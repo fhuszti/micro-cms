@@ -12,15 +12,15 @@
 
         <?php foreach ($articles as $article): ?>
             <article>
-                <h2><?php echo $article['art_title']; ?></h2>
+                <h2><?php echo $article->getTitle(); ?></h2>
 
-                <h4>Ajouté le <time datetime="<?php echo $article['art_date']; ?>" pubdate="pubdate"><?php echo $datePosted; ?></time></h4>
-                <?php if ($article['art_last_modif'] != NULL): ?>
-                    <h4>Dernière modification le <time datetime="<?php echo $article['art_last_modif']; ?>"><?php echo $dateLastModif; ?></time></h4>
+                <h4>Ajouté le <time datetime="<?php echo $article->getDate(); ?>" pubdate="pubdate"><?php echo $article->getFormatDate(); ?></time></h4>
+                <?php if ($article->getLastModif() != "0000-00-00"): ?>
+                    <h4>Dernière modification le <time datetime="<?php echo $article->getLastModif(); ?>"><?php echo $article->getFormatLastModif(); ?></time></h4>
                 <?php endif; ?>
 
                 <p>
-                    <?php echo $article['art_content']; ?>
+                    <?php echo $article->getContent(); ?>
                 </p>
             </article>
         <?php endforeach; ?>
