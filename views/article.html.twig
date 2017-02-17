@@ -1,0 +1,40 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    {{ article.title }}
+{% endblock %}
+
+{% block content %}
+    <article>
+        <h2>{{ article.title }}</h2>
+
+        <h4>Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time></h4>
+        {% if article.lastModif != "0000-00-00" %}
+            <h4>Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time></h4>
+        {% endif %}
+
+        <p>
+            {{ article.content }}
+        </p>
+    </article>
+
+    <section>
+        <h3>Commentaires</h3>
+
+        {% for comment in comments %}
+            <article>
+                <strong>{{ comment.author }} :</strong> {{ comment.content }}
+                <br />
+                <em>
+                    Publié le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y \à H\\hi") }}</time>
+                    {% if comment.lastModif != "0000-00-00 00:00:00" %}
+                        - dernière modification le <time datetime="{{ comment.lastModif }}" pubdate="pubdate">{{ comment.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                    {% endif %}
+                </em>
+            </article>
+
+            {% else %}
+                <p>Aucun commentaire n'a encore été publié sur cet article.</p>
+        {% endfor %}
+    </section>
+{% endblock %}

@@ -1,41 +1,48 @@
 <?php
 namespace MicroCMS\Domain;
 
-class Article {
+class Comment {
     /**
-     * Article id.
+     * Comment id.
      *
      * @var integer
      */
     private $id;
 
     /**
-     * Article title.
+     * Comment author.
      *
      * @var string
      */
-    private $title;
+    private $author;
 
     /**
-     * Article content.
+     * Comment content.
      *
-     * @var string
+     * @var integer
      */
     private $content;
 
     /**
-     * Article date of publication.
+     * Comment date of publication.
      *
      * @var string
      */
     private $date;
 
     /**
-     * Article date of last modification.
+     * Comment date of last modification.
      *
      * @var string
      */
     private $last_modif;
+
+    /**
+     * Associated article.
+     *
+     * @var \MicroCMS\Domain\Article
+     */
+    private $article;
 
 
 
@@ -49,12 +56,12 @@ class Article {
         return $this;
     }
 
-    public function getTitle() {
-        return $this->title;
+    public function getAuthor() {
+        return $this->author;
     }
 
-    public function setTitle($title) {
-        $this->title = $title;
+    public function setAuthor($author) {
+        $this->author = $author;
         return $this;
     }
 
@@ -82,6 +89,15 @@ class Article {
 
     public function setLastModif($last_modif) {
         $this->last_modif = $last_modif;
+        return $this;
+    }
+
+    public function getArticle() {
+        return $this->article;
+    }
+
+    public function setArticle(Article $article) {
+        $this->article = $article;
         return $this;
     }
 }
