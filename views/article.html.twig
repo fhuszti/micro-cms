@@ -23,7 +23,7 @@
 
         {% for comment in comments %}
             <article>
-                <strong>{{ comment.author }} :</strong> {{ comment.content }}
+                <strong>{{ comment.author.username }} :</strong> {{ comment.content }}
                 <br />
                 <em>
                     Publié le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y \à H\\hi") }}</time>
@@ -36,5 +36,17 @@
             {% else %}
                 <p>Aucun commentaire n'a encore été publié sur cet article.</p>
         {% endfor %}
+    </section>
+
+    <section>
+        <h3>Ajouter un commentaire</h3>
+
+        <p>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                A venir !
+            {% else %}
+                <a href="{{ path('login') }}" title="Page de connexion">Connectez-vous</a> pour ajouter un commentaire.
+            {% endif %}
+        </p>
     </section>
 {% endblock %}

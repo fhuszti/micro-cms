@@ -9,8 +9,17 @@ class CommentDAO extends DAO {
      */
     private $articleDAO;
 
+    /**
+     * @var \MicroCMS\DAO\UserDAO
+     */
+    private $userDAO;
+
     public function setArticleDAO(ArticleDAO $articleDAO) {
         $this->articleDAO = $articleDAO;
+    }
+
+    public function setUserDAO(UserDAO $userDAO) {
+        $this->userDAO = $userDAO;
     }
 
 
@@ -29,7 +38,7 @@ class CommentDAO extends DAO {
 
         //art_id is not selected by the query
         //so the article won't be retrived during buildDomainObject()
-        $sql = "SELECT com_id, com_content, com_author, com_date, com_last_modif FROM t_comments WHERE art_id = ? ORDER BY com_id";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id FROM t_comments WHERE art_id = ? ORDER BY com_id";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
         //Convert the query result into an array of domain objects
@@ -57,7 +66,6 @@ class CommentDAO extends DAO {
         $comment = new Comment();
 
         $comment->setId($row['com_id']);
-        $comment->setAuthor($row['com_author']);
         $comment->setContent($row['com_content']);
         $comment->setDate($row['com_date']);
         $comment->setLastModif($row['com_last_modif']);
@@ -68,6 +76,12 @@ class CommentDAO extends DAO {
             $articleId = $row['art_id'];
             $article = $this->articleDAO->find($articleId);
             $comment->setArticle($article);
+        }
+        if (array_key_exists('usr_id', $row)) {
+            //Find and set the associated article
+            $userId = $row['usr_id'];
+            $user = $this->userDAO->find($userId);
+            $comment->setAuthor($user);
         }
 
         return $comment;
