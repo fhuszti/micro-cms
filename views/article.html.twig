@@ -41,12 +41,29 @@
     <section>
         <h3>Ajouter un commentaire</h3>
 
-        <p>
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                A venir !
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        {% if commentForm %}
+            {{ form_start(commentForm) }}
+                <div class="form-group">
+                    {{ form_errors(commentForm.content) }}
+                    {{ form_widget(commentForm.content, { 'attr' : {
+                            'rows' : '4',
+                            'class' : 'form-control',
+                            'placeholder' : 'Entrez votre commentaire'
+                        }})
+                    }}
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
+                </div>
+            {{ form_end(commentForm) }}
             {% else %}
-                <a href="{{ path('login') }}" title="Page de connexion">Connectez-vous</a> pour ajouter un commentaire.
+                <p><a href="{{ path('login') }}" title="Page de connexion">Connectez-vous</a> pour ajouter un commentaire.</p>
             {% endif %}
-        </p>
     </section>
 {% endblock %}

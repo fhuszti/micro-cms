@@ -86,4 +86,36 @@ class CommentDAO extends DAO {
 
         return $comment;
     }
+
+    /**
+     * Saves a comment into the database.
+     *
+     * @param \MicroCMS\Domain\Comment $comment The comment to save
+     */
+    public function save(Comment $comment) {
+        $commentData = array(
+            'art_id' => $comment->getArticle()->getId(),
+            'usr_id' => $comment->getAuthor()->getId(),
+            'com_content' => $comment->getContent()
+        );
+
+        if ($comment->getId()) {
+            // The comment has already been saved : update it
+            $commentData['com_date'] = $comment->getDate();
+            $commentData['com_last_modif'] = (new \DateTime())->format('Y-m-d H:i:s');
+
+            $this->getDb()->update('t_comments', $commentData, array('com_id' => $comment->getId()));
+        }
+        else {
+            // The comment has never been saved : insert it
+            $commentData['com_date'] = (new \DateTime())->format('Y-m-d H:i:s');
+            $commentData['com_last_modif'] = '0000-00-00 00:00:00';
+
+            $this->getDb()->insert('t_comments', $commentData);
+
+            // Get the id of the newly created comment and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $comment->setId($id);
+        }
+    }
 }

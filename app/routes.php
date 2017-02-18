@@ -1,5 +1,7 @@
 <?php
 use Symfony\Component\HttpFoundation\Request;
+use MicroCMS\Domain\Comment;
+use MicroCMS\Form\Type\CommentType;
 
 // Home page
 $app->get('/', function () use ($app) {
@@ -9,11 +11,41 @@ $app->get('/', function () use ($app) {
 })->bind('home');
 
 //Individual article pages with comments
-$app->get('/article/{id}', function($id) use ($app) {
+//match() for POST+GET
+$app->match('/article/{id}', function($id, Request $request) use ($app) {
     $article = $app['dao.article']->find($id);
+
+    $commentFormView = null;
+    // A user is fully authenticated : he can add comments
+    if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+        $user = $app['user'];
+
+        //Generate the comment
+        $comment = new Comment();
+        $comment->setArticle($article);
+        $comment->setAuthor($user);
+
+        //Generate the form going with the comment
+        $commentForm = $app['form.factory']->create(CommentType::class, $comment);
+        //Manage form submission
+        $commentForm->handleRequest($request);
+        if($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $app['dao.comment']->save($comment);
+            $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+        }
+
+        //Addind form view to the page
+        //variable == null is user not logged in
+        $commentFormView = $commentForm->createView();
+    }
+
     $comments = $app['dao.comment']->findAllByArticle($id);
 
-    return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
+    return $app['twig']->render('article.html.twig', array(
+        'article' => $article,
+        'comments' => $comments,
+        'commentForm' => $commentFormView
+    ));
 })->bind('article');
 
 //Login page
