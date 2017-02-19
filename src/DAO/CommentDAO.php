@@ -24,6 +24,22 @@ class CommentDAO extends DAO {
 
 
 
+    /**
+     * Returns a comment matching the supplied id.
+     *
+     * @param integer $id The comment id
+     *
+     * @return \MicroCMS\Domain\Comment|throws an exception if no matching comment is found
+     */
+    public function find($id) {
+        $sql = "SELECT * FROM t_comments WHERE com_id = ?";
+        $row = $this->getDb()->fetchAssoc($sql, array($id));
+
+        if ($row)
+            return $this->buildDomainObject($row);
+        else
+            throw new \Exception("Aucun commentaire ne correspond à l'ID : " . $id);
+    }
 
     /**
      * Returns a list of all comments, sorted by date (most recent first).
@@ -136,5 +152,14 @@ class CommentDAO extends DAO {
             $id = $this->getDb()->lastInsertId();
             $comment->setId($id);
         }
+    }
+
+    /**
+     * Removes a comment from the database.
+     *
+     * @param @param integer $id The comment id
+     */
+    public function delete($id) {
+        $this->getDb()->delete('t_comments', array('com_id' => $id));
     }
 }

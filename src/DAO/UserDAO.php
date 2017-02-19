@@ -22,7 +22,7 @@ class UserDAO extends DAO implements UserProviderInterface {
         if ($row)
             return $this->buildDomainObject($row);
         else
-            throw new \Exception("No user matching ID " . $id);
+            throw new \Exception("Aucun utilisateur ne correspond à l'ID : " . $id);
     }
 
     /**
