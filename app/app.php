@@ -1,10 +1,17 @@
 <?php
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
+use Symfony\Component\HttpFoundation\Request;
+
+
+
 
 //Register global error and exception handlers
 ErrorHandler::register();
 ExceptionHandler::register();
+
+
+
 
 //Register service providers
 $app->register(new Silex\Provider\DoctrineServiceProvider());
@@ -45,6 +52,14 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => __DIR__ . '/../var/logs/microcms.log',
+    'monolog.name' => 'MicroCMS',
+    'monolog.level' => $app['monolog.level']
+));
+
+
+
 
 //Register services
 $app['dao.article'] = function($app) {
@@ -60,3 +75,22 @@ $app['dao.comment'] = function($app) {
 
     return $commentDAO;
 };
+
+
+
+
+// Register error handler
+$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+    switch ($code) {
+        case 403:
+            $message = 'Accès interdit.';
+            break;
+        case 404:
+            $message = 'Ressource introuvable.';
+            break;
+        default:
+            $message = "Oups, quelque chose ne s'est pas passé comme prévu.";
+    }
+    
+    return $app['twig']->render('error.html.twig', array('message' => $message));
+});

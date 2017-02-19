@@ -1,5 +1,6 @@
 .DS_Store
 db/
 vendor/
+var/logs/
 app/config/
 web/.htaccess
