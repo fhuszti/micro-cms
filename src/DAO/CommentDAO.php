@@ -26,6 +26,25 @@ class CommentDAO extends DAO {
 
 
     /**
+     * Returns a list of all comments, sorted by date (most recent first).
+     *
+     * @return array A list of all comments.
+     */
+    public function findAll() {
+        $sql = "SELECT * FROM t_comments ORDER BY com_id DESC";
+        $result = $this->getDb()->fetchAll($sql);
+
+        //Convert query results to an array of Domain objects
+        $comments = array();
+        foreach ($result as $row) {
+            $commentId = $row['com_id'];
+            $comments[$commentId] = $this->buildDomainObject($row);
+        }
+
+        return $comments;
+    }
+
+    /**
      * Return a list of all comments for an article, sorted by date (most recent last).
      *
      * @param integer $articleId The article id.

@@ -57,4 +57,44 @@ class ArticleDAO extends DAO {
 
         return $article;
     }
+
+    /**
+     * Saves an article into the database.
+     *
+     * @param \MicroCMS\Domain\Article $article The article to save
+     */
+    public function save(Article $article) {
+        $articleData = array(
+            'art_title' => $article->getTitle(),
+            'art_content' => $article->getContent()
+        );
+
+        if ($article->getId()) {
+            // The article has already been saved : update it
+            $articleData['art_date'] = $article->getDate();
+            $articleData['art_last_modif'] = (new \DateTime())->format('Y-m-d');
+
+            $this->getDb()->update('t_articles', $articleData, array('art_id' => $article->getId()));
+        }
+        else {
+            // The article has never been saved : insert it
+            $articleData['art_date'] = (new \DateTime())->format('Y-m-d');
+            $articleData['art_last_modif'] = '0000-00-00';
+
+            $this->getDb()->insert('t_articles', $articleData);
+
+            // Get the id of the newly created article and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $article->setId($id);
+        }
+    }
+
+    /**
+    * Removes an article from the database.
+    *
+    * @param integer $id The article id.
+    */
+    public function delete($id) {
+        $this->getDb()->delete('t_articles', array('art_id' => $id));
+    }
 }

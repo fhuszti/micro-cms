@@ -1,0 +1,121 @@
+{% extends "layout.html.twig" %}
+{% set adminMenu = true %}
+
+{% block title %}
+    Administration
+{% endblock %}
+
+{% block content %}
+    <h2>{{ block('title') }}</h2>
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#articles" data-toggle="tab">Articles</a></li>
+                <li><a href="#comments" data-toggle="tab">Comments</a></li>
+                <li><a href="#users" data-toggle="tab">Users</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content">
+        <!-- Articles tab -->
+        <div class="tab-pane fade in active adminTable" id="articles">
+            {% if articles %}
+                <div class="table-responsive">
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Contenu</th>
+                                <th></th>  <!-- Actions column -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for article in articles %}
+                                <tr>
+                                    <td>
+                                        <a class="articleTitle" title="{{ article.title }}" href="{{ path('article', { 'id': article.id }) }}">
+                                            {{ article.title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ article.content | truncate(60) }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('admin_article_edit', { 'id': article.id }) }}" class="btn btn-info btn-xs" title="Modifier">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+                                        <button type="button" class="btn btn-danger btn-xs" title="Supprimer" data-toggle="modal" data-target="#articleDialog{{ article.id }}">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                        <div class="modal fade" id="articleDialog{{ article.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                            &times;
+                                                        </button>
+                                                        <h4 class="modal-title" id="myModalLabel">
+                                                            Confirmation
+                                                        </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Êtes-vous certain de vouloir supprimer cet article ?
+                                                        </p>
+                                                        <p>
+                                                            Tous les commentaires associés seront également supprimés.
+                                                        </p>
+                                                        <p>
+                                                            Cette action est irréversible.
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                            Annuler
+                                                        </button>
+                                                        <a href="{{ path('admin_article_delete', { 'id': article.id }) }}" class="btn btn-danger">
+                                                            Confirmer
+                                                        </a>
+                                                    </div>
+                                                </div><!-- /.modal-content -->
+                                            </div><!-- /.modal-dialog -->
+                                        </div><!-- /.modal -->
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    Aucun article trouvé. Créez le premier !
+                </div>
+            {% endif %}
+
+            <a href="{{ path('admin_article_add') }}">
+                <button type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span> Ajouter un article
+                </button>
+            </a>
+        </div>
+
+        <!-- Comments tab -->
+        <div class="tab-pane fade adminTable" id="comments">
+            <!-- TODO Insérer ici le code de gestion des commentaires -->
+
+        </div>
+
+        <!-- Users tab -->
+        <div class="tab-pane fade adminTable" id="users">
+            <!-- TODO Insérer ici le code de gestion des utilisateurs -->
+
+        </div>
+    </div>
+{% endblock %}
