@@ -80,7 +80,7 @@ $app['dao.comment'] = function($app) {
 
 
 // Register error handler
-$app->error(function (\Exception $e, Request $request, $code) use ($app) {
+/*$app->error(function (\Exception $e, Request $request, $code) use ($app) {
     switch ($code) {
         case 403:
             $message = 'Accès interdit.';
@@ -91,6 +91,6 @@ $app->error(function (\Exception $e, Request $request, $code) use ($app) {
         default:
             $message = "Oups, quelque chose ne s'est pas passé comme prévu.";
     }
-    
+
     return $app['twig']->render('error.html.twig', array('message' => $message));
-});
+});*/

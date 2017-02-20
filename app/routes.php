@@ -7,7 +7,10 @@ $app->get('/', "MicroCMS\Controller\HomeController::indexAction")->bind('home');
 $app->match('/article/{id}', "MicroCMS\Controller\HomeController::articleAction")->bind('article');
 
 //Login page
-$app->get('/login', "MicroCMS\Controller\HomeController::loginAction")->bind('login');
+$app->get('/connexion', "MicroCMS\Controller\HomeController::loginAction")->bind('login');
+
+//Register page
+$app->match('/inscription', "MicroCMS\Controller\HomeController::registerAction")->bind('register');
 
 
 

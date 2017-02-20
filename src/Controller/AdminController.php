@@ -148,7 +148,6 @@ class AdminController {
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // generate a random salt value
             $salt = substr(md5(time()), 0, 23);
-
             $user->setSalt($salt);
 
             $plainPassword = $user->getPassword();
@@ -159,6 +158,9 @@ class AdminController {
             // compute the encoded password
             $password = $encoder->encodePassword($plainPassword, $user->getSalt());
             $user->setPassword($password);
+
+            // initialize a ban status for the user
+            $user->setBanStatus(0);
 
             $app['dao.user']->save($user);
             $app['session']->getFlashBag()->add('success', 'Le membre a été créé avec succès.');

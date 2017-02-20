@@ -118,10 +118,8 @@ class UserDAO extends DAO implements UserProviderInterface {
             $this->getDb()->update('t_users', $userData, array('usr_id' => $user->getId()));
         } else {
             // The user has never been saved : insert it
-            $userData['usr_banStatus'] = '0';
-
             $this->getDb()->insert('t_users', $userData);
-            
+
             // Get the id of the newly created user and set it on the entity.
             $id = $this->getDb()->lastInsertId();
             $user->setId($id);

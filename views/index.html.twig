@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block content %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
     {% for article in articles %}
         <article>
             <h2><a href="{{ path('article', { 'id' : article.id }) }}">{{ article.title }}</a></h2>
