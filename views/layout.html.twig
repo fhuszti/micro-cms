@@ -33,7 +33,7 @@
                                     </li>
                                 {% endif %}
                                 <li>
-                                    <a href="#" title="Modifier le profil" id="menuWelcome">
+                                    <a href="{{ path('profile', { 'id' : app.user.id }) }}" title="Modifier le profil" id="menuWelcome">
                                         <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.user.username }}
                                     </a>
                                 </li>

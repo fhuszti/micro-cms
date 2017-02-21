@@ -12,6 +12,9 @@ $app->get('/connexion', "MicroCMS\Controller\HomeController::loginAction")->bind
 //Register page
 $app->match('/inscription', "MicroCMS\Controller\HomeController::registerAction")->bind('register');
 
+//Profile page
+$app->match('/profil/{id}', "MicroCMS\Controller\HomeController::profileAction")->bind('profile');
+
 
 
 

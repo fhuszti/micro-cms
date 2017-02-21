@@ -126,4 +126,52 @@ class HomeController {
             'last_username' => $app['session']->get('_security.last_username')
         ));
     }
+
+    /**
+     * Profile page controller.
+     *
+     * @param integer $id User id
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+    public function profileAction($id, Request $request, Application $app) {
+        $user = $app['dao.user']->find($id);
+        $password = $user->getPassword();
+        $role = $user->getRole();
+
+        $userForm = $app['form.factory']->createNamed('userForm', UserType::class, $user);
+        $passwordForm = $app['form.factory']->createNamed('passwordForm', UserType::class, $user);
+
+        if ($request->isMethod('POST')) {
+            $userForm->submit($request->request->get($userForm->getName()), false);
+            if ($userForm->isSubmitted() && $userForm->isValid()) {
+                $user->setPassword($password);
+                $user->setRole($role);
+
+                $app['dao.user']->save($user);
+                $app['session']->getFlashBag()->add('success', 'Votre profil a bien été mis à jour.');
+            }
+
+            $passwordForm->submit($request->request->get($passwordForm->getName()), false);
+            if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+                $plainPassword = $user->getPassword();
+
+                // find the encoder for the user
+                $encoder = $app['security.encoder_factory']->getEncoder($user);
+
+                // compute the encoded password
+                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+                $user->setPassword($password);
+
+                $app['dao.user']->save($user);
+                $app['session']->getFlashBag()->add('success', 'Votre mot de passe a bien été mis à jour.');
+            }
+        }
+
+        return $app['twig']->render('profile.html.twig', array(
+            'title' => 'Profil',
+            'userForm' => $userForm->createView(),
+            'passwordForm' => $passwordForm->createView()
+        ));
+    }
 }

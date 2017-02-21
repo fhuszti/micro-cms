@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
 {
+    //default name
+    private $formName = 'user';
+
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('username', TextType::class, array('label' => 'Pseudo'));
         $builder->add('email', EmailType::class, array('label' => 'Adresse email'));
@@ -29,6 +32,10 @@ class UserType extends AbstractType
     }
 
     public function getName(){
-        return 'user';
+        return $this->formName;
+    }
+
+    public function setName($name) {
+        $this->formName = $name;
     }
 }

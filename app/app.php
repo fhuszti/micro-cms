@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
             'anonymous' => true,
             'logout' => true,
             'form' => array(
-                'login_path' => '/login',
+                'login_path' => '/connexion',
                 'check_path' => '/login_check'
             ),
             'users' => function() use ($app) {
