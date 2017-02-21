@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block title %}
+    Chapitres
+{% endblock %}
+
+{% block content %}
+    {% for article in articles %}
+        <article>
+            <h2><a href="{{ path('article', { 'id' : article.id }) }}">{{ article.title }}</a></h2>
+
+            <h4>
+                Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time>
+            </h4>
+            {% if article.lastModif != "0000-00-00" %}
+                <h4>
+                    Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time>
+                </h4>
+            {% endif %}
+
+            <p>
+                {{ article.content }}
+            </p>
+        </article>
+    {% endfor %}
+{% endblock %}

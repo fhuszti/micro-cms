@@ -24,6 +24,22 @@
                     <nav role="navigation">
                         <!-- actual menu list -->
                         <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="{{ path('home') }}" title="Page d'accueil">
+                                    <span class="glyphicon glyphicon-home"></span> Accueil
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('chapters') }}" title="Liste des chapitres">
+                                    <span class="glyphicon glyphicon-book"></span> Chapitres
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('about') }}" title="A propos du projet et de l'auteur">
+                                    <span class="glyphicon glyphicon-info-sign"></span> &Agrave;
+ propos
+                                </a>
+                            </li>
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 {% if app.user and is_granted('ROLE_ADMIN') %}
                                     <li class="{% if adminMenu is defined %}active{% endif %}">

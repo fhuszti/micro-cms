@@ -17,7 +17,7 @@ class HomeController {
      * @param Application $app Silex application
      */
     public function indexAction(Application $app) {
-        $articles = $app['dao.article']->findAll();
+        $articles = $app['dao.article']->findLasts();
 
         return $app['twig']->render('index.html.twig', array('articles' => $articles));
     }
@@ -63,6 +63,26 @@ class HomeController {
             'comments' => $comments,
             'commentForm' => $commentFormView
         ));
+    }
+
+    /**
+     * Posts list controller.
+     *
+     * @param Application $app Silex application
+     */
+    public function postsListAction(Application $app) {
+        $articles = $app['dao.article']->findAll();
+
+        return $app['twig']->render('postsList.html.twig', array('articles' => $articles));
+    }
+
+    /**
+     * About page controller.
+     *
+     * @param Application $app Silex application
+     */
+    public function aboutAction(Application $app) {
+        return $app['twig']->render('about.html.twig');
     }
 
     /**

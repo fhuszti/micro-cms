@@ -22,12 +22,31 @@ class ArticleDAO extends DAO {
     }
 
     /**
-     * Return a list of all articles, sorted by date (most recent first).
+     * Return a list of the last 5 articles, sorted by id (most recent first).
+     *
+     * @return array A list of all articles.
+     */
+    public function findLasts() {
+        $sql = "SELECT * FROM t_articles ORDER BY art_id DESC LIMIT 0, 4";
+        $result = $this->getDb()->fetchAll($sql);
+
+        //Convert query results to an array of Domain objects
+        $articles = array();
+        foreach ($result as $row) {
+            $articleId = $row['art_id'];
+            $articles[$articleId] = $this->buildDomainObject($row);
+        }
+
+        return $articles;
+    }
+
+    /**
+     * Return a list of all articles, sorted by id.
      *
      * @return array A list of all articles.
      */
     public function findAll() {
-        $sql = "SELECT * FROM t_articles ORDER BY art_id DESC";
+        $sql = "SELECT * FROM t_articles ORDER BY art_id";
         $result = $this->getDb()->fetchAll($sql);
 
         //Convert query results to an array of Domain objects

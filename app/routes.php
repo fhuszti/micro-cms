@@ -6,6 +6,12 @@ $app->get('/', "MicroCMS\Controller\HomeController::indexAction")->bind('home');
 //match() for POST+GET
 $app->match('/article/{id}', "MicroCMS\Controller\HomeController::articleAction")->bind('article');
 
+//Posts list page
+$app->get('/chapitres', "MicroCMS\Controller\HomeController::postsListAction")->bind('chapters');
+
+//About page
+$app->get('/apropos', "MicroCMS\Controller\HomeController::aboutAction")->bind('about');
+
 //Login page
 $app->get('/connexion', "MicroCMS\Controller\HomeController::loginAction")->bind('login');
 
