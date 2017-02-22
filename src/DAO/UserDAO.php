@@ -48,8 +48,8 @@ class UserDAO extends DAO implements UserProviderInterface {
      * {@inheritDoc}
      */
     public function loadUserByUsername($username) {
-        $sql = "SELECT * FROM t_users WHERE usr_name = ?";
-        $row = $this->getDb()->fetchAssoc($sql, array($username));
+        $sql = "SELECT * FROM t_users WHERE usr_name = :username OR usr_email = :username";
+        $row = $this->getDb()->fetchAssoc($sql, array('username' => $username));
 
         if ($row)
             return $this->buildDomainObject($row);
