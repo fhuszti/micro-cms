@@ -9,6 +9,7 @@ use MicroCMS\Domain\Comment;
 use MicroCMS\Domain\User;
 use MicroCMS\Form\Type\CommentType;
 use MicroCMS\Form\Type\UserType;
+use MicroCMS\Form\Type\LoginType;
 
 class HomeController {
     /**

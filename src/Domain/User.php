@@ -1,9 +1,9 @@
 <?php
 namespace MicroCMS\Domain;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
-class User implements UserInterface {
+class User implements AdvancedUserInterface, \Serializable {
     /**
      * User id.
      *
@@ -52,7 +52,7 @@ class User implements UserInterface {
      *
      * @var boolean
      */
-    private $banStatus;
+    private $isActive;
 
 
 
@@ -120,12 +120,12 @@ class User implements UserInterface {
         return $this;
     }
 
-    public function getBanStatus() {
-        return $this->banStatus;
+    public function getIsActive() {
+        return $this->isActive;
     }
 
-    public function setBanStatus($banStatus) {
-        $this->banStatus = $banStatus;
+    public function setIsActive($isActive) {
+        $this->isActive = $isActive;
         return $this;
     }
 
@@ -141,5 +141,59 @@ class User implements UserInterface {
      */
     public function eraseCredentials() {
         // Nothing to do here
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonExpired() {
+        return $this->isEnabled();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isAccountNonLocked() {
+        return $this->isEnabled();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCredentialsNonExpired() {
+        return $this->isEnabled();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isEnabled() {
+        return $this->isActive;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize() {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            $this->salt,
+            $this->role,
+            $this->isActive
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized) {
+        list (
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password,
+            $this->salt,
+            $this->role,
+            $this->isActive
+        ) = unserialize($serialized);
     }
 }

@@ -13,7 +13,7 @@ $app->get('/chapitres', "MicroCMS\Controller\HomeController::postsListAction")->
 $app->get('/apropos', "MicroCMS\Controller\HomeController::aboutAction")->bind('about');
 
 //Login page
-$app->get('/connexion', "MicroCMS\Controller\HomeController::loginAction")->bind('login');
+$app->match('/connexion', "MicroCMS\Controller\HomeController::loginAction")->bind('login');
 
 //Register page
 $app->match('/inscription', "MicroCMS\Controller\HomeController::registerAction")->bind('register');
@@ -44,6 +44,12 @@ $app->match('/admin/user/add', "MicroCMS\Controller\AdminController::addUserActi
 
 // Edit an existing user
 $app->match('/admin/user/{id}/edit', "MicroCMS\Controller\AdminController::editUserAction")->bind('admin_user_edit');
+
+// Remove a user
+$app->get('/admin/user/{id}/ban', "MicroCMS\Controller\AdminController::banUserAction")->bind('admin_user_ban');
+
+// Remove a user
+$app->get('/admin/user/{id}/unban', "MicroCMS\Controller\AdminController::unbanUserAction")->bind('admin_user_unban');
 
 // Remove a user
 $app->get('/admin/user/{id}/delete', "MicroCMS\Controller\AdminController::deleteUserAction")->bind('admin_user_delete');

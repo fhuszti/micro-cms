@@ -92,7 +92,7 @@ class UserDAO extends DAO implements UserProviderInterface {
         $user->setPassword($row['usr_password']);
         $user->setSalt($row['usr_salt']);
         $user->setRole($row['usr_role']);
-        $user->setBanStatus($row['usr_banStatus']);
+        $user->setIsActive($row['usr_is_active']);
 
         return $user;
     }
@@ -108,13 +108,12 @@ class UserDAO extends DAO implements UserProviderInterface {
             'usr_email' => $user->getEmail(),
             'usr_password' => $user->getPassword(),
             'usr_salt' => $user->getSalt(),
-            'usr_role' => $user->getRole()
+            'usr_role' => $user->getRole(),
+            'usr_is_active' => $user->getIsActive()
         );
 
         if ($user->getId()) {
             // The user has already been saved : update it
-            $userData['usr_banStatus'] = $user->getBanStatus();
-
             $this->getDb()->update('t_users', $userData, array('usr_id' => $user->getId()));
         } else {
             // The user has never been saved : insert it
@@ -127,6 +126,26 @@ class UserDAO extends DAO implements UserProviderInterface {
     }
 
     /**
+     * Ban a user.
+     *
+     * @param @param integer $id The user id.
+     */
+    public function ban($id) {
+        // Ban the user
+        $this->getDb()->update('t_users', array('usr_is_active' => false), array('usr_id' => $id));
+    }
+
+    /**
+     * Unban a user.
+     *
+     * @param @param integer $id The user id.
+     */
+    public function unban($id) {
+        // Unban the user
+        $this->getDb()->update('t_users', array('usr_is_active' => true), array('usr_id' => $id));
+    }
+
+    /**
      * Removes a user from the database.
      *
      * @param @param integer $id The user id.
@@ -135,5 +154,4 @@ class UserDAO extends DAO implements UserProviderInterface {
         // Delete the user
         $this->getDb()->delete('t_users', array('usr_id' => $id));
     }
-
 }
