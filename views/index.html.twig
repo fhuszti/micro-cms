@@ -11,6 +11,19 @@
         </div>
     {% endfor %}
 
+    <div class="jumbotron">
+        <div class="container">
+            <h1>"Billet simple pour l'Alaska"</h1>
+            <h3>écrit par Jean Forteroche</h3>
+
+            <p>
+                <a href="{{ path('about') }}" title="A propos du projet et de l'auteur" class="btn btn-info btn-lg" role="button">
+                    En savoir plus <span class="glyphicon glyphicon-hand-right"></span>
+                </a>
+            </p>
+        </div>
+    </div>
+
     {% for article in articles %}
         <article>
             <h2><a href="{{ path('article', { 'id' : article.id }) }}">{{ article.title }}</a></h2>
@@ -21,8 +34,10 @@
             {% endif %}
 
             <p>
-                {{ article.content }}
+                {{ article.content | truncate(250, true) }}
             </p>
         </article>
     {% endfor %}
+
+
 {% endblock %}

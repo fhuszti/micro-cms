@@ -160,7 +160,7 @@ class AdminController {
             $user->setPassword($password);
 
             // initialize a ban status for the user
-            $user->setBanStatus(0);
+            $user->setIsActive(true);
 
             $app['dao.user']->save($user);
             $app['session']->getFlashBag()->add('success', 'Le membre a été créé avec succès.');
@@ -202,6 +202,36 @@ class AdminController {
             'title' => 'Modifier le membre',
             'userForm' => $userForm->createView()
         ));
+    }
+
+    /**
+     * Ban user controller.
+     *
+     * @param integer $id User id
+     * @param Application $app Silex application
+     */
+    public function banUserAction($id, Application $app) {
+        // ban the user
+        $app['dao.user']->ban($id);
+        $app['session']->getFlashBag()->add('success', 'Le membre a été banni avec succès.');
+
+        // Redirect to admin home page
+        return $app->redirect($app['url_generator']->generate('admin'));
+    }
+
+    /**
+     * Unban user controller.
+     *
+     * @param integer $id User id
+     * @param Application $app Silex application
+     */
+    public function unbanUserAction($id, Application $app) {
+        // Unban the user
+        $app['dao.user']->unban($id);
+        $app['session']->getFlashBag()->add('success', 'Le membre a été réinstitué avec succès.');
+
+        // Redirect to admin home page
+        return $app->redirect($app['url_generator']->generate('admin'));
     }
 
     /**

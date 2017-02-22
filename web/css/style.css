@@ -10,6 +10,13 @@ body {
     padding-right: 5px;
 }
 
+.jumbotron p {
+    text-align: center;
+}
+.jumbotron h3 {
+    text-align: right;
+}
+
 .adminTable {
     margin-top: 20px;
     margin-bottom: 20px;
