@@ -10,6 +10,8 @@ use MicroCMS\Domain\User;
 use MicroCMS\Form\Type\CommentType;
 use MicroCMS\Form\Type\UserType;
 use MicroCMS\Form\Type\LoginType;
+use MicroCMS\Form\Type\BasicUserDataType;
+use MicroCMS\Form\Type\UserPasswordType;
 
 class HomeController {
     /**
@@ -157,24 +159,28 @@ class HomeController {
      */
     public function profileAction($id, Request $request, Application $app) {
         $user = $app['dao.user']->find($id);
-        $password = $user->getPassword();
-        $role = $user->getRole();
 
-        $userForm = $app['form.factory']->createNamed('userForm', UserType::class, $user);
-        $passwordForm = $app['form.factory']->createNamed('passwordForm', UserType::class, $user);
+        $basicUserDataForm = $app['form.factory']->createNamed('basicUserDataForm', BasicUserDataType::class, $user);
+        $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $user);
 
         if ($request->isMethod('POST')) {
-            $userForm->submit($request->request->get($userForm->getName()), false);
-            if ($userForm->isSubmitted() && $userForm->isValid()) {
-                $user->setPassword($password);
-                $user->setRole($role);
-
+            $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
+            if ($basicUserDataForm->isSubmitted() && $basicUserDataForm->isValid()) {
                 $app['dao.user']->save($user);
+
+                // relog the user in
+                //logged out automatically following name/email change
+                $oldToken = $app['security.token_storage']->getToken();
+                $newToken = new UsernamePasswordToken($user, null, $oldToken->getProviderKey(),
+    $oldToken->getRoles());
+                $app['security.token_storage']->setToken($newToken);
+                $app['session']->set('_security_main', serialize($newToken));
+
                 $app['session']->getFlashBag()->add('success', 'Votre profil a bien été mis à jour.');
             }
 
-            $passwordForm->submit($request->request->get($passwordForm->getName()), false);
-            if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            /*$userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
+            if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()) {
                 $plainPassword = $user->getPassword();
 
                 // find the encoder for the user
@@ -186,13 +192,12 @@ class HomeController {
 
                 $app['dao.user']->save($user);
                 $app['session']->getFlashBag()->add('success', 'Votre mot de passe a bien été mis à jour.');
-            }
+            }*/
         }
 
         return $app['twig']->render('profile.html.twig', array(
             'title' => 'Profil',
-            'userForm' => $userForm->createView(),
-            'passwordForm' => $passwordForm->createView()
+            'basicUserDataForm' => $basicUserDataForm->createView()
         ));
     }
 }

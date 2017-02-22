@@ -14,32 +14,32 @@
         </div>
     {% endfor %}
 
-    {% if form_errors(userForm.password.first) %}
+    {% if form_errors(basicUserDataForm) %}
         <div class="alert alert-danger">
-            {{ form_errors(userForm.password.first) }}
+            {{ form_errors(basicUserDataForm) }}
         </div>
     {% endif %}
 
     <div class="well">
-        {{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
+        {{ form_start(basicUserDataForm, { 'attr': {'class': 'form-horizontal'} }) }}
             <div class="form-group">
-                {{ form_label(userForm.username, null, { 'label_attr':  {
+                {{ form_label(basicUserDataForm.username, null, { 'label_attr':  {
                     'class': 'col-sm-5 control-label'
                 }}) }}
                 <div class="col-sm-4">
-                    {{ form_errors(userForm.username) }}
-                    {{ form_widget(userForm.username, { 'attr':  {
+                    {{ form_errors(basicUserDataForm.username) }}
+                    {{ form_widget(basicUserDataForm.username, { 'attr':  {
                         'class': 'form-control'
                     }}) }}
                 </div>
             </div>
             <div class="form-group">
-                {{ form_label(userForm.email, null, { 'label_attr':  {
+                {{ form_label(basicUserDataForm.email, null, { 'label_attr':  {
                     'class': 'col-sm-5 control-label'
                 }}) }}
                 <div class="col-sm-4">
-                    {{ form_errors(userForm.email) }}
-                    {{ form_widget(userForm.email, { 'attr':  {
+                    {{ form_errors(basicUserDataForm.email) }}
+                    {{ form_widget(basicUserDataForm.email, { 'attr':  {
                         'class': 'form-control'
                     }}) }}
                 </div>
@@ -49,6 +49,6 @@
                     <input type="submit" class="btn btn-primary" value="Valider" />
                 </div>
             </div>
-        {{ form_end(userForm, {'render_rest': false}) }}
+        {{ form_end(basicUserDataForm) }}
     </div>
 {% endblock %}
