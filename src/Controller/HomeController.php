@@ -120,9 +120,9 @@ class HomeController {
             $app['dao.user']->save($user);
 
             // log the user in
-            /*$token = new UsernamePasswordToken($user, null, 'main', array('ROLE_USER'));
-            $this->get('security.token_storage')->setToken($token);
-            $this->get('session')->set('_security_main', serialize($token));*/
+            $token = new UsernamePasswordToken($user, null, 'secured', array('ROLE_USER'));
+            $app['security.token_storage']->setToken($token);
+            $app['session']->set('_security_main', serialize($token));
 
             // flash message to thank the user + home page redirect
             $app['session']->getFlashBag()->add('success', 'Merci, vous êtes désormais inscrit.');
