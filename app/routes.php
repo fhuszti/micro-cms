@@ -48,10 +48,10 @@ $app->match('/admin/user/add', "MicroCMS\Controller\AdminController::addUserActi
 // Edit an existing user
 $app->match('/admin/user/{id}/edit', "MicroCMS\Controller\AdminController::editUserAction")->bind('admin_user_edit');
 
-// Remove a user
+// Ban a user
 $app->get('/admin/user/{id}/ban', "MicroCMS\Controller\AdminController::banUserAction")->bind('admin_user_ban');
 
-// Remove a user
+// Unban a user
 $app->get('/admin/user/{id}/unban', "MicroCMS\Controller\AdminController::unbanUserAction")->bind('admin_user_unban');
 
 // Remove a user
