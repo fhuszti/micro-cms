@@ -115,7 +115,7 @@ class HomeController {
             $user->setRole('ROLE_MEMBER');
 
             // initialize a ban status for the user
-            $user->setBanStatus(0);
+            $user->setIsActive(true);
 
             $app['dao.user']->save($user);
 
