@@ -159,6 +159,12 @@ class HomeController {
      */
     public function profileAction($id, Request $request, Application $app) {
         $user = $app['dao.user']->find($id);
+        $comments = $app['dao.comment']->findAllByUser($id);
+        $articles = array();
+        foreach ($comments as $comment) {
+            $articleId = $comment->getArticle()->getId();
+            $articles[$articleId] = $app['dao.article']->find($articleId);
+        }
 
         $basicUserDataForm = $app['form.factory']->createNamed('basicUserDataForm', BasicUserDataType::class, $user);
         $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $user);
@@ -197,7 +203,9 @@ class HomeController {
 
         return $app['twig']->render('profile.html.twig', array(
             'title' => 'Profil',
-            'basicUserDataForm' => $basicUserDataForm->createView()
+            'basicUserDataForm' => $basicUserDataForm->createView(),
+            'articles' => $articles,
+            'comments' => $comments
         ));
     }
 }

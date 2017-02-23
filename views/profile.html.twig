@@ -51,4 +51,30 @@
             </div>
         {{ form_end(basicUserDataForm) }}
     </div>
+
+    <section>
+        <h3>Mes commentaires</h3>
+
+        {% for articleId, groupArticle in articles %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <a href="{{ path('article', { 'id' : articleId }) }}" title="Aller à cet article"><h3 class="panel-title">{{ groupArticle.title }}</h3></a>
+                </div>
+                <div class="list-group">
+                    {% for comment in comments if comment.article.id == articleId %}
+                    <article class="list-group-item">
+                        <h4>Ajouté le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y") }}</time></h4>
+                        {% if comment.lastModif != "0000-00-00 00:00:00" %}
+                            <h4>Dernière modification le <time datetime="{{ comment.lastModif }}">{{ comment.lastModif|date("d/m/Y") }}</time></h4>
+                        {% endif %}
+
+                        <p>
+                            {{ comment.content }}
+                        </p>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </section>
 {% endblock %}

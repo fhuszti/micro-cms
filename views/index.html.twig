@@ -26,7 +26,7 @@
 
     {% for article in articles %}
         <article>
-            <h2><a href="{{ path('article', { 'id' : article.id }) }}">{{ article.title }}</a></h2>
+            <h2><a href="{{ path('article', { 'id' : article.id }) }}" title="Aller à cet article">{{ article.title }}</a></h2>
 
             <h4>Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time></h4>
             {% if article.lastModif != "0000-00-00" %}

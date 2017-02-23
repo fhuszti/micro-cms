@@ -73,7 +73,7 @@ class CommentDAO extends DAO {
 
         //art_id is not selected by the query
         //so the article won't be retrived during buildDomainObject()
-        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id FROM t_comments WHERE art_id = ? ORDER BY com_id";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id FROM t_comments WHERE art_id = ? ORDER BY com_date";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
         //Convert the query result into an array of domain objects
@@ -90,6 +90,36 @@ class CommentDAO extends DAO {
 
         return $comments;
     }
+
+
+        /**
+         * Return a list of all comments for a user, sorted by article.
+         *
+         * @param integer $user The user id.
+         *
+         * @return array A list of all comments for a user.
+         */
+        public function findAllByUser($userId) {
+            //Find and set the associated user
+            $user = $this->userDAO->find($userId);
+
+            $sql = "SELECT  com_id, com_content, com_date, com_last_modif, art_id FROM t_comments WHERE usr_id = ? ORDER BY art_id, com_date DESC";
+            $result = $this->getDb()->fetchAll($sql, array($userId));
+
+            //Convert the query result into an array of domain objects
+            $comments = array();
+            foreach ($result as $row) {
+                $commentId = $row['com_id'];
+                $comment = $this->buildDomainObject($row);
+
+                //The associated article is defined for the current comment in the loop
+                $comment->setAuthor($user);
+
+                $comments[$commentId] = $comment;
+            }
+
+            return $comments;
+        }
 
     /**
      * Creates a Comment object based on a DB row.
