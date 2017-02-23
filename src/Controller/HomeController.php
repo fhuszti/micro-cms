@@ -13,6 +13,7 @@ use MicroCMS\Form\Type\UserType;
 use MicroCMS\Form\Type\LoginType;
 use MicroCMS\Form\Type\BasicUserDataType;
 use MicroCMS\Form\Type\UserPasswordType;
+use MicroCMS\Form\Type\UserDeleteType;
 
 class HomeController {
     /**
@@ -172,6 +173,7 @@ class HomeController {
         // Managing all necessary forms
         $basicUserDataForm = $app['form.factory']->createNamed('basicUserDataForm', BasicUserDataType::class, $user);
         $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $changePasswordModel);
+        $userDeleteForm = $app['form.factory']->createNamed('userDelete', UserDeleteType::class, $user);
 
         if ($request->isMethod('POST')) {
             //Managing the basic user data form submission
@@ -213,12 +215,36 @@ class HomeController {
                     $app['session']->getFlashBag()->add('error', 'Votre mot de passe actuel ne correspond pas à votre entrée.');
                 }
             }
+
+            //Managing the delete user form submission
+            $userPwd = $user->getPassword();
+            $userDeleteForm->submit($request->request->get($userDeleteForm->getName()), false);
+            if ($request->request->has($userDeleteForm->getName())) {
+                $plainPassword = $user->getPassword();
+
+                // find the encoder for the user
+                $encoder = $app['security.encoder_factory']->getEncoder($user);
+
+                // test the entered plain password with the current encoded password
+                if ($encoder->isPasswordValid($userPwd, $plainPassword, $user->getSalt())) {
+                    // Delete the user
+                    $app['dao.user']->delete($user->getId());
+                    $app['session']->getFlashBag()->add('success', 'Votre compte a été supprimé avec succès.');
+
+                    // Redirect to home page
+                    return $app->redirect($app['url_generator']->generate('home'));
+                }
+                else {
+                    $app['session']->getFlashBag()->add('error', 'Votre mot de passe actuel ne correspond pas à votre entrée.');
+                }
+            }
         }
 
         return $app['twig']->render('profile.html.twig', array(
             'title' => 'Profil',
             'basicUserDataForm' => $basicUserDataForm->createView(),
             'userPasswordForm' => $userPasswordForm->createView(),
+            'userDeleteForm' => $userDeleteForm->createView(),
             'articles' => $articles,
             'comments' => $comments
         ));

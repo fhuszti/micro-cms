@@ -32,6 +32,12 @@
         </div>
     {% endif %}
 
+    {% if form_errors(userDeleteForm) %}
+        <div class="alert alert-danger">
+            {{ form_errors(userDeleteForm) }}
+        </div>
+    {% endif %}
+
     {% if form_errors(userPasswordForm.newPassword.first) %}
         <div class="alert alert-danger">
             {{ form_errors(userPasswordForm.newPassword.first) }}
@@ -40,73 +46,138 @@
 
     <div class="well">
         {{ form_start(basicUserDataForm, { 'attr': {'class': 'form-horizontal'} }) }}
-            <div class="form-group">
-                {{ form_label(basicUserDataForm.username, null, { 'label_attr':  {
-                    'class': 'col-sm-5 control-label'
-                }}) }}
-                <div class="col-sm-4">
-                    {{ form_errors(basicUserDataForm.username) }}
-                    {{ form_widget(basicUserDataForm.username, { 'attr':  {
-                        'class': 'form-control'
+            <fieldset>
+                <legend>Informations</legend>
+
+                <div class="form-group">
+                    {{ form_label(basicUserDataForm.username, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
                     }}) }}
+                    <div class="col-sm-4">
+                        {{ form_errors(basicUserDataForm.username) }}
+                        {{ form_widget(basicUserDataForm.username, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                {{ form_label(basicUserDataForm.email, null, { 'label_attr':  {
-                    'class': 'col-sm-5 control-label'
-                }}) }}
-                <div class="col-sm-4">
-                    {{ form_errors(basicUserDataForm.email) }}
-                    {{ form_widget(basicUserDataForm.email, { 'attr':  {
-                        'class': 'form-control'
+                <div class="form-group">
+                    {{ form_label(basicUserDataForm.email, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
                     }}) }}
+                    <div class="col-sm-4">
+                        {{ form_errors(basicUserDataForm.email) }}
+                        {{ form_widget(basicUserDataForm.email, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-5 col-sm-3">
-                    <input type="submit" class="btn btn-primary" value="Valider" />
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-3">
+                        <input type="submit" class="btn btn-primary" value="Valider" />
+                    </div>
                 </div>
-            </div>
+            </fieldset>
         {{ form_end(basicUserDataForm) }}
 
         {{ form_start(userPasswordForm, { 'attr': {'class': 'form-horizontal'} }) }}
-            <div class="form-group">
-                {{ form_label(userPasswordForm.oldPassword, null, { 'label_attr':  {
-                    'class': 'col-sm-5 control-label'
-                }}) }}
-                <div class="col-sm-4">
-                    {{ form_errors(userPasswordForm.oldPassword) }}
-                    {{ form_widget(userPasswordForm.oldPassword, { 'attr':  {
-                        'class': 'form-control'
+            <fieldset>
+                <legend>Sécurité</legend>
+
+                <div class="form-group">
+                    {{ form_label(userPasswordForm.oldPassword, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
                     }}) }}
+                    <div class="col-sm-4">
+                        {{ form_errors(userPasswordForm.oldPassword) }}
+                        {{ form_widget(userPasswordForm.oldPassword, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                {{ form_label(userPasswordForm.newPassword.first, null, { 'label_attr':  {
-                    'class': 'col-sm-5 control-label'
-                }}) }}
-                <div class="col-sm-4">
-                    {{ form_widget(userPasswordForm.newPassword.first, { 'attr':  {
-                        'class': 'form-control'
+                <div class="form-group">
+                    {{ form_label(userPasswordForm.newPassword.first, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
                     }}) }}
+                    <div class="col-sm-4">
+                        {{ form_widget(userPasswordForm.newPassword.first, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                {{ form_label(userPasswordForm.newPassword.second, null, { 'label_attr':  {
-                    'class': 'col-sm-5 control-label'
-                }}) }}
-                <div class="col-sm-4">
-                    {{ form_widget(userPasswordForm.newPassword.second, { 'attr':  {
-                        'class': 'form-control'
+                <div class="form-group">
+                    {{ form_label(userPasswordForm.newPassword.second, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
                     }}) }}
+                    <div class="col-sm-4">
+                        {{ form_widget(userPasswordForm.newPassword.second, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-5 col-sm-3">
-                    <input type="submit" class="btn btn-primary" value="Valider" />
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-3">
+                        <input type="submit" class="btn btn-primary" value="Valider" />
+                    </div>
                 </div>
-            </div>
+            </fieldset>
         {{ form_end(userPasswordForm) }}
+
+        {{ form_start(userDeleteForm, { 'attr': {'class': 'form-horizontal'} }) }}
+            <fieldset>
+                <legend>Suppression du compte</legend>
+
+                <div class="form-group">
+                    {{ form_label(userDeleteForm.password, null, { 'label_attr':  {
+                        'class': 'col-sm-5 control-label'
+                    }}) }}
+                    <div class="col-sm-4">
+                        {{ form_errors(userDeleteForm.password) }}
+                        {{ form_widget(userDeleteForm.password, { 'attr':  {
+                            'class': 'form-control'
+                        }}) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-3">
+                        {{ form_widget(userDeleteForm.modalSubmit, { 'attr':  {
+                            'data-toggle': 'modal',
+                            'data-target': '#userDeleteDialog'
+                        }}) }}
+                        <div class="modal fade" id="userDeleteDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel">
+                                            Confirmation
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            Êtes-vous certain de vouloir supprimer ce compte ?
+                                        </p>
+                                        <p>
+                                            Tous les commentaires associés seront également supprimés.
+                                        </p>
+                                        <p>
+                                            Cette action est irréversible.
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-dismiss="modal">
+                                            Annuler
+                                        </button>
+                                        <input type="submit" class="btn btn-default" value="Supprimer ce compte définitivement" />
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+            </fieldset>
+        {{ form_end(userDeleteForm) }}
     </div>
 
     <section>
@@ -119,19 +190,22 @@
                 </div>
                 <div class="list-group">
                     {% for comment in comments if comment.article.id == articleId %}
-                    <article class="list-group-item">
-                        <h4>Ajouté le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y") }}</time></h4>
-                        {% if comment.lastModif != "0000-00-00 00:00:00" %}
-                            <h4>Dernière modification le <time datetime="{{ comment.lastModif }}">{{ comment.lastModif|date("d/m/Y") }}</time></h4>
-                        {% endif %}
+                        <article class="list-group-item">
+                            <h4>Ajouté le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y") }}</time></h4>
+                            {% if comment.lastModif != "0000-00-00 00:00:00" %}
+                                <h4>Dernière modification le <time datetime="{{ comment.lastModif }}">{{ comment.lastModif|date("d/m/Y") }}</time></h4>
+                            {% endif %}
 
-                        <p>
-                            {{ comment.content }}
-                        </p>
-                    </article>
+                            <p>
+                                {{ comment.content }}
+                            </p>
+                        </article>
                     {% endfor %}
                 </div>
             </div>
+
+        {% else %}
+            <p>Vous n'avez pas encore publié de commentaire.</p>
         {% endfor %}
     </section>
 {% endblock %}
