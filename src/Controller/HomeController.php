@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use MicroCMS\Domain\Comment;
 use MicroCMS\Domain\User;
+use MicroCMS\Domain\ChangePassword;
 use MicroCMS\Form\Type\CommentType;
 use MicroCMS\Form\Type\UserType;
 use MicroCMS\Form\Type\LoginType;
@@ -159,6 +160,8 @@ class HomeController {
      */
     public function profileAction($id, Request $request, Application $app) {
         $user = $app['dao.user']->find($id);
+        $changePasswordModel = new ChangePassword();
+        // Allow to display all messages by user, sorted by article
         $comments = $app['dao.comment']->findAllByUser($id);
         $articles = array();
         foreach ($comments as $comment) {
@@ -166,12 +169,15 @@ class HomeController {
             $articles[$articleId] = $app['dao.article']->find($articleId);
         }
 
+        // Managing all necessary forms
         $basicUserDataForm = $app['form.factory']->createNamed('basicUserDataForm', BasicUserDataType::class, $user);
-        $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $user);
+        $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $changePasswordModel);
 
         if ($request->isMethod('POST')) {
+            //Managing the basic user data form submission
             $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
             if ($basicUserDataForm->isSubmitted() && $basicUserDataForm->isValid()) {
+                //update the current user
                 $app['dao.user']->save($user);
 
                 // relog the user in
@@ -185,25 +191,34 @@ class HomeController {
                 $app['session']->getFlashBag()->add('success', 'Votre profil a bien été mis à jour.');
             }
 
-            /*$userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
+            //Managing the user password form submission
+            $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
             if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()) {
-                $plainPassword = $user->getPassword();
+                $plainOldPassword = $changePasswordModel->getOldPassword();
+                $plainNewPassword = $changePasswordModel->getNewPassword();
 
                 // find the encoder for the user
                 $encoder = $app['security.encoder_factory']->getEncoder($user);
 
-                // compute the encoded password
-                $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-                $user->setPassword($password);
+                // test the entered plain password with the current encoded password
+                if ($encoder->isPasswordValid($user->getPassword(), $plainOldPassword, $user->getSalt())) {
+                    $newPassword = $encoder->encodePassword($plainNewPassword, $user->getSalt());
 
-                $app['dao.user']->save($user);
-                $app['session']->getFlashBag()->add('success', 'Votre mot de passe a bien été mis à jour.');
-            }*/
+                    $user->setPassword($newPassword);
+                    $app['dao.user']->save($user);
+
+                    $app['session']->getFlashBag()->add('success', 'Votre mot de passe a bien été mis à jour.');
+                }
+                else {
+                    $app['session']->getFlashBag()->add('error', 'Votre mot de passe actuel ne correspond pas à votre entrée.');
+                }
+            }
         }
 
         return $app['twig']->render('profile.html.twig', array(
             'title' => 'Profil',
             'basicUserDataForm' => $basicUserDataForm->createView(),
+            'userPasswordForm' => $userPasswordForm->createView(),
             'articles' => $articles,
             'comments' => $comments
         ));
