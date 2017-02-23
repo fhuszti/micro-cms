@@ -11,7 +11,7 @@
             <div class="container">
                 <div class="navbar-header">
                     <a href="{{ path('home') }}" title="Retour à la page d'accueil" class="navbar-brand">
-                        MicroCMS
+                        Billet simple pour l'Alaska
                     </a>
 
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -24,17 +24,17 @@
                     <nav role="navigation">
                         <!-- actual menu list -->
                         <ul class="nav navbar-nav navbar-right">
-                            <li>
+                            <li class="{% if homeMenu is defined %}active{% endif %}">
                                 <a href="{{ path('home') }}" title="Page d'accueil">
                                     <span class="glyphicon glyphicon-home"></span> Accueil
                                 </a>
                             </li>
-                            <li>
+                            <li class="{% if chaptersMenu is defined %}active{% endif %}">
                                 <a href="{{ path('chapters') }}" title="Liste des chapitres">
                                     <span class="glyphicon glyphicon-book"></span> Chapitres
                                 </a>
                             </li>
-                            <li>
+                            <li class="{% if aboutMenu is defined %}active{% endif %}">
                                 <a href="{{ path('about') }}" title="A propos du projet et de l'auteur">
                                     <span class="glyphicon glyphicon-info-sign"></span> &Agrave;
  propos
@@ -48,7 +48,7 @@
                                         </a>
                                     </li>
                                 {% endif %}
-                                <li>
+                                <li class="{% if profileMenu is defined %}active{% endif %}">
                                     <a href="{{ path('profile', { 'id' : app.user.id }) }}" title="Modifier le profil" id="menuWelcome">
                                         <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.user.username }}
                                     </a>
@@ -64,12 +64,12 @@
                                     </ul>
                                 </li>
                             {% else %}
-                                <li>
+                                <li class="{% if registerMenu is defined %}active{% endif %}">
                                     <a href="{{ path('register') }}" title="Inscription">
                                         <span class="glyphicon glyphicon-pencil"></span> Inscription
                                     </a>
                                 </li>
-                                <li>
+                                <li class="{% if loginMenu is defined %}active{% endif %}">
                                     <a href="{{ path('login') }}" title="Connexion">
                                         <span class="glyphicon glyphicon-user"></span> Connexion
                                     </a>
