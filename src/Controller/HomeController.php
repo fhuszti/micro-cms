@@ -176,7 +176,7 @@ class HomeController {
         if ($request->isMethod('POST')) {
             //Managing the basic user data form submission
             $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
-            if ($basicUserDataForm->isSubmitted() && $basicUserDataForm->isValid()) {
+            if ($request->request->has($basicUserDataForm->getName())) {
                 //update the current user
                 $app['dao.user']->save($user);
 
@@ -193,7 +193,7 @@ class HomeController {
 
             //Managing the user password form submission
             $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
-            if ($userPasswordForm->isSubmitted() && $userPasswordForm->isValid()) {
+            if ($request->request->has($userPasswordForm->getName())) {
                 $plainOldPassword = $changePasswordModel->getOldPassword();
                 $plainNewPassword = $changePasswordModel->getNewPassword();
 
