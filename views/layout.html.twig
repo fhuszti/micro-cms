@@ -43,7 +43,7 @@
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 {% if app.user and is_granted('ROLE_ADMIN') %}
                                     <li class="{% if adminMenu is defined %}active{% endif %}">
-                                        <a href="{{ path('admin') }}" title="Espace d'administration">
+                                        <a href="{{ path('admin') }}" title="Espace d'administration" id="adminMenu">
                                             <span class="glyphicon glyphicon-cog"></span> Administration
                                         </a>
                                     </li>
@@ -94,5 +94,7 @@
 
         <!-- JavaScript Boostrap plugin -->
         <script src="{{ asset('/lib/bootstrap/js/bootstrap.min.js') }}"></script>
+
+
     </body>
 </html>

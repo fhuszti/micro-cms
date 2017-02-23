@@ -2,12 +2,27 @@ body {
     padding-top: 50px;
 }
 
+#adminMenu:hover .glyphicon-cog {
+    -webkit-animation:spin 5s linear infinite;
+    -moz-animation:spin 5s linear infinite;
+    animation:spin 5s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
 #menuWelcome {
     padding-right: 5px;
 }
 #menuDropDown {
     padding-left: 15px;
     padding-right: 15px;
+}
+#menuDropDown .glyphicon-menu-down {
+    transition: transform 0.7s ease;
+}
+.dropdown.open #menuDropDown .glyphicon-menu-down {
+    transform: rotate(180deg);
 }
 
 .jumbotron p {
