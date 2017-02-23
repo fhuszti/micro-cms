@@ -1,27 +1,73 @@
 {% extends "layout.html.twig" %}
 {% set chaptersMenu = true %}
 
+{% block cssSup %}
+    <link href="{{ asset('/css/book.css') }}" rel="stylesheet" />
+{% endblock %}
+
 {% block title %}
     Chapitres
 {% endblock %}
 
 {% block content %}
-    {% for article in articles %}
-        <article>
-            <h2><a href="{{ path('article', { 'id' : article.id }) }}">{{ article.title }}</a></h2>
+    <section id="last-chapters">
+        <ul class="align">
+            {% for article in articles %}
+                <li>
+                    <figure class='book'>
+                        <!-- Front -->
+                        <ul class='hardcover_front'>
+                            <li>
+                                <div class="coverDesign grey">
+                                    {% if date(article.date) > date('-7days') %}
+                                        <span class="ribbon">NOUVEAU</span>
+                                    {% endif %}
 
-            <h4>
-                Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time>
-            </h4>
-            {% if article.lastModif != "0000-00-00" %}
-                <h4>
-                    Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time>
-                </h4>
-            {% endif %}
+                                    {% set articleTitle = article.title|split(' ') %}
+                                    <h1>{{ articleTitle[0] }}</h1>
+                                    <h3>{{ articleTitle[1] }}</h3>
+                                </div>
+                            </li>
+                            <li></li>
+                        </ul>
 
-            <p>
-                {{ article.content }}
-            </p>
-        </article>
-    {% endfor %}
+                        <!-- Pages -->
+                        <ul class='page'>
+                            <li></li>
+                            <li>
+                                <a class="btn btn-book" href="{{ path('article', { 'id' : article.id }) }}" title="Aller à cet article">
+                                    Lire le chapitre
+                                </a>
+                            </li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+
+                        <!-- Back -->
+                        <ul class='hardcover_back'>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <ul class='book_spine'>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <figcaption>
+                            <a href="{{ path('article', { 'id' : article.id }) }}" title="Aller à cet article"><h1>{{ article.title }}</h1></a>
+
+                            <span>Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time></span>
+                            {% if article.lastModif != "0000-00-00" %}
+                                <span>Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time></span>
+                            {% endif %}
+
+                            <p>{{ article.content | truncate(150, true) }}</p>
+                        </figcaption>
+                    </figure>
+                </li>
+            {% else %}
+                <li>Aucun chapitre publié pour le moment.</li>
+            {% endfor %}
+        </ul>
+    </section>
 {% endblock %}
