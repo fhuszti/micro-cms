@@ -1,4 +1,4 @@
-#headerMenu .navbar-brand, #headerMenu .icon-bar {
+#headerMenu .navbar-brand {
     color: #386473;
 }
 #headerMenu .navbar-brand:hover, #headerMenu .navbar-brand:focus, #headerMenu .navbar-brand:active {
@@ -8,6 +8,9 @@
     color: #386473;
 }
 
+#headerMenu .icon-bar {
+    background-color: #386473;
+}
 .navbar-default, .navbar-default .navbar-toggle {
     border-color: #CEDADE;
 }

@@ -25,6 +25,18 @@ a {
 	padding: 30px 50px 0;
 }
 
+.panel-default {
+    text-align: justify;
+}
+.panel-default .panel-heading {
+	background-color: #F0F7FA;
+}
+.panel-default img {
+	max-width: 300px;
+    width: 90%;
+    margin: 10px 20px;
+}
+
 
 
 .adminTable {
@@ -47,6 +59,12 @@ a {
 
 
 
+@media (max-width: 630px) {
+    .panel-default img {
+        float: center;
+        text-align: center;
+    }
+}
 @media (max-width: 767px) {
     #pageOpening {
     	padding: 30px 20px 0;
