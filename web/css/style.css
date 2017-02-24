@@ -49,6 +49,7 @@ form textarea {
 }
 #commentSection {
     background-color: #F0F7FA;
+    border: 1px solid #CEDADE;
     padding: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
@@ -71,7 +72,6 @@ form textarea {
 .comment, .comment .response {
     margin: 0 0 10px 0;
     padding: 0 30px 20px 30px;
-    border: 1px solid black;
     border-radius: 10px 0px;
 }
 .comment .row {
@@ -80,9 +80,11 @@ form textarea {
 }
 .odd-comment {
     background-color: #F0F7FA;
+    border: 1px solid #CEDADE;
 }
 .even-comment {
     background-color: white;
+    border: 1px solid #CEDADE;
 }
 
 .adminTable {
@@ -118,5 +120,9 @@ form textarea {
     }
     .comment .response {
         margin-left: 10px;
+    }
+    .comment .row {
+        padding-left: 20px;
+        padding-right: 20px;
     }
 }
