@@ -3,6 +3,7 @@
 
 {% block cssSup %}
     <link href="{{ asset('/css/book.css') }}" rel="stylesheet" />
+    <link href="{{ asset('/css/homepage.css') }}" rel="stylesheet" />
 {% endblock %}
 
 {% block title %}
@@ -18,18 +19,26 @@
 
     <div class="jumbotron">
         <div class="container">
-            <h1>"Billet simple pour l'Alaska"</h1>
+            <h1>Billet simple pour l&rsquo;Alaska</h1>
             <h3>écrit par Jean Forteroche</h3>
 
-            <p>
-                <a href="{{ path('about') }}" title="A propos du projet et de l'auteur" class="btn btn-info btn-lg" role="button">
-                    En savoir plus <span class="glyphicon glyphicon-hand-right"></span>
-                </a>
-            </p>
+            <div class="row">
+                <p class="row">
+                    Un blog, un roman, une histoire.
+                </p>
+                <p class="row">
+                    <a href="{{ path('about') }}" title="A propos du projet et de l'auteur" class="btn btn-info btn-lg" role="button">
+                        En savoir plus <span class="glyphicon glyphicon-hand-right"></span>
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 
     <section id="last-chapters">
+        <h2>Derniers chapitres parus</h2>
+        <hr />
+
         <ul class="align">
             {% for article in articles %}
                 <li>
@@ -37,7 +46,7 @@
                         <!-- Front -->
                         <ul class='hardcover_front'>
                             <li>
-                                <div class="coverDesign grey">
+                                <div class="coverDesign blue">
                                     {% if date(article.date) > date('-7days') %}
                                         <span class="ribbon">NOUVEAU</span>
                                     {% endif %}

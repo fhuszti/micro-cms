@@ -1,0 +1,39 @@
+.jumbotron {
+    background-image: url("../images/snow-background.jpg");
+    border: 1px solid #CEDADE;
+}
+
+.jumbotron .row {
+    margin-top: 40px;
+}
+
+.jumbotron p {
+    text-align: center;
+}
+
+.jumbotron h1 {
+    font-style: italic;
+}
+.jumbotron h3 {
+    text-align: right;
+    margin-top: 0;
+}
+
+.jumbotron .btn {
+    background-color: #386473;
+    border: 1px solid #CEDADE;
+}
+.jumbotron .btn:hover, .jumbotron .btn:focus, .jumbotron .btn:active {
+    background-color: #234958;
+}
+
+#last-chapters {
+    margin-top: 50px;
+}
+#last-chapters a {
+    color: #386473;
+}
+#last-chapters a:hover, #last-chapters a:focus, #last-chapters a:active {
+    color: #234958;
+    text-decoration: none;
+}
