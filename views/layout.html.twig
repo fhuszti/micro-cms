@@ -9,7 +9,7 @@
         <title>{% block title %}{% endblock %} - MicroCMS</title>
     </head>
     <body>
-        <header class="navbar navbar-default navbar-fixed-top">
+        <header id="headerMenu" class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <a href="{{ path('home') }}" title="Retour à la page d'accueil" class="navbar-brand">
@@ -28,31 +28,35 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li class="{% if homeMenu is defined %}active{% endif %}">
                                 <a href="{{ path('home') }}" title="Page d'accueil">
-                                    <span class="glyphicon glyphicon-home"></span> Accueil
+                                    <span class="glyphicon glyphicon-home"></span>
+                                    <span class="menuLabel"> Accueil</span>
                                 </a>
                             </li>
                             <li class="{% if chaptersMenu is defined %}active{% endif %}">
                                 <a href="{{ path('chapters') }}" title="Liste des chapitres">
-                                    <span class="glyphicon glyphicon-book"></span> Chapitres
+                                    <span class="glyphicon glyphicon-book"></span>
+                                    <span class="menuLabel"> Chapitres</span>
                                 </a>
                             </li>
                             <li class="{% if aboutMenu is defined %}active{% endif %}">
                                 <a href="{{ path('about') }}" title="A propos du projet et de l'auteur">
-                                    <span class="glyphicon glyphicon-info-sign"></span> &Agrave;
- propos
+                                    <span class="glyphicon glyphicon-info-sign"></span>
+                                    <span class="menuLabel"> &Agrave; propos</span>
                                 </a>
                             </li>
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 {% if app.user and is_granted('ROLE_ADMIN') %}
                                     <li class="{% if adminMenu is defined %}active{% endif %}">
                                         <a href="{{ path('admin') }}" title="Espace d'administration" id="adminMenu">
-                                            <span class="glyphicon glyphicon-cog"></span> Administration
+                                            <span class="glyphicon glyphicon-cog"></span>
+                                            <span class="menuLabel"> Administration</span>
                                         </a>
                                     </li>
                                 {% endif %}
                                 <li class="{% if profileMenu is defined %}active{% endif %}">
                                     <a href="{{ path('profile', { 'id' : app.user.id }) }}" title="Modifier le profil" id="menuWelcome">
-                                        <span class="glyphicon glyphicon-user"></span> Bienvenue, {{ app.user.username }}
+                                        <span class="glyphicon glyphicon-user"></span>
+                                        <span class="menuLabel"> Bienvenue, {{ app.user.username }}</span>
                                     </a>
                                 </li>
                                 <li class="dropdown">

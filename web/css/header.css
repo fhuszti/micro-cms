@@ -1,3 +1,22 @@
+#headerMenu .navbar-brand, #headerMenu .icon-bar {
+    color: #386473;
+}
+#headerMenu .navbar-brand:hover, #headerMenu .navbar-brand:focus, #headerMenu .navbar-brand:active {
+    color: #234958;
+}
+#headerMenu a:hover .glyphicon {
+    color: #386473;
+}
+
+.navbar-default, .navbar-default .navbar-toggle {
+    border-color: #CEDADE;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    background-color: inherit;
+    border-bottom: 3px solid #386473;
+}
+
 #adminMenu:hover .glyphicon-cog {
     -webkit-animation:spin 5s linear infinite;
     -moz-animation:spin 5s linear infinite;
@@ -20,4 +39,17 @@
 }
 .dropdown.open #menuDropDown .glyphicon-menu-down {
     transform: rotate(180deg);
+}
+
+
+
+
+
+@media (min-width: 768px) and (max-width: 991px) {
+    #headerMenu .menuLabel {
+        display: none;
+    }
+    #headerMenu .glyphicon {
+        font-size: 1.5em;
+    }
 }
