@@ -6,32 +6,59 @@
 {% endblock %}
 
 {% block content %}
-    <article>
-        <h2>{{ article.title }}</h2>
+    <article class="row">
+        <header  id="articleTitle" class="col-xs-12">
+            <h2>{{ article.title }}</h2>
+        </header>
 
-        <h4>Ajouté le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time></h4>
-        {% if article.lastModif != "0000-00-00" %}
-            <h4>Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time></h4>
-        {% endif %}
+        <div id="articleContent" onerror=""class="col-xs-12">
+            <p>{{ article.content }}</p>
+        </div>
 
-        <p>
-            {{ article.content }}
-        </p>
+        <footer class="col-xs-12">
+            <hr />
+            <h5>
+                le <time datetime="{{ article.date }}" pubdate="pubdate">{{ article.date|date("d/m/Y") }}</time>
+                {% if article.lastModif != "0000-00-00" %}
+                    - modifié le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time>
+                    {% endif %}
+            </h5>
+        </footer>
     </article>
 
-    <section id="commentSection">
+    <section id="commentSection" class="row">
         <h3>Commentaires</h3>
 
         {% for parent in parents %}
-            <div class="comment even-comment">
-                <p>{{ parent.content }}</p>
+            <article class="comment even-comment row">
+                <header class="row">
+                    <div class="col-xs-12 col-sm-5">
+                        <h3>{{ parent.author.username}}</h3>
+                    </div>
+                    <div class="col-xs-12 col-sm-7">
+                        <h4>
+                            le <time datetime="{{ parent.date }}" pubdate="pubdate">{{ parent.date|date("d/m/Y \à H\\hi") }}</time>
+                            {% if parent.lastModif != "0000-00-00 00:00:00" %}
+                                <br />- modifié le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                            {% endif %}
+                        </h4>
+                    </div>
+                </header>
+
+                <div class="row">
+                    <p>{{ parent.content }}</p>
+                </div>
 
                 {% for child in children %}
                     {% if child.parentId == parent.id %}
                         {{ macroThreadedComments.print_comments_recursively(child, children, 1) }}
                     {% endif %}
                 {% endfor %}
-            </div>
+            </article>
+        {% else %}
+                <div class="row">
+                    <p>Aucun commentaire n'a encore été publié sur cet article.</p>
+                </div>
         {% endfor %}
 
     </section>

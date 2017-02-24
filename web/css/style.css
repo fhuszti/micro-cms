@@ -32,25 +32,50 @@ body {
     text-align: right;
 }
 
-#commentSection {
-    background-color: #eee;
-    padding: 20px;
-    margin-top: 50px;
+#articleTitle h2 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
-#commentSection h3 {
+#articleContent {
+    padding: 0 30px;
+    text-align: justify;
+}
+#commentSection {
+    background-color: #F0F7FA;
+    padding: 20px;
+    margin-top: 30px;
+}
+#commentSection>h3 {
     margin-top: 0;
     margin-bottom: 30px;
+}
+.comment h3 {
+    font-size: 1.4em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.comment h4 {
+    text-align: right;
+    font-size: 1em;
+    font-weight: normal;
+    font-style: italic;
 }
 .comment {
 
 }
 .comment, .comment .response {
-    padding: 10px 20px 20px 30px;
+    margin: 0 0 10px 0;
+    padding: 0 30px 20px 30px;
     border: 1px solid black;
-    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.comment .row {
+    margin: 0;
+    margin-top: 20px;
 }
 .odd-comment {
-    background-color: #eee;
+    background-color: #F0F7FA;
 }
 .even-comment {
     background-color: white;
@@ -68,6 +93,26 @@ body {
 
 .footer {
     border-top: 1px solid #ccc;
-    padding-top: 10px;
+    padding: 20px;
     text-align: center;
+}
+
+
+
+
+
+@media (max-width: 767px) {
+    .comment h3 {
+        margin-bottom: 0;
+        margin-top: 0px;
+    }
+    .comment h4 {
+        text-align: left;
+    }
+    .comment, .comment .response {
+        padding: 0 10px 20px 10px;
+    }
+    .comment .response {
+        margin-left: 10px;
+    }
 }

@@ -1,6 +1,22 @@
 {% macro print_comments_recursively(parent, children, commentId) %}
-    <div class="response {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
-        <p>{{ parent.content }}</p>
+    <article class="response row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
+        <header class="row">
+            <div class="col-xs-12 col-sm-5">
+                <h3>{{ parent.author.username}}</h3>
+            </div>
+            <div class="col-xs-12 col-sm-7">
+                <h4>
+                    le <time datetime="{{ parent.date }}" pubdate="pubdate">{{ parent.date|date("d/m/Y \à H\\hi") }}</time>
+                    {% if parent.lastModif != "0000-00-00 00:00:00" %}
+                        <br />- modifié le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                    {% endif %}
+                </h4>
+            </div>
+        </header>
+
+        <div class="row">
+            <p>{{ parent.content }}</p>
+        </div>
 
         {% set commentId = commentId + 1 %}
 
@@ -9,5 +25,5 @@
                 {{ _self.print_comments_recursively(child, children, commentId) }}
             {% endif %}
         {% endfor %}
-    </div>
+    </article>
 {% endmacro %}
