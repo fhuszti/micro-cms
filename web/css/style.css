@@ -41,10 +41,17 @@ body {
     padding: 0 30px;
     text-align: justify;
 }
+article footer h5 {
+    text-align: right;
+}
+form textarea {
+    resize: vertical;
+}
 #commentSection {
     background-color: #F0F7FA;
     padding: 20px;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 #commentSection>h3 {
     margin-top: 0;
@@ -61,14 +68,11 @@ body {
     font-weight: normal;
     font-style: italic;
 }
-.comment {
-
-}
 .comment, .comment .response {
     margin: 0 0 10px 0;
     padding: 0 30px 20px 30px;
     border: 1px solid black;
-    border-radius: 10px;
+    border-radius: 10px 0px;
 }
 .comment .row {
     margin: 0;

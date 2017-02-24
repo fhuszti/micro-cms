@@ -26,6 +26,40 @@
         </footer>
     </article>
 
+    <section class="row">
+        <h3 class="col-xs-12">Ajouter un commentaire
+        <hr /></h3>
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        <div class="col-xs-12">
+            {% if commentForm %}
+                {{ form_start(commentForm) }}
+                    <div class="form-group">
+                        {{ form_errors(commentForm.content) }}
+                        {{ form_widget(commentForm.content, { 'attr' : {
+                                'rows' : '4',
+                                'class' : 'form-control',
+                                'placeholder' : 'Entrez votre commentaire'
+                            }})
+                        }}
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
+                    </div>
+                {{ form_end(commentForm) }}
+            {% else %}
+                <p>
+                    <a href="{{ path('register') }}" title="Page d'inscription'">Inscrivez-vous</a> ou <a href="{{ path('login') }}" title="Page de connexion">connectez-vous</a> pour ajouter un commentaire.
+                </p>
+            {% endif %}
+        </div>
+    </section>
+
     <section id="commentSection" class="row">
         <h3>Commentaires</h3>
 
@@ -57,38 +91,9 @@
             </article>
         {% else %}
                 <div class="row">
-                    <p>Aucun commentaire n'a encore été publié sur cet article.</p>
+                    <p class="col-xs-12">Aucun commentaire n'a encore été publié sur cet article.</p>
                 </div>
         {% endfor %}
 
-    </section>
-
-    <section>
-        <h3>Ajouter un commentaire</h3>
-
-        {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="alert alert-success">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-
-        {% if commentForm %}
-            {{ form_start(commentForm) }}
-                <div class="form-group">
-                    {{ form_errors(commentForm.content) }}
-                    {{ form_widget(commentForm.content, { 'attr' : {
-                            'rows' : '4',
-                            'class' : 'form-control',
-                            'placeholder' : 'Entrez votre commentaire'
-                        }})
-                    }}
-                </div>
-                <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
-                </div>
-            {{ form_end(commentForm) }}
-            {% else %}
-                <p><a href="{{ path('login') }}" title="Page de connexion">Connectez-vous</a> pour ajouter un commentaire.</p>
-            {% endif %}
     </section>
 {% endblock %}
