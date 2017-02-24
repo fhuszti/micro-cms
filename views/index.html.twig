@@ -47,7 +47,7 @@
                         <ul class='hardcover_front'>
                             <li>
                                 <div class="coverDesign blue">
-                                    {% if date(article.date) > date('-7days') %}
+                                    {% if date(article.date) > date('-14days') %}
                                         <span class="ribbon">NOUVEAU</span>
                                     {% endif %}
                                     <h1>{{ article.title }}</h1>

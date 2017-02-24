@@ -21,6 +21,10 @@ a {
 	color: inherit;
 }
 
+#pageOpening {
+	padding: 30px 50px 0;
+}
+
 
 
 .adminTable {
@@ -38,4 +42,13 @@ a {
     padding: 20px;
     text-align: center;
     background-color: #f8f8f8;
+}
+
+
+
+
+@media (max-width: 767px) {
+    #pageOpening {
+    	padding: 30px 20px 0;
+    }
 }

@@ -10,7 +10,10 @@
 {% endblock %}
 
 {% block content %}
-    <section id="last-chapters">
+    <section id="pageOpening">
+        <h2>Chapitres déjà parus</h2>
+        <hr />
+
         <ul class="align">
             {% for article in articles %}
                 <li>
@@ -18,14 +21,12 @@
                         <!-- Front -->
                         <ul class='hardcover_front'>
                             <li>
-                                <div class="coverDesign grey">
-                                    {% if date(article.date) > date('-7days') %}
+                                <div class="coverDesign blue">
+                                    {% if date(article.date) > date('-14days') %}
                                         <span class="ribbon">NOUVEAU</span>
                                     {% endif %}
 
-                                    {% set articleTitle = article.title|split(' ') %}
-                                    <h1>{{ articleTitle[0] }}</h1>
-                                    <h3>{{ articleTitle[1] }}</h3>
+                                    <h1>{{ article.title }}</h1>
                                 </div>
                             </li>
                             <li></li>

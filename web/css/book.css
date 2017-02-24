@@ -649,6 +649,14 @@ Table of Contents
 
 /* figcaption */
 
+figure a {
+    color: #386473;
+}
+figure a:hover, figure a:focus, figure a:active {
+    color: #234958;
+    text-decoration: none;
+}
+
 figcaption {
 	padding-left: 40px;
 	text-align: left;

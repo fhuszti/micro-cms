@@ -30,10 +30,3 @@
 #last-chapters {
     margin-top: 50px;
 }
-#last-chapters a {
-    color: #386473;
-}
-#last-chapters a:hover, #last-chapters a:focus, #last-chapters a:active {
-    color: #234958;
-    text-decoration: none;
-}
