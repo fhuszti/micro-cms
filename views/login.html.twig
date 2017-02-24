@@ -6,33 +6,36 @@
 {% endblock %}
 
 {% block content %}
-    <h2 class="text-center">{{ block('title') }}</h2>
+    <div id="pageOpening">
+        <h2>{{ block('title') }}</h2>
+        <hr />
 
-    {% if error %}
-        <div class="alert alert-danger">
-            <strong>Erreur lors de la tentative de connexion.</strong> {{ error }}
+        {% if error %}
+            <div class="alert alert-danger">
+                <strong>Erreur lors de la tentative de connexion.</strong> {{ error }}
+            </div>
+        {% endif %}
+
+        <div class="well">
+            <form class="form-signin form-horizontal" role="form" action="{{ path('login_check') }}" method="post">
+                <div class="form-group">
+                    <label for="user_username" class="col-sm-5 control-label required">Pseudo ou Adresse email :</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="_username" id="user_username" value="{{ last_username }}" class="form-control" placeholder="Entrez votre pseudo ou adresse email" required autofocus />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user_password" class="col-sm-5 control-label required">Mot de passe :</label>
+                    <div class="col-sm-4">
+                        <input type="password" id="user_password" name="_password" class="form-control" placeholder="Entrez votre mot de passe" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-3">
+                        <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-log-in"></span> Connexion</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    {% endif %}
-
-    <div class="well">
-        <form class="form-signin form-horizontal" role="form" action="{{ path('login_check') }}" method="post">
-            <div class="form-group">
-                <label for="user_username" class="col-sm-5 control-label required">Pseudo ou Adresse email :</label>
-                <div class="col-sm-4">
-                    <input type="text" name="_username" id="user_username" value="{{ last_username }}" class="form-control" placeholder="Entrez votre pseudo ou adresse email" required autofocus />
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="user_password" class="col-sm-5 control-label required">Mot de passe :</label>
-                <div class="col-sm-4">
-                    <input type="password" id="user_password" name="_password" class="form-control" placeholder="Entrez votre mot de passe" required />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-5 col-sm-3">
-                    <button type="submit" class="btn btn-default btn-primary"><span class="glyphicon glyphicon-log-in"></span> Connexion</button>
-                </div>
-            </div>
-        </form>
     </div>
 {% endblock %}
