@@ -43,6 +43,13 @@
 .dropdown.open #menuDropDown .glyphicon-menu-down {
     transform: rotate(180deg);
 }
+.dropdown.open {
+    border-bottom: 3px solid #e7e7e7;
+}
+.navbar-nav>li>.dropdown-menu {
+    margin-top: 3px;
+    min-width: 200px;
+}
 
 
 

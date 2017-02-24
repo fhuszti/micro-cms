@@ -19,14 +19,6 @@
     margin-top: 0;
 }
 
-.jumbotron .btn {
-    background-color: #386473;
-    border: 1px solid #CEDADE;
-}
-.jumbotron .btn:hover, .jumbotron .btn:focus, .jumbotron .btn:active {
-    background-color: #234958;
-}
-
 #last-chapters {
     margin-top: 50px;
 }

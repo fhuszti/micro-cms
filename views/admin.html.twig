@@ -6,7 +6,9 @@
 {% endblock %}
 
 {% block content %}
+    <div id="pageOpening">
     <h2>{{ block('title') }}</h2>
+    <hr />
 
     {% for flashMessage in app.session.flashbag.get('success') %}
         <div class="alert alert-success">
@@ -346,4 +348,5 @@
             </a>
         </div>
     </div>
+</div>
 {% endblock %}

@@ -18,15 +18,29 @@ h2, h3 {
 	color: #386473;
 }
 a {
-	color: inherit;
+	color: #386473;
+}
+a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: #234958;
+}
+.btn-primary, .btn-info {
+    background-color: #386473;
+    border: 1px solid #CEDADE;
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-info:hover, .btn-info:focus, .btn-info:active {
+    background-color: #234958;
 }
 
 #pageOpening {
-	padding: 30px 50px 0;
+	padding: 20px 50px 0;
 }
 
-.panel-default {
+.justified-content {
     text-align: justify;
+}
+.panel-default {
+    border-color: #CEDADE;
 }
 .panel-default .panel-heading {
 	background-color: #F0F7FA;
@@ -35,6 +49,10 @@ a {
 	max-width: 300px;
     width: 90%;
     margin: 10px 20px;
+}
+
+.well {
+    border-color: #CEDADE;
 }
 
 
