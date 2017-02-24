@@ -61,11 +61,13 @@ class HomeController {
             $commentFormView = $commentForm->createView();
         }
 
-        $comments = $app['dao.comment']->findAllByArticle($id);
+        $parents = $app['dao.comment']->findAllParentsByArticle($id);
+        $children = $app['dao.comment']->findAllChildrenByArticle($id);
 
         return $app['twig']->render('article.html.twig', array(
             'article' => $article,
-            'comments' => $comments,
+            'parents' => $parents,
+            'children' => $children,
             'commentForm' => $commentFormView
         ));
     }

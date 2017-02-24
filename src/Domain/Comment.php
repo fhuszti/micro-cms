@@ -44,6 +44,14 @@ class Comment {
      */
     private $article;
 
+    /**
+     * Id of the parent comment.
+     * Default at null
+     *
+     * @var integer
+     */
+    private $parent_id;
+
 
 
 
@@ -98,6 +106,15 @@ class Comment {
 
     public function setArticle(Article $article) {
         $this->article = $article;
+        return $this;
+    }
+
+    public function getParentId() {
+        return $this->parent_id;
+    }
+
+    public function setParentId($parent_id) {
+        $this->parent_id = $parent_id;
         return $this;
     }
 }

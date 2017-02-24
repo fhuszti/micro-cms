@@ -32,6 +32,30 @@ body {
     text-align: right;
 }
 
+#commentSection {
+    background-color: #eee;
+    padding: 20px;
+    margin-top: 50px;
+}
+#commentSection h3 {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+.comment {
+
+}
+.comment, .comment .response {
+    padding: 10px 20px 20px 30px;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+.odd-comment {
+    background-color: #eee;
+}
+.even-comment {
+    background-color: white;
+}
+
 .adminTable {
     margin-top: 20px;
     margin-bottom: 20px;

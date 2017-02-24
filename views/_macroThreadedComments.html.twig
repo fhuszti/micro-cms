@@ -1,0 +1,13 @@
+{% macro print_comments_recursively(parent, children, commentId) %}
+    <div class="response {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
+        <p>{{ parent.content }}</p>
+
+        {% set commentId = commentId + 1 %}
+
+        {% for child in children %}
+            {% if child.parentId == parent.id  %}
+                {{ _self.print_comments_recursively(child, children, commentId) }}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endmacro %}

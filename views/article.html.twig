@@ -1,4 +1,5 @@
 {% extends "layout.html.twig" %}
+{% import "_macroThreadedComments.html.twig" as macroThreadedComments %}
 
 {% block title %}
     {{ article.title }}
@@ -18,24 +19,21 @@
         </p>
     </article>
 
-    <section>
+    <section id="commentSection">
         <h3>Commentaires</h3>
 
-        {% for comment in comments %}
-            <article>
-                <strong>{{ comment.author.username }} :</strong> {{ comment.content }}
-                <br />
-                <em>
-                    Publié le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y \à H\\hi") }}</time>
-                    {% if comment.lastModif != "0000-00-00 00:00:00" %}
-                        - dernière modification le <time datetime="{{ comment.lastModif }}" pubdate="pubdate">{{ comment.lastModif|date("d/m/Y \à H\\hi") }}</time>
-                    {% endif %}
-                </em>
-            </article>
+        {% for parent in parents %}
+            <div class="comment even-comment">
+                <p>{{ parent.content }}</p>
 
-            {% else %}
-                <p>Aucun commentaire n'a encore été publié sur cet article.</p>
+                {% for child in children %}
+                    {% if child.parentId == parent.id %}
+                        {{ macroThreadedComments.print_comments_recursively(child, children, 1) }}
+                    {% endif %}
+                {% endfor %}
+            </div>
         {% endfor %}
+
     </section>
 
     <section>
