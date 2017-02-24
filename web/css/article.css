@@ -1,0 +1,78 @@
+#articleTitle h2 {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#articleContent {
+    padding: 0 30px;
+    text-align: justify;
+}
+article footer h5 {
+    text-align: right;
+}
+form textarea {
+    resize: vertical;
+}
+#commentSection {
+    background-color: #F0F7FA;
+    border: 1px solid #CEDADE;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+#commentSection>h3 {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+.comment h3 {
+    font-size: 1.4em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.comment h4 {
+    text-align: right;
+    font-size: 1em;
+    font-weight: normal;
+    font-style: italic;
+}
+.comment, .comment .response {
+    margin: 0 0 10px 0;
+    padding: 0 30px 20px 30px;
+    border-radius: 10px 0px;
+}
+.comment .row {
+    margin: 0;
+    margin-top: 20px;
+}
+.odd-comment {
+    background-color: #F0F7FA;
+    border: 1px solid #CEDADE;
+}
+.even-comment {
+    background-color: white;
+    border: 1px solid #CEDADE;
+}
+
+
+
+
+
+@media (max-width: 767px) {
+    .comment h3 {
+        margin-bottom: 0;
+        margin-top: 0px;
+    }
+    .comment h4 {
+        text-align: left;
+    }
+    .comment, .comment .response {
+        padding: 0 10px 20px 10px;
+    }
+    .comment .response {
+        margin-left: 10px;
+    }
+    .comment .row {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

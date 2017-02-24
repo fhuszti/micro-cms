@@ -1,5 +1,6 @@
 {% extends "layout.html.twig" %}
 {% import "_macroThreadedComments.html.twig" as macroThreadedComments %}
+{% block cssSup %}<link href="{{ asset('/css/article.css') }}" rel="stylesheet" />{% endblock %}
 
 {% block title %}
     {{ article.title }}
