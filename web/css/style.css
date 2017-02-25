@@ -40,6 +40,11 @@ a:hover, a:focus, a:active {
 .justified-content {
     text-align: justify;
 }
+
+.modal-header {
+    color: #386473;
+}
+
 .panel-default {
     border-color: #CEDADE;
 }

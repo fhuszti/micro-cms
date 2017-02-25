@@ -10,9 +10,18 @@
 article footer h5 {
     text-align: right;
 }
+
 form textarea {
     resize: vertical;
 }
+
+.marginTopless {
+    margin-top: 0;
+}
+.marginBottomless {
+    margin-bottom: 0;
+}
+
 #commentSection {
     background-color: #F0F7FA;
     border: 1px solid #CEDADE;
@@ -29,9 +38,9 @@ form textarea {
     margin-top: 10px;
     margin-bottom: 20px;
 }
-.comment h4 {
+.comment .pubDate {
     text-align: right;
-    font-size: 1em;
+    font-size: 0.9em;
     font-weight: normal;
     font-style: italic;
 }
@@ -43,6 +52,9 @@ form textarea {
 .comment .row {
     margin: 0;
     margin-top: 20px;
+}
+.comment footer .btn {
+    margin-top: 10px;
 }
 .odd-comment {
     background-color: #F0F7FA;
@@ -58,11 +70,11 @@ form textarea {
 
 
 @media (max-width: 767px) {
-    .comment h3 {
+    .comment h4:not([class='pubDate']) {
         margin-bottom: 0;
         margin-top: 0px;
     }
-    .comment h4 {
+    .comment .pubDate {
         text-align: left;
     }
     .comment, .comment .response {

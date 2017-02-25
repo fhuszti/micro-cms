@@ -219,7 +219,7 @@ class CommentDAO extends DAO {
      *
      * @param \MicroCMS\Domain\Comment $comment The comment to save
      */
-    public function save(Comment $comment) {
+    public function save(Comment $comment, $flagging = false) {
         $commentData = array(
             'art_id' => $comment->getArticle()->getId(),
             'usr_id' => $comment->getAuthor()->getId(),
@@ -229,8 +229,11 @@ class CommentDAO extends DAO {
 
         if ($comment->getId()) {
             // The comment has already been saved : update it
-            $commentData['com_date'] = $comment->getDate();
-            $commentData['com_last_modif'] = (new \DateTime())->format('Y-m-d H:i:s');
+            //if we're not flagging, we update the date of last modif
+            if (!$flagging) {
+                $commentData['com_date'] = $comment->getDate();
+                $commentData['com_last_modif'] = (new \DateTime())->format('Y-m-d H:i:s');
+            }
 
             $this->getDb()->update('t_comments', $commentData, array('com_id' => $comment->getId()));
         }

@@ -73,6 +73,35 @@ class HomeController {
     }
 
     /**
+     * Comment flagging controller.
+     *
+     * @param Request $request POST request sent
+     * @param Application $app Silex application
+     */
+    public function commentFlagAction(Request $request, Application $app) {
+        $commentId = $request->request->get('id');
+
+        $comment = $app['dao.comment']->find($commentId);
+        $author = $app['dao.user']->find($comment->getAuthor()->getId());
+
+        //increment the number of times a comment has been flagged by 1 and save it
+        $flagsOnComment = (int)$comment->getNumberFlags() + 1;
+        $comment->setNumberFlags($flagsOnComment);
+        $app['dao.comment']->save($comment, true);
+
+        //add the comment id to the user's list of comments he's flagged and save it
+        $flaggedComments = $author->getCommentsFlagged();
+
+        //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
+        //but Silex wants a return on actions, so I leave it there just so it works
+        // + it's cool to have that in case the user starts getting redirected anyway
+        $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
+
+        // Redirect to home page
+        return $app->redirect($app['url_generator']->generate('home'));
+    }
+
+    /**
      * Posts list controller.
      *
      * @param Application $app Silex application
