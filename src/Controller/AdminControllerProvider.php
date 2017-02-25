@@ -10,7 +10,7 @@ class AdminControllerProvider implements ControllerProviderInterface {
         $controllers = $app['controllers_factory'];
 
         //Administration page
-        $controllers->get('/', "MicroCMS\Controller\AdminController::indexAction")->bind('admin');
+        $controllers->get('/', "MicroCMS\Controller\Admin\AdminHomeController::indexAction")->bind('admin');
 
         // Add a new article
         $controllers->match('/article/add', "MicroCMS\Controller\AdminController::addArticleAction")->bind('admin_article_add');
