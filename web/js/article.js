@@ -5,7 +5,8 @@ $(function() {
             e.preventDefault();
 
             var parentId = $(this).attr('id'),
-                modal = $('#flagDialog'+parentId);
+                modal = $('#flagDialog'+parentId),
+                flagButton = $('#flagButton'+parentId);
 
             $.ajax({
                 type: 'POST',
@@ -17,7 +18,7 @@ $(function() {
                     modal.modal('toggle');
 
                     // we change the button to the "flagged" version
-                    $(this).text('Déjà signalé');
+                    flagButton.replaceWith("<button type='button' class='btn btn-warning disabled' title='Commentaire déjà signalé'>Déjà signalé</button>" );
                 },
                 error: function(xhr, status, error) {
                     var err = xhr.responseText;
