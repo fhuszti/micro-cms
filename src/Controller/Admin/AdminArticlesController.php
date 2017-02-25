@@ -1,0 +1,70 @@
+<?php
+namespace MicroCMS\Controller\Admin;
+
+use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use MicroCMS\Domain\Article;
+use MicroCMS\Form\Type\ArticleType;
+
+class AdminArticlesController {
+    /**
+     * Add article controller.
+     *
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+    public function addArticleAction(Request $request, Application $app) {
+        $article = new Article();
+
+        $articleForm = $app['form.factory']->create(ArticleType::class, $article);
+        $articleForm->handleRequest($request);
+        if ($articleForm->isSubmitted() && $articleForm->isValid()) {
+            $app['dao.article']->save($article);
+            $app['session']->getFlashBag()->add('success', 'L\'article a été créé avec succès.');
+        }
+
+        return $app['twig']->render('article_form.html.twig', array(
+            'title' => 'Créer un article',
+            'articleForm' => $articleForm->createView()
+        ));
+    }
+
+    /**
+     * Edit article controller.
+     *
+     * @param integer $id Article id
+     * @param Request $request Incoming request
+     * @param Application $app Silex application
+     */
+
+    public function editArticleAction($id, Request $request, Application $app) {
+        $article = $app['dao.article']->find($id);
+
+        $articleForm = $app['form.factory']->create(ArticleType::class, $article);
+        $articleForm->handleRequest($request);
+        if ($articleForm->isSubmitted() && $articleForm->isValid()) {
+            $app['dao.article']->save($article);
+            $app['session']->getFlashBag()->add('success', 'L\'article a été modifié avec succès.');
+        }
+
+        return $app['twig']->render('article_form.html.twig', array(
+            'title' => 'Modifier l\'article',
+            'articleForm' => $articleForm->createView()
+        ));
+    }
+
+    /**
+     * Delete article controller.
+     *
+     * @param integer $id Article id
+     * @param Application $app Silex application
+     */
+    public function deleteArticleAction($id, Application $app) {
+        // Delete the article
+        $app['dao.article']->delete($id);
+        $app['session']->getFlashBag()->add('success', 'L\'article a été supprimé avec succès.');
+
+        // Redirect to admin home page
+        return $app->redirect($app['url_generator']->generate('admin'));
+    }
+}
