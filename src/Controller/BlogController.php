@@ -16,7 +16,7 @@ use MicroCMS\Form\Type\BasicUserDataType;
 use MicroCMS\Form\Type\UserPasswordType;
 use MicroCMS\Form\Type\UserDeleteType;
 
-class HomeController {
+class BlogController {
     /**
      * Home page controller.
      *
