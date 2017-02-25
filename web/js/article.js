@@ -9,7 +9,7 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: "comment/flag",
+                url: "commentaire/flag",
                 timeout: 3000,
                 data: {'id': parentId},
                 success: function() {
@@ -18,8 +18,9 @@ $(function() {
 
                     // we change the button to the "flagged" version
                 },
-                error: function() {
-                    alert('error');
+                error: function(xhr, status, error) {
+                    var err = xhr.responseText;
+                    alert('erreur');
                 }
             });
         });

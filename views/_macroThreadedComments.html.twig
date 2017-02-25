@@ -1,4 +1,4 @@
-{% macro print_comments_recursively(parent, children, commentId) %}
+{% macro print_comments_recursively(parent, children, commentId, flags) %}
     <article class="response row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
         <header class="row">
             <div class="col-xs-12 col-sm-5">
@@ -23,13 +23,13 @@
             <footer class="row" id="footer">
                 <hr class="marginTopless marginBottomless" />
                 <p class="pull-right">
-                    {% if parent.flagged == 0 %}
+                    {% if parent.id in flags|keys %}
+                        <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
+                            Commentaire signalé
+                        </button>
+                    {% else %}
                         <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}">
                             Signaler
-                        </button>
-                    {% elseif parent.flagged == true %}
-                        <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
-                            Commentaire signalé, en attente
                         </button>
                     {% endif %}
                     <button type="button" class="btn btn-primary" title="Répondre au commentaire">
@@ -70,7 +70,7 @@
 
         {% for child in children %}
             {% if child.parentId == parent.id  %}
-                {{ _self.print_comments_recursively(child, children, commentId) }}
+                {{ _self.print_comments_recursively(child, children, commentId, flags) }}
             {% endif %}
         {% endfor %}
     </article>

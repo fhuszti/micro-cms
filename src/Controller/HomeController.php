@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use MicroCMS\Domain\Comment;
 use MicroCMS\Domain\User;
+use MicroCMS\Domain\Flag;
 use MicroCMS\Domain\ChangePassword;
 use MicroCMS\Form\Type\CommentType;
 use MicroCMS\Form\Type\UserType;
@@ -38,9 +39,13 @@ class HomeController {
         $article = $app['dao.article']->find($id);
 
         $commentFormView = null;
-        // A user is fully authenticated : he can add comments
+        $flags = array();
+        // A user is fully authenticated : he can add and flag comments
         if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $app['user'];
+
+            //we fill the flags array with the comments the user might have already flagged
+            $flags = $app['dao.flag']->findAllByUser($user->getId());
 
             //Generate the comment
             $comment = new Comment();
@@ -61,6 +66,8 @@ class HomeController {
             $commentFormView = $commentForm->createView();
         }
 
+        //fetch all comments in two separate arrays
+        //depending on it being a first comment or a children comment
         $parents = $app['dao.comment']->findAllParentsByArticle($id);
         $children = $app['dao.comment']->findAllChildrenByArticle($id);
 
@@ -68,6 +75,7 @@ class HomeController {
             'article' => $article,
             'parents' => $parents,
             'children' => $children,
+            'flags' => $flags,
             'commentForm' => $commentFormView
         ));
     }
@@ -79,23 +87,27 @@ class HomeController {
      * @param Application $app Silex application
      */
     public function commentFlagAction(Request $request, Application $app) {
-        $commentId = $request->request->get('id');
+        // A user is fully authenticated : he can flag comments
+        if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $commentId = $request->request->get('id');
 
-        $comment = $app['dao.comment']->find($commentId);
-        $author = $app['dao.user']->find($comment->getAuthor()->getId());
+            $comment = $app['dao.comment']->find($commentId);
+            $user = $app['user'];
 
-        //increment the number of times a comment has been flagged by 1 and save it
-        $flagsOnComment = (int)$comment->getNumberFlags() + 1;
-        $comment->setNumberFlags($flagsOnComment);
-        $app['dao.comment']->save($comment, true);
+            //set up the new flag
+            $flag = new Flag();
+            $flag->setUser($user);
+            $flag->setComment($comment);
+            $flag->setIp($_SERVER['REMOTE_ADDR']);
 
-        //add the comment id to the user's list of comments he's flagged and save it
-        $flaggedComments = $author->getCommentsFlagged();
+            //save the new flag
+            $app['dao.flag']->save($flag);
 
-        //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
-        //but Silex wants a return on actions, so I leave it there just so it works
-        // + it's cool to have that in case the user starts getting redirected anyway
-        $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
+            //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
+            //but Silex wants a return on actions, so I leave it there just so it works
+            // + it's cool to have that in case the user starts getting redirected anyway
+            $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
+        }
 
         // Redirect to home page
         return $app->redirect($app['url_generator']->generate('home'));

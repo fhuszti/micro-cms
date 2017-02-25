@@ -7,7 +7,7 @@ $app->get('/', "MicroCMS\Controller\HomeController::indexAction")->bind('home');
 $app->match('/chapitre/{id}', "MicroCMS\Controller\HomeController::articleAction")->bind('article');
 
 //Flag a comment in the database
-$app->match('/chapitre/comment/flag', "MicroCMS\Controller\HomeController::commentFlagAction")->bind('user_comment_flag');
+$app->match('/chapitre/commentaire/flag', "MicroCMS\Controller\HomeController::commentFlagAction")->bind('user_comment_flag');
 
 //Posts list page
 $app->get('/chapitres', "MicroCMS\Controller\HomeController::postsListAction")->bind('chapters');

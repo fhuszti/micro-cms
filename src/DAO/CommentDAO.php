@@ -72,7 +72,7 @@ class CommentDAO extends DAO {
         $article = $this->articleDAO->find($articleId);
 
         //art_id is not selected by the query
-        //so the article won't be retrived during buildDomainObject()
+        //so the article won't be retrieved during buildDomainObject()
         $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id, parent_id FROM t_comments WHERE art_id = ? ORDER BY com_date";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
@@ -219,7 +219,7 @@ class CommentDAO extends DAO {
      *
      * @param \MicroCMS\Domain\Comment $comment The comment to save
      */
-    public function save(Comment $comment, $flagging = false) {
+    public function save(Comment $comment) {
         $commentData = array(
             'art_id' => $comment->getArticle()->getId(),
             'usr_id' => $comment->getAuthor()->getId(),
@@ -229,11 +229,8 @@ class CommentDAO extends DAO {
 
         if ($comment->getId()) {
             // The comment has already been saved : update it
-            //if we're not flagging, we update the date of last modif
-            if (!$flagging) {
-                $commentData['com_date'] = $comment->getDate();
-                $commentData['com_last_modif'] = (new \DateTime())->format('Y-m-d H:i:s');
-            }
+            $commentData['com_date'] = $comment->getDate();
+            $commentData['com_last_modif'] = (new \DateTime())->format('Y-m-d H:i:s');
 
             $this->getDb()->update('t_comments', $commentData, array('com_id' => $comment->getId()));
         }
@@ -253,7 +250,7 @@ class CommentDAO extends DAO {
     /**
      * Removes a comment from the database.
      *
-     * @param @param integer $id The comment id
+     * @param integer $id The comment id
      */
     public function delete($id) {
         $this->getDb()->delete('t_comments', array('com_id' => $id));
