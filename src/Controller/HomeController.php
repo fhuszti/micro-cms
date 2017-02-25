@@ -93,11 +93,13 @@ class HomeController {
 
             $comment = $app['dao.comment']->find($commentId);
             $user = $app['user'];
+            $article = $app['dao.article']->find($comment->getArticle()->getId());
 
             //set up the new flag
             $flag = new Flag();
             $flag->setUser($user);
             $flag->setComment($comment);
+            $flag->setArticle($article);
             $flag->setIp($_SERVER['REMOTE_ADDR']);
 
             //save the new flag

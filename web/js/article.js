@@ -17,6 +17,7 @@ $(function() {
                     modal.modal('toggle');
 
                     // we change the button to the "flagged" version
+                    $(this).text('Déjà signalé');
                 },
                 error: function(xhr, status, error) {
                     var err = xhr.responseText;

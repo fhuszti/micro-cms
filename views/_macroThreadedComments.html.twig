@@ -25,7 +25,7 @@
                 <p class="pull-right">
                     {% if parent.id in flags|keys %}
                         <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
-                            Commentaire signalé
+                            Déjà signalé
                         </button>
                     {% else %}
                         <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}">

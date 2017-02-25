@@ -78,8 +78,8 @@ $app['dao.comment'] = function($app) {
 $app['dao.flag'] = function($app) {
     $flagDAO = new MicroCMS\DAO\FlagDAO($app['db']);
     $flagDAO->setArticleDAO($app['dao.article']);
-    $flagDAO->setCommentDAO($app['dao.comment']);
     $flagDAO->setUserDAO($app['dao.user']);
+    $flagDAO->setCommentDAO($app['dao.comment']);
 
     return $flagDAO;
 };

@@ -144,8 +144,8 @@ class FlagDAO extends DAO {
     public function save(Flag $flag) {
         $flagData = array(
             'flag_com_id' => $flag->getComment()->getId(),
-            'flag_usr_id' => $flag->getUser()->getId(),
             'flag_art_id' => $flag->getArticle()->getId(),
+            'flag_usr_id' => $flag->getUser()->getId(),
             'flag_ip' => inet_pton($flag->getIp())
         );
 
