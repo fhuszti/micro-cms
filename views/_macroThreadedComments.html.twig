@@ -1,4 +1,4 @@
-{% macro print_comments_recursively(parent, children, commentId, flags) %}
+{% macro print_comments_recursively(parent, children, commentId, flags, commentForms) %}
     <article class="comment row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
         <header class="row">
             <div class="col-xs-12 col-sm-5">
@@ -63,6 +63,25 @@
                         </div><!-- /.modal-dialog -->
                     </div><!-- /.modal -->
                 </p>
+
+                {% for commentForm in commentForms %}
+                    {% if commentForm.vars.name == "commentForm-#{parent.id}" %}
+                        {{ form_start(commentForm) }}
+                            <div class="form-group">
+                                {{ form_errors(commentForm.content) }}
+                                {{ form_widget(commentForm.content, { 'attr' : {
+                                        'rows' : '4',
+                                        'class' : 'form-control',
+                                        'placeholder' : 'Entrez votre commentaire'
+                                    }})
+                                }}
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
+                            </div>
+                        {{ form_end(commentForm) }}
+                    {% endif %}
+                {% endfor %}
             </footer>
         {% endif %}
 
@@ -70,7 +89,7 @@
 
         {% for child in children %}
             {% if child.parentId == parent.id  %}
-                {{ _self.print_comments_recursively(child, children, commentId, flags) }}
+                {{ _self.print_comments_recursively(child, children, commentId, flags, commentForms) }}
             {% endif %}
         {% endfor %}
     </article>

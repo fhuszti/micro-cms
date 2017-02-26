@@ -9,6 +9,27 @@ use MicroCMS\Domain\Flag;
 use MicroCMS\Form\Type\CommentType;
 
 class BlogArticleController {
+    private function commentFormsManager($comments, $app, $emptyComment) {
+        $forms = array();
+
+        foreach ($comments as $key => $comment) {
+            $name = 'commentForm-'.$key;
+            $forms[$key] = $app['form.factory']->createNamed($name, CommentType::class, $emptyComment);
+        }
+
+        return $forms;
+    }
+
+    private function createFormViews($forms) {
+        $views = array();
+
+        foreach ($forms as $key => $form) {
+            $views[$key] = $form->createView();
+        }
+
+        return $views;
+    }
+
     /**
      * Article details controller.
      *
@@ -19,7 +40,7 @@ class BlogArticleController {
     public function articleAction($id, Request $request, Application $app) {
         $article = $app['dao.article']->find($id);
 
-        $commentFormView = null;
+        $mainFormView = null;
         $flags = array();
         // A user is fully authenticated : he can add and flag comments
         if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -28,23 +49,42 @@ class BlogArticleController {
             //we fill the flags array with the comments the user might have already flagged
             $flags = $app['dao.flag']->findAllByUser($user->getId());
 
-            //Generate the comment
+            //Generate the potential new comment
             $comment = new Comment();
             $comment->setArticle($article);
             $comment->setAuthor($user);
 
-            //Generate the form going with the comment
-            $commentForm = $app['form.factory']->create(CommentType::class, $comment);
+            //Generate the main comment form for the article
+            $mainForm = $app['form.factory']->create(CommentType::class, $comment);
+
+            //Generate all secondary forms linked to comments themselves
+            $commentForms = $this->commentFormsManager($app['dao.comment']->findAllByArticle($id), $app, $comment);
+
             //Manage form submission
-            $commentForm->handleRequest($request);
-            if($commentForm->isSubmitted() && $commentForm->isValid()) {
-                $app['dao.comment']->save($comment);
-                $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+            if ($request->isMethod('POST')) {
+                $mainForm->submit($request->request->get($mainForm->getName()), false);
+                if ($request->request->has($mainForm->getName())) {
+                    $app['dao.comment']->save($comment);
+                    $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                }
+
+                foreach ($commentForms as $key => $form) {
+                    $form->submit($request->request->get($form->getName()), false);
+                    if ($request->request->has($form->getName())) {
+                        //if it's not from the main form, then it's a comment related to another one
+                        //we set its parent_id attribute with the id in the form name
+                        $comment->setParentId(explode('-', $form->getName())[1]);
+
+                        $app['dao.comment']->save($comment);
+                        $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                    }
+                }
             }
 
-            //Addind form view to the page
-            //variable == null is user not logged in
-            $commentFormView = $commentForm->createView();
+            //Adding form view to the page
+            //mainFormView == null is user not logged in
+            $mainFormView = $mainForm->createView();
+            $commentFormViews = empty($commentForms) ? null : $this->createFormViews($commentForms);
         }
 
         //fetch all comments in two separate arrays
@@ -57,7 +97,8 @@ class BlogArticleController {
             'parents' => $parents,
             'children' => $children,
             'flags' => $flags,
-            'commentForm' => $commentFormView
+            'mainForm' => $mainFormView,
+            'commentForms' => $commentFormViews
         ));
     }
 
