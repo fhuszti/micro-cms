@@ -50,8 +50,12 @@ class AppTest extends WebTestCase {
     public function provideUrls() {
         return array(
             array('/'),
-            array('/article/1'),
-            array('/login'),
+            array('/apropos'),
+            array('/chapitres'),
+            array('/chapitre/1'),
+            array('/inscription'),
+            array('/connexion'),
+            array('/profil/1'),
             array('/admin'),
             array('/admin/article/add'),
             array('/admin/article/1/edit'),
