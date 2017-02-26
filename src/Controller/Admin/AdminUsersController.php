@@ -8,6 +8,27 @@ use MicroCMS\Form\Type\UserType;
 
 class AdminUsersController {
     /**
+     * Encode a plain password
+     *
+     * @param MicroCMS\Domain\User $user User registering
+     * @param Application $app Silex application
+     */
+    private function encodePassword(User $user, Application $app) {
+        $plainPassword = $user->getPassword();
+
+        // find the default encoder
+        $encoder = $app['security.encoder.bcrypt'];
+
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password);
+    }
+
+
+
+
+
+    /**
      * Add user controller.
      *
      * @param Request $request Incoming request
@@ -17,20 +38,15 @@ class AdminUsersController {
         $user = new User();
 
         $userForm = $app['form.factory']->create(UserType::class, $user);
+
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // generate a random salt value
             $salt = substr(md5(time()), 0, 23);
             $user->setSalt($salt);
 
-            $plainPassword = $user->getPassword();
-
-            // find the default encoder
-            $encoder = $app['security.encoder.bcrypt'];
-
-            // compute the encoded password
-            $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-            $user->setPassword($password);
+            //encode the plain password
+            $this->encodePassword($user, $app);
 
             // initialize a ban status for the user
             $user->setIsActive(true);
@@ -56,16 +72,11 @@ class AdminUsersController {
         $user = $app['dao.user']->find($id);
 
         $userForm = $app['form.factory']->create(UserType::class, $user);
+
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $plainPassword = $user->getPassword();
-
-            // find the encoder for the user
-            $encoder = $app['security.encoder_factory']->getEncoder($user);
-
-            // compute the encoded password
-            $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-            $user->setPassword($password);
+            //encode the plain password
+            $this->encodePassword($user, $app);
 
             $app['dao.user']->save($user);
             $app['session']->getFlashBag()->add('success', 'Le membre a été modifié avec succès.');

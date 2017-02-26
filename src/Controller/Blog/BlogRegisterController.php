@@ -10,6 +10,40 @@ use MicroCMS\Form\Type\UserType;
 
 class BlogRegisterController {
     /**
+     * Encode a plain password
+     *
+     * @param MicroCMS\Domain\User $user User registering
+     * @param Application $app Silex application
+     */
+    private function encodePassword(User $user, Application $app) {
+        $plainPassword = $user->getPassword();
+
+        // find the default encoder
+        $encoder = $app['security.encoder.bcrypt'];
+
+        // compute the encoded password
+        $password = $encoder->encodePassword($plainPassword, $user->getSalt());
+        $user->setPassword($password);
+    }
+
+    /**
+     * Log the user in
+     *
+     * @param MicroCMS\Domain\User $user User registering
+     * @param Application $app Silex application
+     */
+    private function logUserIn(User $user, Application $app) {
+        // log the user in
+        $token = new UsernamePasswordToken($user, null, 'secured', array('ROLE_USER'));
+        $app['security.token_storage']->setToken($token);
+        $app['session']->set('_security_main', serialize($token));
+    }
+
+
+
+
+
+    /**
      * Register user controller.
      *
      * @param Request $request Incoming request
@@ -25,14 +59,8 @@ class BlogRegisterController {
             $salt = substr(md5(time()), 0, 23);
             $user->setSalt($salt);
 
-            $plainPassword = $user->getPassword();
-
-            // find the default encoder
-            $encoder = $app['security.encoder.bcrypt'];
-
-            // compute the encoded password
-            $password = $encoder->encodePassword($plainPassword, $user->getSalt());
-            $user->setPassword($password);
+            //encode the plain password
+            $this->encodePassword($user, $app);
 
             // initialize a role for the user
             $user->setRole('ROLE_MEMBER');
@@ -42,10 +70,8 @@ class BlogRegisterController {
 
             $app['dao.user']->save($user);
 
-            // log the user in
-            $token = new UsernamePasswordToken($user, null, 'secured', array('ROLE_USER'));
-            $app['security.token_storage']->setToken($token);
-            $app['session']->set('_security_main', serialize($token));
+            //log the user in
+            $this->logUserIn($user, $app);
 
             // flash message to thank the user + home page redirect
             $app['session']->getFlashBag()->add('success', 'Merci, vous êtes désormais inscrit.');
