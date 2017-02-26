@@ -44,10 +44,10 @@ form textarea {
     font-weight: normal;
     font-style: italic;
 }
-.comment, .comment .response {
+.comment {
     margin: 0 0 10px 0;
     padding: 0 30px 20px 30px;
-    border-radius: 10px 0px;
+    border-radius: 10px 0;
 }
 .comment .row {
     margin: 0;
@@ -72,7 +72,7 @@ form textarea {
 @media (max-width: 767px) {
     .comment h4:not([class='pubDate']) {
         margin-bottom: 0;
-        margin-top: 0px;
+        margin-top: 0;
     }
     .comment .pubDate {
         text-align: left;

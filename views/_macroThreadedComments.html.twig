@@ -1,5 +1,5 @@
 {% macro print_comments_recursively(parent, children, commentId, flags) %}
-    <article class="response row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
+    <article class="comment row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
         <header class="row">
             <div class="col-xs-12 col-sm-5">
                 <h4>{{ parent.author.username}}</h4>

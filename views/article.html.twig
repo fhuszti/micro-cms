@@ -69,83 +69,11 @@
             <hr class="marginTopless" />
 
             {% for parent in parents %}
-                <article class="comment even-comment row">
-                    <header class="row">
-                        <div class="col-xs-12 col-sm-5">
-                            <h4>{{ parent.author.username}}</h4>
-                        </div>
-                        <div class="col-xs-12 col-sm-7">
-                            <h4 class="pubDate">
-                                <time datetime="{{ parent.date }}" pubdate="pubdate">{{ parent.date|date("d/m/Y \à H\\hi") }}</time>
-                                {% if parent.lastModif != "0000-00-00 00:00:00" %}
-                                     - modifié le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
-                                {% endif %}
-                            </h4>
-                        </div>
-                    </header>
-                    <hr class="marginTopless" />
-
-                    <div class="row">
-                        <p>{{ parent.content }}</p>
-                    </div>
-
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <footer class="row" id="footer">
-                            <hr class="marginTopless marginBottomless" />
-                            <p class="pull-right">
-                                {% if parent.id in flags|keys %}
-                                    <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
-                                        Déjà signalé
-                                    </button>
-                                {% else %}
-                                    <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}" id="flagButton{{ parent.id }}">
-                                        Signaler
-                                    </button>
-                                {% endif %}
-                                <button type="button" class="btn btn-primary" title="Répondre au commentaire">
-                                    Répondre
-                                </button>
-                                <div class="modal fade" id="flagDialog{{ parent.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                    &times;
-                                                </button>
-                                                <h4 class="modal-title" id="myModalLabel">
-                                                    Confirmation
-                                                </h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>
-                                                    Êtes-vous certain de vouloir signaler ce commentaire ?
-                                                </p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                    Annuler
-                                                </button>
-                                                <a href="#" class="btn btn-info confirmFlagButton" id="{{ parent.id }}">
-                                                    Confirmer
-                                                </a>
-                                            </div>
-                                        </div><!-- /.modal-content -->
-                                    </div><!-- /.modal-dialog -->
-                                </div><!-- /.modal -->
-                            </p>
-                        </footer>
-                    {% endif %}
-
-                    {% for child in children %}
-                        {% if child.parentId == parent.id %}
-                            {{ macroThreadedComments.print_comments_recursively(child, children, 1, flags) }}
-                        {% endif %}
-                    {% endfor %}
-                </article>
+                {{ macroThreadedComments.print_comments_recursively(parent, children, 0, flags) }}
             {% else %}
-                    <div class="row">
-                        <p class="col-xs-12">Aucun commentaire n'a encore été publié sur cet article.</p>
-                    </div>
+                <div class="row">
+                    <p class="col-xs-12">Aucun commentaire n'a encore été publié sur cet article.</p>
+                </div>
             {% endfor %}
 
         </section>
