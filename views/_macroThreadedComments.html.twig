@@ -22,6 +22,16 @@
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <footer class="row">
                 <hr class="marginTopless marginBottomless" />
+                {% if user.id == parent.author.id %}
+                    <p class="pull-left">
+                        <button class="btn btn-info btn-xs" title="Modifier le commentaire">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button class="btn btn-danger btn-xs" title="Supprimer le commentaire">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </p>
+                {% endif %}
                 <p class="pull-right">
                     {% if user.id != parent.author.id %}
                         {% if parent.id in flags|keys %}
@@ -82,7 +92,7 @@
                                     }}
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Publier le commentaire" />
+                                    <input type="submit" class="btn btn-primary" value="Publier" />
                                 </div>
                             {{ form_end(commentForm) }}
                         </div>
