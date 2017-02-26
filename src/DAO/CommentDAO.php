@@ -73,7 +73,7 @@ class CommentDAO extends DAO {
 
         //art_id is not selected by the query
         //so the article won't be retrieved during buildDomainObject()
-        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id, parent_id FROM t_comments WHERE art_id = ? ORDER BY com_date";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, com_level, usr_id, parent_id FROM t_comments WHERE art_id = ? ORDER BY com_date";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
         //Convert the query result into an array of domain objects
@@ -102,7 +102,7 @@ class CommentDAO extends DAO {
         //Find and set the associated user
         $user = $this->userDAO->find($userId);
 
-        $sql = "SELECT  com_id, com_content, com_date, com_last_modif, art_id, parent_id FROM t_comments WHERE usr_id = ? ORDER BY art_id, com_date DESC";
+        $sql = "SELECT  com_id, com_content, com_date, com_last_modif, com_level, art_id, parent_id FROM t_comments WHERE usr_id = ? ORDER BY art_id, com_date DESC";
         $result = $this->getDb()->fetchAll($sql, array($userId));
 
         //Convert the query result into an array of domain objects
@@ -133,7 +133,7 @@ class CommentDAO extends DAO {
 
         //art_id is not selected by the query
         //so the article won't be retrived during buildDomainObject()
-        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id, parent_id FROM t_comments WHERE art_id = ? AND parent_id IS NULL ORDER BY com_date";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, com_level, usr_id, parent_id FROM t_comments WHERE art_id = ? AND parent_id IS NULL ORDER BY com_date";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
         //Convert the query result into an array of domain objects
@@ -164,7 +164,7 @@ class CommentDAO extends DAO {
 
         //art_id is not selected by the query
         //so the article won't be retrived during buildDomainObject()
-        $sql = "SELECT com_id, com_content, com_date, com_last_modif, usr_id, parent_id FROM t_comments WHERE art_id = ? AND parent_id IS NOT NULL ORDER BY com_date";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, com_level, usr_id, parent_id FROM t_comments WHERE art_id = ? AND parent_id IS NOT NULL ORDER BY com_date";
         $result = $this->getDb()->fetchAll($sql, array($articleId));
 
         //Convert the query result into an array of domain objects
@@ -196,6 +196,7 @@ class CommentDAO extends DAO {
         $comment->setDate($row['com_date']);
         $comment->setLastModif($row['com_last_modif']);
         $comment->setParentId($row['parent_id']);
+        $comment->setLevel($row['com_level']);
 
         //Conditional so we build a given Article object only once in findAllByArticle()
         if (array_key_exists('art_id', $row)) {
@@ -224,7 +225,8 @@ class CommentDAO extends DAO {
             'art_id' => $comment->getArticle()->getId(),
             'usr_id' => $comment->getAuthor()->getId(),
             'com_content' => $comment->getContent(),
-            'parent_id' => $comment->getParentId()
+            'parent_id' => $comment->getParentId(),
+            'com_level' => $comment->getLevel()
         );
 
         if ($comment->getId()) {

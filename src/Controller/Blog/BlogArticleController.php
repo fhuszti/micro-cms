@@ -62,20 +62,33 @@ class BlogArticleController {
             //Generate all secondary forms linked to comments themselves
             $commentForms = $this->commentFormsManager($app['dao.comment']->findAllByArticle($id), $app, $comment);
 
-            //Manage form submission
+            //Manage forms submission
             if ($request->isMethod('POST')) {
+                //Main form submission
                 $mainForm->submit($request->request->get($mainForm->getName()), false);
                 if ($request->request->has($mainForm->getName())) {
+                    //This is a root level comment
+                    $comment->setLevel(0);
+
                     $app['dao.comment']->save($comment);
                     $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
                 }
 
+                //Comment forms submission
                 foreach ($commentForms as $key => $form) {
                     $form->submit($request->request->get($form->getName()), false);
                     if ($request->request->has($form->getName())) {
+                        //we get the ID of the parent to the new comment
+                        $parentId = explode('-', $form->getName())[1];
+
                         //if it's not from the main form, then it's a comment related to another one
                         //we set its parent_id attribute with the id in the form name
-                        $comment->setParentId(explode('-', $form->getName())[1]);
+                        $comment->setParentId($parentId);
+
+                        //We find the new comment's parent level in the comment tree
+                        //then we increment it and set it
+                        $parentLevel = $app['dao.comment']->find($parentId)->getLevel();
+                        $comment->setLevel($parentLevel + 1);
 
                         $app['dao.comment']->save($comment);
                         $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');

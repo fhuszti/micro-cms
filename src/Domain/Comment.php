@@ -52,6 +52,13 @@ class Comment {
      */
     private $parent_id;
 
+    /**
+     * Level in the comment tree
+     *
+     * @var integer
+     */
+    private $level;
+
 
 
 
@@ -115,6 +122,15 @@ class Comment {
 
     public function setParentId($parent_id) {
         $this->parent_id = $parent_id;
+        return $this;
+    }
+
+    public function getLevel() {
+        return $this->level;
+    }
+
+    public function setLevel($level) {
+        $this->level = $level;
         return $this;
     }
 }
