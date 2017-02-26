@@ -1,7 +1,8 @@
 $(function() {
-    var confirmFlagButton = $('.confirmFlagButton');
+    function flagging() {
+        var confirmFlagButtons = $('.confirmFlagButton');
 
-    confirmFlagButton.on('click', function(e) {
+        confirmFlagButtons.on('click', function(e) {
             e.preventDefault();
 
             var parentId = $(this).attr('id'),
@@ -26,4 +27,25 @@ $(function() {
                 }
             });
         });
+    }
+
+
+    function responding() {
+        var respondButtons = $('.respondButtons');
+
+        respondButtons.on('click', function() {
+            var parentId = $(this).attr('id').split('-')[1],
+                form = $('form[name="commentForm-'+parentId+'"]'),
+                formDiv = form.parent();
+
+            if (formDiv.css('display') == 'none')
+                formDiv.slideDown();
+            else
+                formDiv.slideUp();
+        });
+    }
+
+
+    flagging();
+    responding();
 });

@@ -65,6 +65,10 @@ form textarea {
     border: 1px solid #CEDADE;
 }
 
+.hidden-form {
+    display: none;
+}
+
 
 
 
