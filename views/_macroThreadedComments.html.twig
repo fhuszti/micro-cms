@@ -34,9 +34,11 @@
                             </button>
                         {% endif %}
                     {% endif %}
-                    <button type="button" class="btn btn-primary respondButtons" title="Répondre au commentaire" id="respond-{{ parent.id }}">
-                        Répondre
-                    </button>
+                    {% if parent.level >= 0 and parent.level < 3 %}
+                        <button type="button" class="btn btn-primary respondButtons" title="Répondre au commentaire" id="respond-{{ parent.id }}">
+                            Répondre
+                        </button>
+                    {% endif %}
                     <div class="modal fade" id="flagDialog{{ parent.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">

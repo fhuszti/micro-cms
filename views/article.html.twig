@@ -42,6 +42,12 @@
                 </div>
             {% endfor %}
 
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger col-xs-12">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
             <div class="col-xs-12">
                 {% if mainForm %}
                     {{ form_start(mainForm) }}

@@ -88,10 +88,15 @@ class BlogArticleController {
                         //We find the new comment's parent level in the comment tree
                         //then we increment it and set it
                         $parentLevel = $app['dao.comment']->find($parentId)->getLevel();
-                        $comment->setLevel($parentLevel + 1);
+                        if ($parentLevel >= 3) {
+                            $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas répondre à un commentaire de niveau 3.');
+                        }
+                        else {
+                            $comment->setLevel($parentLevel + 1);
 
-                        $app['dao.comment']->save($comment);
-                        $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                            $app['dao.comment']->save($comment);
+                            $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                        }
                     }
                 }
             }
