@@ -26,6 +26,7 @@ form textarea {
     background-color: #F0F7FA;
     border: 1px solid #CEDADE;
     padding: 20px;
+    padding-right: 10px;
     margin-top: 30px;
     margin-bottom: 30px;
 }
@@ -46,12 +47,12 @@ form textarea {
 }
 .comment {
     margin: 0 0 10px 0;
-    padding: 0 30px 20px 30px;
+    padding: 0 20px 20px 30px;
     border-radius: 10px 0;
 }
 .comment .row {
     margin: 0;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 .comment footer .btn {
     margin-top: 10px;
@@ -68,12 +69,24 @@ form textarea {
 .hidden-form {
     display: none;
 }
+.hidden-form input[class~='btn'] {
+    margin-top: 0;
+}
+.hidden-form .form-group {
+    margin-bottom: 10px;
+}
 
 
 
 
 
 @media (max-width: 767px) {
+    #wrapper {
+        padding: 0;
+    }
+    #commentSection {
+        padding-left: 5px;
+    }
     .comment h4:not([class='pubDate']) {
         margin-bottom: 0;
         margin-top: 0;
@@ -81,14 +94,7 @@ form textarea {
     .comment .pubDate {
         text-align: left;
     }
-    .comment, .comment .response {
-        padding: 0 10px 20px 10px;
-    }
-    .comment .response {
-        margin-left: 10px;
-    }
-    .comment .row {
-        padding-left: 20px;
-        padding-right: 20px;
+    .comment {
+        padding: 0 5px 20px 10px;
     }
 }

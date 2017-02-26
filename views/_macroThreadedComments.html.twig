@@ -25,17 +25,17 @@
                 <p class="pull-right">
                     {% if user.id != parent.author.id %}
                         {% if parent.id in flags|keys %}
-                            <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
+                            <button type="button" class="btn btn-warning btn-sm disabled" title="Commentaire déjà signalé">
                                 Déjà signalé
                             </button>
                         {% else %}
-                            <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}" id="flagButton{{ parent.id }}">
+                            <button type="button" class="btn btn-default btn-sm" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}" id="flagButton{{ parent.id }}">
                                 Signaler
                             </button>
                         {% endif %}
                     {% endif %}
                     {% if parent.level >= 0 and parent.level < 3 %}
-                        <button type="button" class="btn btn-primary respondButtons" title="Répondre au commentaire" id="respond-{{ parent.id }}">
+                        <button type="button" class="btn btn-primary btn-sm respondButtons" title="Répondre au commentaire" id="respond-{{ parent.id }}">
                             Répondre
                         </button>
                     {% endif %}
