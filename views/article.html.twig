@@ -71,7 +71,7 @@
             <hr class="marginTopless" />
 
             {% for parent in parents %}
-                {{ macroThreadedComments.print_comments_recursively(parent, children, 0, flags, commentForms) }}
+                {{ macroThreadedComments.print_comments_recursively(parent, children, 0, flags, commentForms, user) }}
             {% else %}
                 <div class="row">
                     <p class="col-xs-12">Aucun commentaire n'a encore été publié sur cet article.</p>

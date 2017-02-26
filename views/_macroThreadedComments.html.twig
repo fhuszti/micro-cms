@@ -1,4 +1,4 @@
-{% macro print_comments_recursively(parent, children, commentId, flags, commentForms) %}
+{% macro print_comments_recursively(parent, children, commentId, flags, commentForms, user) %}
     <article class="comment row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
         <header class="row">
             <div class="col-xs-12 col-sm-5">
@@ -23,14 +23,16 @@
             <footer class="row" id="footer">
                 <hr class="marginTopless marginBottomless" />
                 <p class="pull-right">
-                    {% if parent.id in flags|keys %}
-                        <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
-                            Déjà signalé
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}" id="flagButton{{ parent.id }}">
-                            Signaler
-                        </button>
+                    {% if user.id != parent.author.id %}
+                        {% if parent.id in flags|keys %}
+                            <button type="button" class="btn btn-warning disabled" title="Commentaire déjà signalé">
+                                Déjà signalé
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-default" title="Signaler le commentaire" data-toggle="modal" data-target="#flagDialog{{ parent.id }}" id="flagButton{{ parent.id }}">
+                                Signaler
+                            </button>
+                        {% endif %}
                     {% endif %}
                     <button type="button" class="btn btn-primary" title="Répondre au commentaire">
                         Répondre
@@ -89,7 +91,7 @@
 
         {% for child in children %}
             {% if child.parentId == parent.id  %}
-                {{ _self.print_comments_recursively(child, children, commentId, flags, commentForms) }}
+                {{ _self.print_comments_recursively(child, children, commentId, flags, commentForms, user) }}
             {% endif %}
         {% endfor %}
     </article>

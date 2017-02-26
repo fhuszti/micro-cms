@@ -41,6 +41,8 @@ class BlogArticleController {
         $article = $app['dao.article']->find($id);
 
         $mainFormView = null;
+        $commentFormViews = null;
+        $user = null;
         $flags = array();
         // A user is fully authenticated : he can add and flag comments
         if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -93,6 +95,7 @@ class BlogArticleController {
         $children = $app['dao.comment']->findAllChildrenByArticle($id);
 
         return $app['twig']->render('article.html.twig', array(
+            'user' => $user,
             'article' => $article,
             'parents' => $parents,
             'children' => $children,
