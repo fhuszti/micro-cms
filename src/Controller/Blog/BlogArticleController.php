@@ -157,4 +157,37 @@ class BlogArticleController {
         // Redirect to home page
         return $app->redirect($app['url_generator']->generate('home'));
     }
+
+    /**
+     * Comment deleting controller.
+     *
+     * @param Request $request POST request sent
+     * @param Application $app Silex application
+     */
+    public function deleteCommentAction(Request $request, Application $app) {
+        // A user is fully authenticated : he can delete his own comments
+        if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $commentId = $request->request->get('id');
+
+            $comment = $app['dao.comment']->find($commentId);
+            $user = $app['user'];
+
+            //Is it one of the user's own comments ?
+            if ($user->getId() === $comment->getAuthor()->getId()) {
+                $comment->setIsDeleted(true);
+                $comment->setContent("[Commentaire supprimé par son auteur]");
+
+                //save the comment
+                $app['dao.comment']->save($comment);
+
+                //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
+                //but Silex wants a return on actions, so I leave it there just so it works
+                // + it's cool to have that in case the user starts getting redirected anyway
+                $app['session']->getFlashBag()->add('success', 'Le commentaire a été supprimé.');
+            }
+        }
+
+        // Redirect to home page
+        return $app->redirect($app['url_generator']->generate('home'));
+    }
 }

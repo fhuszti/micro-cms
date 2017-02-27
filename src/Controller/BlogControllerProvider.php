@@ -34,6 +34,9 @@ class BlogControllerProvider implements ControllerProviderInterface {
         //Flag a comment in the database
         $controllers->match('/chapitre/commentaire/flag', "MicroCMS\Controller\Blog\BlogArticleController::commentFlagAction")->bind('user_comment_flag');
 
+        //Delete a comment (via user)
+        $controllers->match('/chapitre/commentaire/supprimer', "MicroCMS\Controller\Blog\BlogArticleController::deleteCommentAction")->bind('user_comment_delete');
+
 
 
 

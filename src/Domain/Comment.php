@@ -59,6 +59,13 @@ class Comment {
      */
     private $level;
 
+    /**
+     * Is the comment deleted or not
+     *
+     * @var boolean
+     */
+    private $is_deleted;
+
 
 
 
@@ -131,6 +138,15 @@ class Comment {
 
     public function setLevel($level) {
         $this->level = $level;
+        return $this;
+    }
+
+    public function getIsDeleted() {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted($is_deleted) {
+        $this->is_deleted = $is_deleted;
         return $this;
     }
 }

@@ -5,9 +5,9 @@ $(function() {
         confirmFlagButtons.on('click', function(e) {
             e.preventDefault();
 
-            var parentId = $(this).attr('id'),
+            var parentId = $(this).attr('id').split('-')[1],
                 modal = $('#flagDialog'+parentId),
-                flagButton = $('#flagButton'+parentId);
+                flagButton = $('#flagButton-'+parentId);
 
             $.ajax({
                 type: 'POST',
@@ -31,7 +31,7 @@ $(function() {
 
 
     function responding() {
-        var respondButtons = $('.respondButtons');
+        var respondButtons = $('.respondButton');
 
         respondButtons.on('click', function() {
             var parentId = $(this).attr('id').split('-')[1],
@@ -46,6 +46,34 @@ $(function() {
     }
 
 
+    function deleting() {
+        var deleteButtons = $('.confirmDeleteButton');
+
+        deleteButtons.on('click', function(e) {
+            e.preventDefault();
+
+            var commentId = $(this).attr('id').split('-')[1],
+                modal = $('#deleteDialog'+commentId);
+
+            $.ajax({
+                type: 'POST',
+                url: "commentaire/supprimer",
+                timeout: 3000,
+                data: {'id': commentId},
+                success: function() {
+                    // we toggle the modal back to hidden
+                    modal.modal('toggle');
+                },
+                error: function(xhr, status, error) {
+                    var err = xhr.responseText;
+                    alert('erreur');
+                }
+            });
+        });
+    }
+
+
     flagging();
     responding();
+    deleting();
 });

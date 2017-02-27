@@ -191,7 +191,7 @@
                         <a href="{{ path('article', { 'id' : articleId }) }}" title="Aller à cet article"><h3 class="panel-title">{{ groupArticle.title }}</h3></a>
                     </div>
                     <div class="list-group">
-                        {% for comment in comments if comment.article.id == articleId %}
+                        {% for comment in comments if comment.article.id == articleId and comment.isDeleted == false %}
                             <article class="list-group-item">
                                 <h4>Ajouté le <time datetime="{{ comment.date }}" pubdate="pubdate">{{ comment.date|date("d/m/Y") }}</time></h4>
                                 {% if comment.lastModif != "0000-00-00 00:00:00" %}
