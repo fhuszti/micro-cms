@@ -18,14 +18,14 @@
         <!-- End comment header -->
 
         <!-- Comment content -->
-        <div class="row">
+        <div class="row" id="commentContent-{{ parent.id }}">
             <p>{{ parent.content }}</p>
         </div>
         <!-- End comment content -->
 
         <!-- Comment footer -->
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-            <footer class="row">
+            <footer class="row" id="commentFooter-{{ parent.id }}">
                 <hr class="marginTopless marginBottomless" />
 
                 {% if parent.isDeleted == false %}
@@ -67,9 +67,9 @@
                                                 Confirmer
                                             </a>
                                         </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
+                                    </div><!-- modal-content -->
+                                </div><!-- modal-dialog -->
+                            </div><!-- modal -->
                             <!-- End delete modal window -->
                         </p>
                     {% endif %}
@@ -121,37 +121,37 @@
                                                 Confirmer
                                             </a>
                                         </div>
-                                    </div><!-- /.modal-content -->
-                                </div><!-- /.modal-dialog -->
-                            </div><!-- /.modal -->
+                                    </div><!-- modal-content -->
+                                </div><!-- modal-dialog -->
+                            </div><!-- modal -->
                         {% endif %}
                         <!-- End report modal window -->
                     </p>
-                {% endif %}
-                <!-- End report and respond -->
+                    <!-- End report and respond -->
 
-                <!-- Respond-to-a-comment form -->
-                {% for commentForm in commentForms %}
-                    {% if commentForm.vars.name == "commentForm-#{parent.id}" %}
-                        <div class="hidden-form col-xs-12">
-                            {{ form_start(commentForm) }}
-                                <div class="form-group">
-                                    {{ form_errors(commentForm.content) }}
-                                    {{ form_widget(commentForm.content, { 'attr' : {
-                                            'rows' : '4',
-                                            'class' : 'form-control',
-                                            'placeholder' : 'Entrez votre commentaire'
-                                        }})
-                                    }}
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-primary" value="Publier" />
-                                </div>
-                            {{ form_end(commentForm) }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                <!-- End respond-to-a-comment form -->
+                    <!-- Respond-to-a-comment form -->
+                    {% for commentForm in commentForms %}
+                        {% if commentForm.vars.name == "commentForm-#{parent.id}" %}
+                            <div class="hidden-form col-xs-12">
+                                {{ form_start(commentForm) }}
+                                    <div class="form-group">
+                                        {{ form_errors(commentForm.content) }}
+                                        {{ form_widget(commentForm.content, { 'attr' : {
+                                                'rows' : '4',
+                                                'class' : 'form-control',
+                                                'placeholder' : 'Entrez votre commentaire'
+                                            }})
+                                        }}
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-primary" value="Publier" />
+                                    </div>
+                                {{ form_end(commentForm) }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <!-- End respond-to-a-comment form -->
+                {% endif %}
             </footer>
         {% endif %}
         <!-- End comment footer -->

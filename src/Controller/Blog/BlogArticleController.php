@@ -153,6 +153,9 @@ class BlogArticleController {
             // + it's cool to have that in case the user starts getting redirected anyway
             $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
         }
+        else {
+            $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas signaler les commentaires sans être connecté.');
+        }
 
         // Redirect to home page
         return $app->redirect($app['url_generator']->generate('home'));
@@ -184,6 +187,9 @@ class BlogArticleController {
                 //but Silex wants a return on actions, so I leave it there just so it works
                 // + it's cool to have that in case the user starts getting redirected anyway
                 $app['session']->getFlashBag()->add('success', 'Le commentaire a été supprimé.');
+            }
+            else {
+                $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas supprimer les commentaires des autres.');
             }
         }
 

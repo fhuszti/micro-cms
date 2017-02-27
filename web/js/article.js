@@ -16,10 +16,10 @@ $(function() {
                 data: {'id': parentId},
                 success: function() {
                     // we toggle the modal back to hidden
-                    modal.modal('toggle');
-
-                    // we change the button to the "flagged" version
-                    flagButton.replaceWith("<button type='button' class='btn btn-warning disabled' title='Commentaire déjà signalé'>Déjà signalé</button>" );
+                    modal.modal('hide').on('hidden.bs.modal', function() {
+                        // we change the button to the "flagged" version
+                        flagButton.replaceWith("<button type='button' class='btn btn-warning disabled' title='Commentaire déjà signalé'>Déjà signalé</button>");
+                    });
                 },
                 error: function(xhr, status, error) {
                     var err = xhr.responseText;
@@ -53,7 +53,9 @@ $(function() {
             e.preventDefault();
 
             var commentId = $(this).attr('id').split('-')[1],
-                modal = $('#deleteDialog'+commentId);
+                modal = $('#deleteDialog'+commentId),
+                content = $('#commentContent-'+commentId),
+                footer = $('#commentFooter-'+commentId);
 
             $.ajax({
                 type: 'POST',
@@ -62,7 +64,14 @@ $(function() {
                 data: {'id': commentId},
                 success: function() {
                     // we toggle the modal back to hidden
-                    modal.modal('toggle');
+                    //we replace DOM stuff inside a callback because bug on modal backdrop otherwise
+                    modal.modal('hide').on('hidden.bs.modal', function() {
+                        // we change the content to the "deleted" version
+                        content.replaceWith('<div class="row" id="commentContent-'+commentId+'"><p>[Commentaire supprimé par son auteur]</p></div>');
+
+                        // we change the footer to the "deleted" version
+                        footer.replaceWith('<footer class="row" id="commentFooter-'+commentId+'"><hr class="marginTopless marginBottomless"></footer>');
+                    });
                 },
                 error: function(xhr, status, error) {
                     var err = xhr.responseText;
