@@ -228,7 +228,7 @@ class CommentDAO extends DAO {
             'com_content' => $comment->getContent(),
             'parent_id' => $comment->getParentId(),
             'com_level' => $comment->getLevel(),
-            'com_is_deleted' => $comment->getIsDeleted()
+            'com_is_deleted' => is_null($comment->getIsDeleted()) ? 0 : $comment->getIsDeleted()
         );
 
         if ($comment->getId()) {
