@@ -76,9 +76,8 @@ $(function() {
                         footer.replaceWith('<footer class="row" id="commentFooter-'+commentId+'"><hr class="marginTopless marginBottomless"></footer>');
                     });
                 },
-                error: function(xhr, status, error) {
-                    var err = xhr.responseText;
-                    alert('erreur');
+                error: function() {
+                    $('<div class="alert alert-danger col-xs-12">Une erreur s\'est produite lors de la suppression du commentaire.<br />Veuillez réessayer plus tard.</div>').insertBefore(content);
                 }
             });
         });
@@ -119,22 +118,26 @@ $(function() {
                 oldContent = $('#commentContent-'+commentId),
                 commentContent = $('form[name="editForm-'+commentId+'"] textarea').val();
 
-            $.ajax({
-                type: 'POST',
-                url: "commentaire/modifier",
-                timeout: 3000,
-                data: {'id': commentId, 'content': commentContent},
-                success: function() {
-                    oldContent.replaceWith('<div class="row" id="commentContent-'+commentId+'"><p>'+commentContent+'</p></div>');
+            if (commentContent) {
+                $.ajax({
+                    type: 'POST',
+                    url: "commentaire/modifier",
+                    timeout: 3000,
+                    data: {'id': commentId, 'content': commentContent},
+                    success: function() {
+                        oldContent.replaceWith('<div class="row" id="commentContent-'+commentId+'"><p>'+commentContent+'</p></div>');
 
-                    formDiv.hide();
-                    olDcontent.slideDown();
-                },
-                error: function(xhr, status, error) {
-                    var err = xhr.responseText;
-                    alert('erreur');
-                }
-            });
+                        formDiv.hide();
+                        olDcontent.slideDown();
+                    },
+                    error: function() {
+                        $('<div class="alert alert-danger col-xs-12">Une erreur s\'est produite lors de l\'envoi du commentaire.<br />Veuillez réessayer plus tard.</div>').insertBefore(oldContent);
+                    }
+                });
+            }
+            else {
+                $('<div class="alert alert-danger col-xs-12">Votre commentaire ne peut être vide.</div>').insertBefore(oldContent);
+            }
         })
     }
 

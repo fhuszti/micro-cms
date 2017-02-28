@@ -85,11 +85,15 @@ class BlogArticleController {
                 //Main form submission
                 $mainForm->submit($request->request->get($mainForm->getName()), false);
                 if ($request->request->has($mainForm->getName())) {
-                    //This is a root level comment
-                    $comment->setLevel(0);
+                    if ($mainForm->isValid()) {
+                        //This is a root level comment
+                        $comment->setLevel(0);
 
-                    $app['dao.comment']->save($comment);
-                    $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                        $app['dao.comment']->save($comment);
+                        $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                    }
+                    else
+                        $app['session']->getFlashBag()->add('error', 'Votre commentaire ne peut être vide.');
                 }
 
                 //Comment forms submission
@@ -110,10 +114,14 @@ class BlogArticleController {
                             $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas répondre à un commentaire de niveau 3.');
                         }
                         else {
-                            $comment->setLevel($parentLevel + 1);
+                            if ($form->isValid()) {
+                                $comment->setLevel($parentLevel + 1);
 
-                            $app['dao.comment']->save($comment);
-                            $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                                $app['dao.comment']->save($comment);
+                                $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+                            }
+                            else
+                                $app['session']->getFlashBag()->add('error', 'Votre commentaire ne peut être vide.');
                         }
                     }
                 }

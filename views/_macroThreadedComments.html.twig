@@ -31,9 +31,8 @@
             {% for editForm in editForms %}
                 {% if editForm.vars.name == "editForm-#{parent.id}" and parent.author.id == user.id and parent.isDeleted == false %}
                     <div class="hidden-form col-xs-12">
-                        {{ form_start(editForm) }}
+                        {{ form_start(editForm, {'attr': {'novalidate': 'novalidate'}}) }}
                             <div class="form-group">
-                                {{ form_errors(editForm.content) }}
                                 {{ form_widget(editForm.content, { 'attr' : {
                                         'rows' : '4',
                                         'class' : 'form-control',
@@ -160,9 +159,8 @@
                     {% for commentForm in commentForms %}
                         {% if commentForm.vars.name == "commentForm-#{parent.id}" %}
                             <div class="hidden-form col-xs-12">
-                                {{ form_start(commentForm) }}
+                                {{ form_start(commentForm, {'attr': {'novalidate': 'novalidate'}}) }}
                                     <div class="form-group">
-                                        {{ form_errors(commentForm.content) }}
                                         {{ form_widget(commentForm.content, { 'attr' : {
                                                 'rows' : '4',
                                                 'class' : 'form-control',

@@ -1,6 +1,9 @@
 <?php
 namespace MicroCMS\Domain;
 
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Comment {
     /**
      * Comment id.
@@ -148,5 +151,10 @@ class Comment {
     public function setIsDeleted($is_deleted) {
         $this->is_deleted = $is_deleted;
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('content', new Assert\NotBlank());
     }
 }

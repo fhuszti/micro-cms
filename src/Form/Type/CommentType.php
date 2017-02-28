@@ -10,6 +10,12 @@ class CommentType extends AbstractType {
         $builder->add('content', TextareaType::class);
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'MicroCMS\Domain\Comment',
+        ));
+    }
+
     public function getName() {
         return 'comment';
     }
