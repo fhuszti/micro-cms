@@ -31,7 +31,8 @@
                     <div class="col-sm-4">
                         {{ form_errors(userForm.username) }}
                         {{ form_widget(userForm.username, { 'attr':  {
-                            'class': 'form-control'
+                            'class': 'form-control',
+                            'placeholder' : 'Entrez votre pseudo'
                         }}) }}
                     </div>
                 </div>
@@ -42,7 +43,8 @@
                     <div class="col-sm-4">
                         {{ form_errors(userForm.email) }}
                         {{ form_widget(userForm.email, { 'attr':  {
-                            'class': 'form-control'
+                            'class': 'form-control',
+                            'placeholder' : 'Entrez votre adresse email'
                         }}) }}
                     </div>
                 </div>
@@ -52,7 +54,8 @@
                     }}) }}
                     <div class="col-sm-4">
                         {{ form_widget(userForm.password.first, { 'attr':  {
-                            'class': 'form-control'
+                            'class': 'form-control',
+                            'placeholder' : 'Entrez votre mot de passe'
                         }}) }}
                     </div>
                 </div>
@@ -62,7 +65,8 @@
                     }}) }}
                     <div class="col-sm-4">
                         {{ form_widget(userForm.password.second, { 'attr':  {
-                            'class': 'form-control'
+                            'class': 'form-control',
+                            'placeholder' : 'Confirmez'
                         }}) }}
                     </div>
                 </div>
