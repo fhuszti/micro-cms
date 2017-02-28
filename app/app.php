@@ -37,6 +37,9 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 'login_path' => '/connexion',
                 'check_path' => '/login_check'
             ),
+            'remember_me' => array(
+                'key' => (new RandomLib\Factory)->getMediumStrengthGenerator()->generate(32)
+            ),
             'users' => function() use ($app) {
                 return new MicroCMS\DAO\UserDAO($app['db']);
             }
@@ -49,6 +52,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         array('^/admin', 'ROLE_ADMIN')
     )
 ));
+$app->register(new Silex\Provider\RememberMeServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\LocaleServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider(), array(
