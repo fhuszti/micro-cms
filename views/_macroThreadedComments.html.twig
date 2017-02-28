@@ -1,4 +1,4 @@
-{% macro print_comments_recursively(parent, children, commentId, flags, commentForms, user) %}
+{% macro print_comments_recursively(parent, children, commentId, flags, commentForms, editForms, user) %}
     <article class="comment row {% if commentId is odd %}odd-comment{% else %}even-comment{% endif %}">
         <!-- Comment header -->
         <header class="row">
@@ -9,7 +9,11 @@
                 <h4 class="pubDate">
                     <time datetime="{{ parent.date }}" pubdate="pubdate">{{ parent.date|date("d/m/Y \à H\\hi") }}</time>
                     {% if parent.lastModif != "0000-00-00 00:00:00" %}
-                         - modifié le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                        {% if parent.isDeleted %}
+                            - supprimé le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                        {% else %}
+                            - modifié le <time datetime="{{ parent.lastModif }}" pubdate="pubdate">{{ parent.lastModif|date("d/m/Y \à H\\hi") }}</time>
+                        {% endif %}
                     {% endif %}
                 </h4>
             </div>
@@ -21,10 +25,33 @@
         <div class="row" id="commentContent-{{ parent.id }}">
             <p>{{ parent.content }}</p>
         </div>
-        <!-- End comment content -->
 
-        <!-- Comment footer -->
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <!-- Edit-a-comment form -->
+            {% for editForm in editForms %}
+                {% if editForm.vars.name == "editForm-#{parent.id}" and parent.author.id == user.id and parent.isDeleted == false %}
+                    <div class="hidden-form col-xs-12">
+                        {{ form_start(editForm) }}
+                            <div class="form-group">
+                                {{ form_errors(editForm.content) }}
+                                {{ form_widget(editForm.content, { 'attr' : {
+                                        'rows' : '4',
+                                        'class' : 'form-control',
+                                        'placeholder' : 'Entrez votre commentaire'
+                                    }})
+                                }}
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary confirmEditButton" value="Modifier" id="confirmEdit-{{ parent.id }}" />
+                            </div>
+                        {{ form_end(editForm) }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <!-- End edit-a-comment form -->
+            <!-- End comment content -->
+
+            <!-- Comment footer -->
             <footer class="row" id="commentFooter-{{ parent.id }}">
                 <hr class="marginTopless marginBottomless" />
 
@@ -32,7 +59,7 @@
                     <!-- Edit and delete -->
                     {% if user.id == parent.author.id %}
                         <p class="pull-left">
-                            <button class="btn btn-info btn-xs" title="Modifier le commentaire">
+                            <button class="btn btn-info btn-xs editButton" title="Modifier le commentaire" id="editButton-{{ parent.id }}">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
                             <button class="btn btn-danger btn-xs" title="Supprimer le commentaire" data-toggle="modal" data-target="#deleteDialog{{ parent.id }}" id="deleteButton-{{ parent.id }}">
@@ -161,7 +188,7 @@
         <!-- Display children comments -->
         {% for child in children %}
             {% if child.parentId == parent.id  %}
-                {{ _self.print_comments_recursively(child, children, commentId, flags, commentForms, user) }}
+                {{ _self.print_comments_recursively(child, children, commentId, flags, commentForms, editForms, user) }}
             {% endif %}
         {% endfor %}
         <!-- End display children comments -->

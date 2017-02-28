@@ -1,4 +1,5 @@
 $(function() {
+    //Report a comment
     function flagging() {
         var confirmFlagButtons = $('.confirmFlagButton');
 
@@ -30,6 +31,7 @@ $(function() {
     }
 
 
+    //Respond to a comment
     function responding() {
         var respondButtons = $('.respondButton');
 
@@ -46,6 +48,7 @@ $(function() {
     }
 
 
+    //Delete a comment
     function deleting() {
         var deleteButtons = $('.confirmDeleteButton');
 
@@ -82,7 +85,62 @@ $(function() {
     }
 
 
+    //Edit a comment
+    function editing() {
+        //Attach click event to edit buttons
+        var editButtons = $('.editButton');
+
+        editButtons.on('click', function() {
+            var commentId = $(this).attr('id').split('-')[1],
+                form = $('form[name="editForm-'+commentId+'"]'),
+                formDiv = form.parent(),
+                content = $('#commentContent-'+commentId);
+
+            //We toggle the form
+            if (formDiv.css('display') == 'none') {
+                formDiv.slideDown();
+                content.hide();
+            }
+            else {
+                formDiv.hide();
+                content.slideDown();
+            }
+        });
+
+        //Attach click event to submit buttons to use AJAX
+        var confirmEditButtons = $('.confirmEditButton');
+
+        confirmEditButtons.on('click', function(e) {
+            e.preventDefault();
+
+            var commentId = $(this).attr('id').split('-')[1],
+                form = $('form[name="editForm-'+commentId+'"]'),
+                formDiv = form.parent(),
+                oldContent = $('#commentContent-'+commentId),
+                commentContent = $('form[name="editForm-'+commentId+'"] textarea').val();
+
+            $.ajax({
+                type: 'POST',
+                url: "commentaire/modifier",
+                timeout: 3000,
+                data: {'id': commentId, 'content': commentContent},
+                success: function() {
+                    oldContent.replaceWith('<div class="row" id="commentContent-'+commentId+'"><p>'+commentContent+'</p></div>');
+
+                    formDiv.hide();
+                    olDcontent.slideDown();
+                },
+                error: function(xhr, status, error) {
+                    var err = xhr.responseText;
+                    alert('erreur');
+                }
+            });
+        })
+    }
+
+
     flagging();
     responding();
     deleting();
+    editing();
 });

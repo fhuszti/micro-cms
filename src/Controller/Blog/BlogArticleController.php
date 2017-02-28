@@ -9,6 +9,18 @@ use MicroCMS\Domain\Flag;
 use MicroCMS\Form\Type\CommentType;
 
 class BlogArticleController {
+    private function editFormsManager($comments, $app, $emptyComment) {
+        $forms = array();
+
+        foreach ($comments as $key => $comment) {
+            $name = 'editForm-'.$key;
+            $emptyComment = $comment;
+            $forms[$key] = $app['form.factory']->createNamed($name, CommentType::class, $comment);
+        }
+
+        return $forms;
+    }
+
     private function commentFormsManager($comments, $app, $emptyComment) {
         $forms = array();
 
@@ -56,11 +68,17 @@ class BlogArticleController {
             $comment->setArticle($article);
             $comment->setAuthor($user);
 
+            //Get all comments for the article
+            $articleComments = $app['dao.comment']->findAllByArticle($id);
+
             //Generate the main comment form for the article
             $mainForm = $app['form.factory']->create(CommentType::class, $comment);
 
-            //Generate all secondary forms linked to comments themselves
-            $commentForms = $this->commentFormsManager($app['dao.comment']->findAllByArticle($id), $app, $comment);
+            //Generate all forms needed to respond to comments
+            $commentForms = $this->commentFormsManager($articleComments, $app, $comment);
+
+            //Generate all forms needed to edit comments
+            $editForms = $this->editFormsManager($articleComments, $app, $comment);
 
             //Manage forms submission
             if ($request->isMethod('POST')) {
@@ -105,6 +123,7 @@ class BlogArticleController {
             //mainFormView == null is user not logged in
             $mainFormView = $mainForm->createView();
             $commentFormViews = empty($commentForms) ? null : $this->createFormViews($commentForms);
+            $editFormViews = empty($editForms) ? null : $this->createFormViews($editForms);
         }
 
         //fetch all comments in two separate arrays
@@ -119,7 +138,8 @@ class BlogArticleController {
             'children' => $children,
             'flags' => $flags,
             'mainForm' => $mainFormView,
-            'commentForms' => $commentFormViews
+            'commentForms' => $commentFormViews,
+            'editForms' => $editFormViews
         ));
     }
 
@@ -191,6 +211,48 @@ class BlogArticleController {
             else {
                 $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas supprimer les commentaires des autres.');
             }
+        }
+        else {
+            $app['session']->getFlashBag()->add('error', 'Vous devez être connecté pour supprimer un commentaire.');
+        }
+
+        // Redirect to home page
+        return $app->redirect($app['url_generator']->generate('home'));
+    }
+
+    /**
+     * Comment editing controller.
+     *
+     * @param Request $request POST request sent
+     * @param Application $app Silex application
+     */
+    public function editCommentAction(Request $request, Application $app) {
+        // A user is fully authenticated : he can edit his own comments
+        if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $commentId = $request->request->get('id');
+            $commentContent = $request->request->get('content');
+
+            $comment = $app['dao.comment']->find($commentId);
+            $user = $app['user'];
+
+            //Is it one of the user's own comments ?
+            if ($user->getId() === $comment->getAuthor()->getId()) {
+                $comment->setContent($commentContent);
+
+                //save the comment
+                $app['dao.comment']->save($comment);
+
+                //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
+                //but Silex wants a return on actions, so I leave it there just so it works
+                // + it's cool to have that in case the user starts getting redirected anyway
+                $app['session']->getFlashBag()->add('success', 'Le commentaire a été modifié.');
+            }
+            else {
+                $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas modifier les commentaires des autres.');
+            }
+        }
+        else {
+            $app['session']->getFlashBag()->add('error', 'Vous devez être connecté pour modifier un commentaire.');
         }
 
         // Redirect to home page

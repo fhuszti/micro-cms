@@ -37,6 +37,9 @@ class BlogControllerProvider implements ControllerProviderInterface {
         //Delete a comment (via user)
         $controllers->match('/chapitre/commentaire/supprimer', "MicroCMS\Controller\Blog\BlogArticleController::deleteCommentAction")->bind('user_comment_delete');
 
+        //Edit a comment (via user)
+        $controllers->match('/chapitre/commentaire/modifier', "MicroCMS\Controller\Blog\BlogArticleController::editCommentAction")->bind('user_comment_edit');
+
 
 
 
