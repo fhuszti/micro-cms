@@ -87,6 +87,18 @@ class BlogProfileController {
     }
 
     /**
+     * Log the user in
+     *
+     * @param MicroCMS\Domain\User $user User registering
+     * @param Application $app Silex application
+     */
+    private function logUserOut(Application $app) {
+        // log the user out
+        $app['security.token_storage']->setToken(null);
+        $app['session']->invalidate();
+    }
+
+    /**
      * Manage the user password form submission
      *
      * @param string $userPwd User's current password
@@ -101,6 +113,9 @@ class BlogProfileController {
 
         // test the entered plain password with the current encoded password
         if ($encoder->isPasswordValid($userPwd, $plainPassword, $user->getSalt())) {
+            //Log the user out
+            $this->logUserOut($app);
+
             // Delete the user
             $app['dao.user']->delete($user->getId());
             $app['session']->getFlashBag()->add('success', 'Votre compte a été supprimé avec succès.');
