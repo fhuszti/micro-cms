@@ -114,7 +114,6 @@ class Flag {
             'type' => 'integer',
             'message' => 'L\'ID associé au report doit être de type Integer ou null.'
         )));
-        $metadata->addPropertyConstraint('id', new Assert\GreaterThanOrEqual(0));
 
 
 

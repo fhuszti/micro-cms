@@ -102,7 +102,7 @@ class CommentDAO extends DAO {
         //Find and set the associated user
         $user = $this->userDAO->find($userId);
 
-        $sql = "SELECT  com_id, com_content, com_date, com_last_modif, com_level, com_is_deleted, art_id, parent_id FROM t_comments WHERE usr_id = ? ORDER BY art_id, com_date DESC";
+        $sql = "SELECT com_id, com_content, com_date, com_last_modif, com_level, com_is_deleted, art_id, parent_id FROM t_comments WHERE usr_id = ? ORDER BY art_id, com_date DESC";
         $result = $this->getDb()->fetchAll($sql, array($userId));
 
         //Convert the query result into an array of domain objects
@@ -195,7 +195,7 @@ class CommentDAO extends DAO {
         $comment->setContent($row['com_content']);
         $comment->setDate($row['com_date']);
         $comment->setLastModif($row['com_last_modif']);
-        $comment->setParentId($row['parent_id']);
+        $comment->setParentId(is_null($row['parent_id']) ? null : (int)$row['parent_id']);
         $comment->setLevel((int) $row['com_level']);
         $comment->setIsDeleted((bool) $row['com_is_deleted']);
 

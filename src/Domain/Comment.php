@@ -163,7 +163,6 @@ class Comment {
             'type' => 'integer',
             'message' => 'L\'ID associé au commentaire doit être de type Integer ou null.'
         )));
-        $metadata->addPropertyConstraint('id', new Assert\GreaterThanOrEqual(0));
 
 
 

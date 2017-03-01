@@ -110,7 +110,7 @@ class FlagDAO extends DAO {
     protected function buildDomainObject(array $row) {
         $flag = new Flag();
 
-        $flag->setId($row['flag_id']);
+        $flag->setId((int) $row['flag_id']);
         $flag->setDate($row['flag_date']);
         $flag->setIp(inet_ntop($row['flag_ip']));
 

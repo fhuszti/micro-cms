@@ -203,11 +203,6 @@ class User implements AdvancedUserInterface, \Serializable {
         ) = unserialize($serialized);
     }
 
-    //Check whether the username and email are unique
-    private function checkUnique(ExecutionContextInterface $context) {
-
-    }
-
 
 
 
@@ -218,7 +213,6 @@ class User implements AdvancedUserInterface, \Serializable {
             'type' => 'integer',
             'message' => 'L\'ID associé à l\'utilisateur doit être de type Integer ou null.'
         )));
-        $metadata->addPropertyConstraint('id', new Assert\GreaterThanOrEqual(0));
 
 
 
