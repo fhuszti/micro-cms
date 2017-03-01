@@ -10,6 +10,19 @@ use MicroCMS\Domain\Flag;
 use MicroCMS\Form\Type\CommentType;
 
 class BlogArticleController {
+    private function generateForms($articleId, $comment, $app) {
+        //Get all comments for the article
+        $articleComments = $app['dao.comment']->findAllByArticle($articleId);
+
+        //Generate all forms needed to respond to comments
+        $commentForms = $this->commentFormsManager($articleComments, $app, $comment);
+
+        //Generate all forms needed to edit comments
+        $editForms = $this->editFormsManager($articleComments, $app, $comment);
+
+        return array('commentForms' => $commentForms, 'editForms' => $editForms);
+    }
+
     private function editFormsManager($comments, $app, $emptyComment) {
         $forms = array();
 
@@ -70,17 +83,11 @@ class BlogArticleController {
             $comment->setArticle($article);
             $comment->setAuthor($user);
 
-            //Get all comments for the article
-            $articleComments = $app['dao.comment']->findAllByArticle($id);
-
             //Generate the main comment form for the article
             $mainForm = $app['form.factory']->create(CommentType::class, $comment);
 
-            //Generate all forms needed to respond to comments
-            $commentForms = $this->commentFormsManager($articleComments, $app, $comment);
-
-            //Generate all forms needed to edit comments
-            $editForms = $this->editFormsManager($articleComments, $app, $comment);
+            //Generate all needed forms for the current view
+            $forms = $this->generateForms($id, $comment, $app);
 
             //Manage forms submission
             if ($request->isMethod('POST')) {
@@ -93,13 +100,21 @@ class BlogArticleController {
 
                         $app['dao.comment']->save($comment);
                         $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+
+                        //We reset the $comment variable
+                        $comment = new Comment();
+                        $comment->setArticle($article);
+                        $comment->setAuthor($user);
+
+                        //we update the forms list
+                        $forms = $this->generateForms($id, $comment, $app);
                     }
                     else
                         $app['session']->getFlashBag()->add('error', 'Votre commentaire n\'est pas valable.');
                 }
 
                 //Comment forms submission
-                foreach ($commentForms as $key => $form) {
+                foreach ($forms['commentForms'] as $key => $form) {
                     $form->submit($request->request->get($form->getName()), false);
                     if ($request->request->has($form->getName())) {
                         //we get the ID of the parent to the new comment
@@ -121,6 +136,14 @@ class BlogArticleController {
 
                                 $app['dao.comment']->save($comment);
                                 $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
+
+                                //We reset the $comment variable
+                                $comment = new Comment();
+                                $comment->setArticle($article);
+                                $comment->setAuthor($user);
+
+                                //we update the forms list
+                                $forms = $this->generateForms($id, $comment, $app);
                             }
                             else
                                 $app['session']->getFlashBag()->add('error', 'Votre commentaire n\'est pas valable.');
@@ -132,8 +155,8 @@ class BlogArticleController {
             //Adding form view to the page
             //mainFormView == null is user not logged in
             $mainFormView = $mainForm->createView();
-            $commentFormViews = empty($commentForms) ? null : $this->createFormViews($commentForms);
-            $editFormViews = empty($editForms) ? null : $this->createFormViews($editForms);
+            $commentFormViews = empty($forms['commentForms']) ? null : $this->createFormViews($forms['commentForms']);
+            $editFormViews = empty($forms['editForms']) ? null : $this->createFormViews($forms['editForms']);
         }
 
         //fetch all comments in two separate arrays
