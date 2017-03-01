@@ -84,4 +84,61 @@ class Article {
         $this->last_modif = $last_modif;
         return $this;
     }
+
+
+
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        //ID
+        $metadata->addPropertyConstraint('id', new Assert\Type(array(
+            'type' => 'integer',
+            'message' => 'L\'ID associé à l\'article doit être de type Integer ou null.'
+        )));
+
+
+
+        //Title
+        $metadata->addPropertyConstraint('title', new Assert\NotBlank(array(
+            'message' => 'Le titre de l\'article ne peut être vide.'
+        )));
+        $metadata->addPropertyConstraint('title', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Le titre de l\'article doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('title', new Assert\Length(array(
+            'min' => 2,
+            'max' => 120,
+            'minMessage' => 'Le titre de l\'article doit comporter 2 caractères au minimum.',
+            'maxMessage' => 'Le titre de l\'article doit compoter 120 caractères au maximum.'
+        )));
+
+
+
+        //Content
+        $metadata->addPropertyConstraint('content', new Assert\NotBlank(array(
+            'message' => 'Le contenu de l\'article ne peut être vide.'
+        )));
+        $metadata->addPropertyConstraint('content', new Assert\Email(array(
+            'message' => 'Le contenu de l\'article doit avoir un format valable.'
+        )));
+        $metadata->addPropertyConstraint('content', new Assert\Length(array(
+            'min' => 2,
+            'minMessage' => 'Le contenu de l\'article doit comporter 2 caractères au minimum.'
+        )));
+
+
+
+        //Date
+        $metadata->addPropertyConstraint('date', new Assert\Date(array(
+            'message' => 'La date de création de l\'article doit être un objet de type Date, ou une string valide au format YYYY-MM-DD.'
+        )));
+
+
+
+        //Last modif
+        $metadata->addPropertyConstraint('last_modif', new Assert\Date(array(
+            'message' => 'La date de dernière modification de l\'article doit être un objet de type Date, ou une string valide au format YYYY-MM-DD.'
+        )));
+    }
 }

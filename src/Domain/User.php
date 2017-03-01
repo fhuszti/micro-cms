@@ -211,57 +211,67 @@ class User implements AdvancedUserInterface, \Serializable {
         //ID
         $metadata->addPropertyConstraint('id', new Assert\Type(array(
             'type' => 'integer',
-            'message' => 'L\'ID associé à l\'utilisateur doit être de type Integer ou null.'
+            'message' => 'L\'ID associé à l\'utilisateur doit être de type Integer ou null.',
+            'groups' => array('registration')
         )));
 
 
 
         //Username
         $metadata->addPropertyConstraint('username', new Assert\NotBlank(array(
-            'message' => 'Votre pseudo ne peut être vide.'
+            'message' => 'Votre pseudo ne peut être vide.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('username', new Assert\Type(array(
             'type' => 'string',
-            'message' => 'Votre pseudo doit être une chaîne de caractères.'
+            'message' => 'Votre pseudo doit être une chaîne de caractères.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('username', new Assert\Length(array(
             'min' => 2,
             'max' => 50,
             'minMessage' => 'Votre pseudo doit comporter 2 caractères au minimum.',
-            'maxMessage' => 'Votre pseudo doit compoter 50 caractères au maximum.'
+            'maxMessage' => 'Votre pseudo doit compoter 50 caractères au maximum.',
+            'groups' => array('registration')
         )));
 
 
 
         //Email
         $metadata->addPropertyConstraint('email', new Assert\NotBlank(array(
-            'message' => 'Votre adresse email ne peut être vide.'
+            'message' => 'Votre adresse email ne peut être vide.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('email', new Assert\Email(array(
-            'message' => 'Votre adresse email doit avoir un format valable.'
+            'message' => 'Votre adresse email doit avoir un format valable.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('email', new Assert\Length(array(
             'min' => 2,
             'max' => 100,
             'minMessage' => 'Votre adresse email doit comporter 2 caractères au minimum.',
-            'maxMessage' => 'Votre adresse email doit compoter 100 caractères au maximum.'
+            'maxMessage' => 'Votre adresse email doit compoter 100 caractères au maximum.',
+            'groups' => array('registration')
         )));
 
 
 
         //Password
         $metadata->addPropertyConstraint('password', new Assert\NotBlank(array(
-            'message' => 'Votre mot de passe doit être renseigné.'
+            'message' => 'Votre mot de passe doit être renseigné.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('password', new Assert\Type(array(
             'type' => 'string',
-            'message' => 'Votre mot de passe doit être une chaîne de caractères.'
+            'message' => 'Votre mot de passe doit être une chaîne de caractères.',
+            'groups' => array('registration')
         )));
         $metadata->addPropertyConstraint('password', new Assert\Length(array(
             'min' => 8,
             'max' => 120,
-            'minMessage' => 'Votre pseudo doit comporter 8 caractères au minimum.',
-            'maxMessage' => 'Votre pseudo doit compoter 120 caractères au maximum.'
+            'minMessage' => 'Votre mot de passe doit comporter 8 caractères au minimum.',
+            'maxMessage' => 'Votre mot de passe doit compoter 120 caractères au maximum.',
+            'groups' => array('registration')
         )));
 
 

@@ -3,6 +3,7 @@ namespace MicroCMS\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,6 +34,13 @@ class UserType extends AbstractType
             'data_class' => 'MicroCMS\Domain\User'
         ));
     }
+
+    public function configureOptions(OptionsResolver $resolver)
+{
+    $resolver->setDefaults(array(
+        'validation_groups' => array('registration'),
+    ));
+}
 
     public function getName(){
         return 'user';

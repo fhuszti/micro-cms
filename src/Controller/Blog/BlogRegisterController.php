@@ -53,6 +53,7 @@ class BlogRegisterController {
         $user = new User();
 
         $userForm = $app['form.factory']->create(UserType::class, $user);
+
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             // generate a random salt value
