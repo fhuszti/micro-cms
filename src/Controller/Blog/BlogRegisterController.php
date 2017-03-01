@@ -56,27 +56,37 @@ class BlogRegisterController {
 
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            // generate a random salt value
-            $salt = substr(md5(time()), 0, 23);
-            $user->setSalt($salt);
+            if (!$app['dao.user']->findByUsername($user->getUsername())) {
+                if (!$app['dao.user']->findByEmail($user->getEmail())) {
+                    // generate a random salt value
+                    $salt = substr(md5(time()), 0, 23);
+                    $user->setSalt($salt);
 
-            //encode the plain password
-            $this->encodePassword($user, $app);
+                    //encode the plain password
+                    $this->encodePassword($user, $app);
 
-            // initialize a role for the user
-            $user->setRole('ROLE_MEMBER');
+                    // initialize a role for the user
+                    $user->setRole('ROLE_MEMBER');
 
-            // initialize a ban status for the user
-            $user->setIsActive(true);
+                    // initialize a ban status for the user
+                    $user->setIsActive(true);
 
-            $app['dao.user']->save($user);
+                    $app['dao.user']->save($user);
 
-            //log the user in
-            $this->logUserIn($user, $app);
+                    //log the user in
+                    $this->logUserIn($user, $app);
 
-            // flash message to thank the user + home page redirect
-            $app['session']->getFlashBag()->add('success', 'Merci, vous êtes désormais inscrit.');
-            return $app->redirect($app['url_generator']->generate('home'));
+                    // flash message to thank the user + home page redirect
+                    $app['session']->getFlashBag()->add('success', 'Merci, vous êtes désormais inscrit.');
+                    return $app->redirect($app['url_generator']->generate('home'));
+                }
+                else {
+                    $app['session']->getFlashBag()->add('error', 'Cette adresse email est déjà utilisée.');
+                }
+            }
+            else {
+                $app['session']->getFlashBag()->add('error', 'Ce pseudo est déjà utilisé.');
+            }
         }
 
         return $app['twig']->render('register.html.twig', array(
