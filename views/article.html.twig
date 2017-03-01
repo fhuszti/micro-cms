@@ -15,7 +15,7 @@
                 <hr />
             </header>
 
-            <div id="articleContent" onerror=""class="col-xs-12">
+            <div id="articleContent" class="col-xs-12">
                 <p>{{ article.content }}</p>
             </div>
 
@@ -35,18 +35,6 @@
                 Ajouter un commentaire
                 <hr />
             </h3>
-
-            {% for flashMessage in app.session.flashbag.get('success') %}
-                <div class="alert alert-success col-xs-12">
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
-
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <div class="alert alert-danger col-xs-12">
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
 
             <div class="col-xs-12">
                 {% if mainForm %}
@@ -70,6 +58,17 @@
                 {% endif %}
             </div>
         </section>
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success col-xs-12">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger col-xs-12">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
 
         <section id="commentSection" class="row">
             <h3>

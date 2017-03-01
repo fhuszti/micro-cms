@@ -191,13 +191,13 @@ class CommentDAO extends DAO {
     protected function buildDomainObject(array $row) {
         $comment = new Comment();
 
-        $comment->setId($row['com_id']);
+        $comment->setId((int) $row['com_id']);
         $comment->setContent($row['com_content']);
         $comment->setDate($row['com_date']);
         $comment->setLastModif($row['com_last_modif']);
         $comment->setParentId($row['parent_id']);
-        $comment->setLevel($row['com_level']);
-        $comment->setIsDeleted($row['com_is_deleted']);
+        $comment->setLevel((int) $row['com_level']);
+        $comment->setIsDeleted((bool) $row['com_is_deleted']);
 
         //Conditional so we build a given Article object only once in findAllByArticle()
         if (array_key_exists('art_id', $row)) {

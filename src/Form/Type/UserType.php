@@ -16,7 +16,7 @@ class UserType extends AbstractType
         $builder->add('email', EmailType::class, array('label' => 'Adresse email'));
         $builder->add('password', RepeatedType::class, array(
                 'type'            => PasswordType::class,
-                'invalid_message' => 'Le contenu des deux champs de mot de passe doivent être identiques.',
+                'invalid_message' => 'Le contenu des deux champs de mot de passe doit être identique.',
                 'options'         => array('required' => true),
                 'first_options'   => array('label' => 'Mot de passe'),
                 'second_options'  => array('label' => 'Vérification du mot de passe'),
@@ -25,6 +25,12 @@ class UserType extends AbstractType
         $builder->add('role', ChoiceType::class, array(
                 'choices' => array('Membre' => 'ROLE_USER', 'Admin' => 'ROLE_ADMIN'),
                 'label' => 'Rang'
+        ));
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => 'MicroCMS\Domain\User'
         ));
     }
 

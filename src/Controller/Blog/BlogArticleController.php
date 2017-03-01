@@ -3,6 +3,7 @@ namespace MicroCMS\Controller\Blog;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use MicroCMS\Domain\Comment;
 use MicroCMS\Domain\Flag;
@@ -54,6 +55,7 @@ class BlogArticleController {
 
         $mainFormView = null;
         $commentFormViews = null;
+        $editFormViews = null;
         $user = null;
         $flags = array();
         // A user is fully authenticated : he can add and flag comments
@@ -93,7 +95,7 @@ class BlogArticleController {
                         $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
                     }
                     else
-                        $app['session']->getFlashBag()->add('error', 'Votre commentaire ne peut être vide.');
+                        $app['session']->getFlashBag()->add('error', 'Votre commentaire n\'est pas valable.');
                 }
 
                 //Comment forms submission
@@ -121,7 +123,7 @@ class BlogArticleController {
                                 $app['session']->getFlashBag()->add('success', 'Votre commentaire a été ajouté avec succès.');
                             }
                             else
-                                $app['session']->getFlashBag()->add('error', 'Votre commentaire ne peut être vide.');
+                                $app['session']->getFlashBag()->add('error', 'Votre commentaire n\'est pas valable.');
                         }
                     }
                 }
@@ -173,13 +175,18 @@ class BlogArticleController {
             $flag->setArticle($article);
             $flag->setIp($_SERVER['REMOTE_ADDR']);
 
-            //save the new flag
-            $app['dao.flag']->save($flag);
+            $errors = $app['validator']->validate($flag);
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $app['session']->getFlashBag()->add('error', $error->getMessage());
+                }
+            }
+            else {
+                //save the new flag
+                $app['dao.flag']->save($flag);
 
-            //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
-            //but Silex wants a return on actions, so I leave it there just so it works
-            // + it's cool to have that in case the user starts getting redirected anyway
-            $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
+                $app['session']->getFlashBag()->add('success', 'Le commentaire a été signalé.');
+            }
         }
         else {
             $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas signaler les commentaires sans être connecté.');
@@ -198,7 +205,7 @@ class BlogArticleController {
     public function deleteCommentAction(Request $request, Application $app) {
         // A user is fully authenticated : he can delete his own comments
         if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $commentId = $request->request->get('id');
+            $commentId = (int) $request->request->get('id');
 
             $comment = $app['dao.comment']->find($commentId);
             $user = $app['user'];
@@ -208,13 +215,18 @@ class BlogArticleController {
                 $comment->setIsDeleted(true);
                 $comment->setContent("[Commentaire supprimé par son auteur]");
 
-                //save the comment
-                $app['dao.comment']->save($comment);
+                $errors = $app['validator']->validate($comment);
+                if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        $app['session']->getFlashBag()->add('error', $error->getMessage());
+                    }
+                }
+                else {
+                    //save the comment
+                    $app['dao.comment']->save($comment);
 
-                //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
-                //but Silex wants a return on actions, so I leave it there just so it works
-                // + it's cool to have that in case the user starts getting redirected anyway
-                $app['session']->getFlashBag()->add('success', 'Le commentaire a été supprimé.');
+                    $app['session']->getFlashBag()->add('success', 'Le commentaire a été supprimé.');
+                }
             }
             else {
                 $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas supprimer les commentaires des autres.');
@@ -224,8 +236,8 @@ class BlogArticleController {
             $app['session']->getFlashBag()->add('error', 'Vous devez être connecté pour supprimer un commentaire.');
         }
 
-        // Redirect to home page
-        return $app->redirect($app['url_generator']->generate('home'));
+        // Redirect to home page  via AJAX
+        return new JsonResponse($app['url_generator']->generate('home'));
     }
 
     /**
@@ -237,7 +249,7 @@ class BlogArticleController {
     public function editCommentAction(Request $request, Application $app) {
         // A user is fully authenticated : he can edit his own comments
         if ($app['security.authorization_checker']->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $commentId = $request->request->get('id');
+            $commentId = (int) $request->request->get('id');
             $commentContent = $request->request->get('content');
 
             $comment = $app['dao.comment']->find($commentId);
@@ -247,13 +259,18 @@ class BlogArticleController {
             if ($user->getId() === $comment->getAuthor()->getId()) {
                 $comment->setContent($commentContent);
 
-                //save the comment
-                $app['dao.comment']->save($comment);
+                $errors = $app['validator']->validate($comment);
+                if (count($errors) > 0) {
+                    foreach ($errors as $error) {
+                        $app['session']->getFlashBag()->add('error', $error->getMessage());
+                    }
+                }
+                else {
+                    //save the comment
+                    $app['dao.comment']->save($comment);
 
-                //Everything after this shouldn't get called because this method should be called using AJAX and preventing its normal behavior
-                //but Silex wants a return on actions, so I leave it there just so it works
-                // + it's cool to have that in case the user starts getting redirected anyway
-                $app['session']->getFlashBag()->add('success', 'Le commentaire a été modifié.');
+                    $app['session']->getFlashBag()->add('success', 'Le commentaire a été modifié.');
+                }
             }
             else {
                 $app['session']->getFlashBag()->add('error', 'Vous ne pouvez pas modifier les commentaires des autres.');
@@ -264,6 +281,6 @@ class BlogArticleController {
         }
 
         // Redirect to home page
-        return $app->redirect($app['url_generator']->generate('home'));
+        return new JsonResponse($app['url_generator']->generate('article', array('id' => $comment->getArticle()->getId())));
     }
 }

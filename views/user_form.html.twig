@@ -15,9 +15,7 @@
     {% endfor %}
 
     {% if form_errors(userForm.password.first) %}
-        <div class="alert alert-danger">
-            {{ form_errors(userForm.password.first) }}
-        </div>
+        {{ form_errors(userForm.password.first) }}
     {% endif %}
 
     <div class="well">

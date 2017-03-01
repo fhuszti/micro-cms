@@ -22,41 +22,19 @@
             </div>
         {% endfor %}
 
-        {% if form_errors(basicUserDataForm) %}
-            <div class="alert alert-danger">
-                {{ form_errors(basicUserDataForm) }}
-            </div>
-        {% endif %}
-
-        {% if form_errors(userPasswordForm) %}
-            <div class="alert alert-danger">
-                {{ form_errors(userPasswordForm) }}
-            </div>
-        {% endif %}
-
-        {% if form_errors(userDeleteForm) %}
-            <div class="alert alert-danger">
-                {{ form_errors(userDeleteForm) }}
-            </div>
-        {% endif %}
-
-        {% if form_errors(userPasswordForm.newPassword.first) %}
-            <div class="alert alert-danger">
-                {{ form_errors(userPasswordForm.newPassword.first) }}
-            </div>
-        {% endif %}
-
         <div class="well">
             {{ form_start(basicUserDataForm, { 'attr': {'class': 'form-horizontal'} }) }}
                 <fieldset>
                     <legend>Informations</legend>
+
+                    {{ form_errors(basicUserDataForm.username) }}
+                    {{ form_errors(basicUserDataForm.email) }}
 
                     <div class="form-group">
                         {{ form_label(basicUserDataForm.username, null, { 'label_attr':  {
                             'class': 'col-sm-5 control-label'
                         }}) }}
                         <div class="col-sm-4">
-                            {{ form_errors(basicUserDataForm.username) }}
                             {{ form_widget(basicUserDataForm.username, { 'attr':  {
                                 'class': 'form-control'
                             }}) }}
@@ -67,7 +45,6 @@
                             'class': 'col-sm-5 control-label'
                         }}) }}
                         <div class="col-sm-4">
-                            {{ form_errors(basicUserDataForm.email) }}
                             {{ form_widget(basicUserDataForm.email, { 'attr':  {
                                 'class': 'form-control'
                             }}) }}
@@ -85,12 +62,15 @@
                 <fieldset>
                     <legend>Sécurité</legend>
 
+                    {{ form_errors(userPasswordForm.oldPassword) }}
+                    {{ form_errors(userPasswordForm.newPassword.first) }}
+                    {{ form_errors(userPasswordForm.newPassword.second) }}
+
                     <div class="form-group">
                         {{ form_label(userPasswordForm.oldPassword, null, { 'label_attr':  {
                             'class': 'col-sm-5 control-label'
                         }}) }}
                         <div class="col-sm-4">
-                            {{ form_errors(userPasswordForm.oldPassword) }}
                             {{ form_widget(userPasswordForm.oldPassword, { 'attr':  {
                                 'class': 'form-control'
                             }}) }}
@@ -128,12 +108,13 @@
                 <fieldset>
                     <legend>Suppression du compte</legend>
 
+                    {{ form_errors(userDeleteForm.password) }}
+
                     <div class="form-group">
                         {{ form_label(userDeleteForm.password, null, { 'label_attr':  {
                             'class': 'col-sm-5 control-label'
                         }}) }}
                         <div class="col-sm-4">
-                            {{ form_errors(userDeleteForm.password) }}
                             {{ form_widget(userDeleteForm.password, { 'attr':  {
                                 'class': 'form-control'
                             }}) }}

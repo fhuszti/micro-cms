@@ -25,6 +25,26 @@ class UserDAO extends DAO implements UserProviderInterface {
             throw new \Exception("Aucun utilisateur ne correspond à l'ID : " . $id);
     }
 
+    public function findByUsername($username) {
+        $sql = "SELECT * FROM t_users WHERE usr_name = ?";
+        $row = $this->getDb()->fetchAssoc($sql, array($username));
+
+        if ($row)
+            return true;
+        else
+            return false;
+    }
+
+    public function findByEmail($email) {
+        $sql = "SELECT * FROM t_users WHERE usr_email = ?";
+        $row = $this->getDb()->fetchAssoc($sql, array($email));
+
+        if ($row)
+            return true;
+        else
+            return false;
+    }
+
     /**
      * Returns a list of all users, sorted by role and name.
      *
@@ -86,13 +106,13 @@ class UserDAO extends DAO implements UserProviderInterface {
     protected function buildDomainObject(array $row) {
         $user = new User();
 
-        $user->setId($row['usr_id']);
+        $user->setId((int) $row['usr_id']);
         $user->setUsername($row['usr_name']);
         $user->setEmail($row['usr_email']);
         $user->setPassword($row['usr_password']);
         $user->setSalt($row['usr_salt']);
         $user->setRole($row['usr_role']);
-        $user->setIsActive($row['usr_is_active']);
+        $user->setIsActive((bool) $row['usr_is_active']);
 
         return $user;
     }

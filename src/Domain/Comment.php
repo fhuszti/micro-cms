@@ -153,8 +153,75 @@ class Comment {
         return $this;
     }
 
+
+
+
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint('content', new Assert\NotBlank());
+        //ID
+        $metadata->addPropertyConstraint('id', new Assert\Type(array(
+            'type' => 'integer',
+            'message' => 'L\'ID associé au commentaire doit être de type Integer ou null.'
+        )));
+        $metadata->addPropertyConstraint('id', new Assert\GreaterThanOrEqual(0));
+
+
+
+        //Content
+        $metadata->addPropertyConstraint('content', new Assert\NotBlank(array(
+            'message' => 'Votre message ne peut être vide.'
+        )));
+
+
+
+        //Author
+        $metadata->addPropertyConstraint('author', new Assert\NotBlank(array(
+            'message' => 'L\'auteur du commentaire doit être renseigné.'
+        )));
+        $metadata->addPropertyConstraint('author', new Assert\Type(array(
+            'type' => 'object',
+            'message' => 'L\'auteur associé doit être de type Object.'
+        )));
+
+
+
+        //Article
+        $metadata->addPropertyConstraint('article', new Assert\NotBlank(array(
+            'message' => 'L\'article associé au commentaire doit être renseigné.'
+        )));
+        $metadata->addPropertyConstraint('article', new Assert\Type(array(
+            'type' => 'object',
+            'message' => 'L\'article associé doit être de type Object.'
+        )));
+
+
+
+        //Parent ID
+        $metadata->addPropertyConstraint('parent_id', new Assert\Type(array(
+            'type' => 'integer',
+            'message' => 'L\'ID du commentaire parent doit être de type Integer ou null.'
+        )));
+
+
+
+        //Comment level
+        $metadata->addPropertyConstraint('level', new Assert\Type(array(
+            'type' => 'integer',
+            'message' => 'Le niveau associé au commentaire doit être de type Integer.'
+        )));
+        $metadata->addPropertyConstraint('level', new Assert\Range(array(
+            'min' => 0,
+            'max' => 3,
+            'minMessage' => 'Le niveau associé au commentaire doit être supérieur ou égal à 0.',
+            'maxMessage' => 'Le niveau associé au commentaire doit être inférieur ou égal à 3.'
+        )));
+
+
+
+        //Is Deleted ?
+        $metadata->addPropertyConstraint('is_deleted', new Assert\Type(array(
+            'type' => 'bool',
+            'message' => 'La valeur fournit pour décider du statut de suppression du commentaire doit être un Boolean.'
+        )));
     }
 }

@@ -12,7 +12,7 @@ class CommentType extends AbstractType {
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
-            'data_class' => 'MicroCMS\Domain\Comment',
+            'data_class' => 'MicroCMS\Domain\Comment'
         ));
     }
 

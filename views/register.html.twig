@@ -15,11 +15,17 @@
                 {{ flashMessage }}
             </div>
         {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
 
         {% if form_errors(userForm.password.first) %}
-            <div class="alert alert-danger">
-                {{ form_errors(userForm.password.first) }}
-            </div>
+            {{ form_errors(userForm.password.first) }}
+        {% endif %}
+        {% if form_errors(userForm.password.second) %}
+            {{ form_errors(userForm.password.second) }}
         {% endif %}
 
         <div class="well">

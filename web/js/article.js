@@ -19,7 +19,7 @@ $(function() {
                     // we toggle the modal back to hidden
                     modal.modal('hide').on('hidden.bs.modal', function() {
                         // we change the button to the "flagged" version
-                        flagButton.replaceWith("<button type='button' class='btn btn-warning disabled' title='Commentaire déjà signalé'>Déjà signalé</button>");
+                        flagButton.replaceWith("<button type='button' class='btn btn-warning btn-sm disabled' title='Commentaire déjà signalé'>Déjà signalé</button>");
                     });
                 },
                 error: function(xhr, status, error) {
@@ -65,7 +65,7 @@ $(function() {
                 url: "commentaire/supprimer",
                 timeout: 3000,
                 data: {'id': commentId},
-                success: function() {
+                success: function(urlFromController) {
                     // we toggle the modal back to hidden
                     //we replace DOM stuff inside a callback because bug on modal backdrop otherwise
                     modal.modal('hide').on('hidden.bs.modal', function() {
@@ -124,11 +124,11 @@ $(function() {
                     url: "commentaire/modifier",
                     timeout: 3000,
                     data: {'id': commentId, 'content': commentContent},
-                    success: function() {
+                    success: function(urlFromController) {
                         oldContent.replaceWith('<div class="row" id="commentContent-'+commentId+'"><p>'+commentContent+'</p></div>');
 
                         formDiv.hide();
-                        olDcontent.slideDown();
+                        oldContent.slideDown();
                     },
                     error: function() {
                         $('<div class="alert alert-danger col-xs-12">Une erreur s\'est produite lors de l\'envoi du commentaire.<br />Veuillez réessayer plus tard.</div>').insertBefore(oldContent);
@@ -138,7 +138,7 @@ $(function() {
             else {
                 $('<div class="alert alert-danger col-xs-12">Votre commentaire ne peut être vide.</div>').insertBefore(oldContent);
             }
-        })
+        });
     }
 
 

@@ -2,6 +2,9 @@
 namespace MicroCMS\Domain;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class User implements AdvancedUserInterface, \Serializable {
     /**
@@ -52,7 +55,7 @@ class User implements AdvancedUserInterface, \Serializable {
      *
      * @var boolean
      */
-    private $isActive;
+    private $is_active;
 
 
 
@@ -121,11 +124,11 @@ class User implements AdvancedUserInterface, \Serializable {
     }
 
     public function getIsActive() {
-        return $this->isActive;
+        return $this->is_active;
     }
 
-    public function setIsActive($isActive) {
-        $this->isActive = $isActive;
+    public function setIsActive($is_active) {
+        $this->is_active = $is_active;
         return $this;
     }
 
@@ -168,8 +171,11 @@ class User implements AdvancedUserInterface, \Serializable {
      * @inheritDoc
      */
     public function isEnabled() {
-        return $this->isActive;
+        return $this->is_active;
     }
+
+
+
 
     /** @see \Serializable::serialize() */
     public function serialize() {
@@ -180,7 +186,7 @@ class User implements AdvancedUserInterface, \Serializable {
             $this->password,
             $this->salt,
             $this->role,
-            $this->isActive
+            $this->is_active
         ));
     }
 
@@ -193,7 +199,116 @@ class User implements AdvancedUserInterface, \Serializable {
             $this->password,
             $this->salt,
             $this->role,
-            $this->isActive
+            $this->is_active
         ) = unserialize($serialized);
+    }
+
+    //Check whether the username and email are unique
+    private function checkUnique(ExecutionContextInterface $context) {
+
+    }
+
+
+
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        //ID
+        $metadata->addPropertyConstraint('id', new Assert\Type(array(
+            'type' => 'integer',
+            'message' => 'L\'ID associé à l\'utilisateur doit être de type Integer ou null.'
+        )));
+        $metadata->addPropertyConstraint('id', new Assert\GreaterThanOrEqual(0));
+
+
+
+        //Username
+        $metadata->addPropertyConstraint('username', new Assert\NotBlank(array(
+            'message' => 'Votre pseudo ne peut être vide.'
+        )));
+        $metadata->addPropertyConstraint('username', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Votre pseudo doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('username', new Assert\Length(array(
+            'min' => 2,
+            'max' => 50,
+            'minMessage' => 'Votre pseudo doit comporter 2 caractères au minimum.',
+            'maxMessage' => 'Votre pseudo doit compoter 50 caractères au maximum.'
+        )));
+
+
+
+        //Email
+        $metadata->addPropertyConstraint('email', new Assert\NotBlank(array(
+            'message' => 'Votre adresse email ne peut être vide.'
+        )));
+        $metadata->addPropertyConstraint('email', new Assert\Email(array(
+            'message' => 'Votre adresse email doit avoir un format valable.'
+        )));
+        $metadata->addPropertyConstraint('email', new Assert\Length(array(
+            'min' => 2,
+            'max' => 100,
+            'minMessage' => 'Votre adresse email doit comporter 2 caractères au minimum.',
+            'maxMessage' => 'Votre adresse email doit compoter 100 caractères au maximum.'
+        )));
+
+
+
+        //Password
+        $metadata->addPropertyConstraint('password', new Assert\NotBlank(array(
+            'message' => 'Votre mot de passe doit être renseigné.'
+        )));
+        $metadata->addPropertyConstraint('password', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Votre mot de passe doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('password', new Assert\Length(array(
+            'min' => 8,
+            'max' => 120,
+            'minMessage' => 'Votre pseudo doit comporter 8 caractères au minimum.',
+            'maxMessage' => 'Votre pseudo doit compoter 120 caractères au maximum.'
+        )));
+
+
+
+        //Salt
+        $metadata->addPropertyConstraint('salt', new Assert\NotBlank(array(
+            'message' => 'Le Salt doit être généré.'
+        )));
+        $metadata->addPropertyConstraint('salt', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Le Salt doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('salt', new Assert\Length(array(
+            'min' => 1,
+            'minMessage' => 'Le Salt doit comporter 1 caractère au minimum.'
+        )));
+
+
+
+        //Role
+        $metadata->addPropertyConstraint('role', new Assert\NotBlank(array(
+            'message' => 'Le rang doit être renseigné.'
+        )));
+        $metadata->addPropertyConstraint('role', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Le rang doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('role', new Assert\Regex(array(
+            'pattern' => '/^ROLE_/',
+            'message' => 'Le rang doit commencer par "ROLE_".'
+        )));
+
+
+
+        //Is active ?
+        $metadata->addPropertyConstraint('is_active', new Assert\NotBlank(array(
+            'message' => 'Le statut de ban de l\'utilisateur doit être renseigné.'
+        )));
+        $metadata->addPropertyConstraint('is_active', new Assert\Type(array(
+            'type' => 'bool',
+            'message' => 'Le statut de ban de l\'utilisateur doit être un Boolean.'
+        )));
     }
 }
