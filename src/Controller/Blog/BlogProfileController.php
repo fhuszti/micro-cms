@@ -125,6 +125,8 @@ class BlogProfileController {
         }
         else {
             $app['session']->getFlashBag()->add('error', 'Votre mot de passe actuel ne correspond pas à votre entrée.');
+
+            return $app->redirect($app['url_generator']->generate('profile', array('id' => $user->getId())));
         }
     }
 
@@ -172,7 +174,7 @@ class BlogProfileController {
             $userPwd = $user->getPassword();
             $userDeleteForm->submit($request->request->get($userDeleteForm->getName()), false);
             if ($request->request->has($userDeleteForm->getName())) {
-                $this->userDeleteFormSubmission($userPwd, $user, $app);
+                return $this->userDeleteFormSubmission($userPwd, $user, $app);
             }
         }
 

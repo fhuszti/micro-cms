@@ -4,7 +4,6 @@ namespace MicroCMS\Domain;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class User implements AdvancedUserInterface, \Serializable {
     /**

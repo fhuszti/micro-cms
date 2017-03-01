@@ -56,6 +56,9 @@ class BlogArticleController {
         return $views;
     }
 
+
+
+
     /**
      * Article details controller.
      *
