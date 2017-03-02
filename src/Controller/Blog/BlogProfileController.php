@@ -163,8 +163,8 @@ class BlogProfileController {
 
 
         // Managing all necessary forms
-        $basicUserDataForm = $app['form.factory']->createNamed('basicUserDataForm', BasicUserDataType::class, $user);
-        $userPasswordForm = $app['form.factory']->createNamed('userPasswordForm', UserPasswordType::class, $changePasswordModel);
+        $basicUserDataForm = $app['form.factory']->createNamed('basicData', BasicUserDataType::class, $user);
+        $userPasswordForm = $app['form.factory']->createNamed('userPassword', UserPasswordType::class, $changePasswordModel);
         $userDeleteForm = $app['form.factory']->createNamed('userDelete', UserDeleteType::class, $user);
 
         if ($request->isMethod('POST')) {
