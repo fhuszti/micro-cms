@@ -24,7 +24,7 @@ form textarea {
 
 #commentSection {
 
-    
+
     padding: 20px;
     padding-right: 10px;
     margin-top: 30px;
@@ -82,8 +82,9 @@ form textarea {
 
 @media (max-width: 767px) {
     #wrapper {
-        padding: 0;
+        padding: 20px;
     }
+
     #commentSection {
         padding-left: 5px;
     }

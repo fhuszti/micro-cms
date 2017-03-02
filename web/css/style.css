@@ -94,6 +94,6 @@ a:hover, a:focus, a:active {
 }
 @media (max-width: 767px) {
     #pageOpening {
-    	padding: 30px 20px 0;
+    	padding: 0;
     }
 }
