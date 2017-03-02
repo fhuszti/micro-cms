@@ -48,14 +48,24 @@ class BlogProfileController {
      * @param Application $app Silex application
      */
     private function basicDataFormSubmission(User $user, Application $app) {
-        //update the current user
-        $app['dao.user']->save($user);
+        if (!$app['dao.user']->findByUsername($user->getUsername(), $user->getId())) {
+            if (!$app['dao.user']->findByEmail($user->getEmail(), $user->getId())) {
+                //update the current user
+                $app['dao.user']->save($user);
 
-        // relog the user in
-        //logged out automatically following name/email change
-        $this->relogUserIn($user, $app);
+                // relog the user in
+                //logged out automatically following name/email change
+                $this->relogUserIn($user, $app);
 
-        $app['session']->getFlashBag()->add('success', 'Votre profil a bien été mis à jour.');
+                $app['session']->getFlashBag()->add('success', 'Votre profil a bien été mis à jour.');
+            }
+            else {
+                $app['session']->getFlashBag()->add('error', 'Cette adresse email est déjà utilisée.');
+            }
+        }
+        else {
+            $app['session']->getFlashBag()->add('error', 'Ce pseudo est déjà utilisé.');
+        }
     }
 
     /**
@@ -161,20 +171,23 @@ class BlogProfileController {
             //Managing the basic user data form submission
             $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
             if ($request->request->has($basicUserDataForm->getName())) {
-                $this->basicDataFormSubmission($user, $app);
+                if ($basicUserDataForm->isValid())
+                    $this->basicDataFormSubmission($user, $app);
             }
 
             //Managing the user password form submission
             $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
             if ($request->request->has($userPasswordForm->getName())) {
-                $this->userPasswordFormSubmission($changePasswordModel, $user, $app);
+                if ($userPasswordForm->isValid())
+                    $this->userPasswordFormSubmission($changePasswordModel, $user, $app);
             }
 
             //Managing the delete user form submission
             $userPwd = $user->getPassword();
             $userDeleteForm->submit($request->request->get($userDeleteForm->getName()), false);
             if ($request->request->has($userDeleteForm->getName())) {
-                return $this->userDeleteFormSubmission($userPwd, $user, $app);
+                if ($userDeleteForm->isValid())
+                    return $this->userDeleteFormSubmission($userPwd, $user, $app);
             }
         }
 

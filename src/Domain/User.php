@@ -219,19 +219,19 @@ class User implements AdvancedUserInterface, \Serializable {
         //Username
         $metadata->addPropertyConstraint('username', new Assert\NotBlank(array(
             'message' => 'Votre pseudo ne peut être vide.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
         $metadata->addPropertyConstraint('username', new Assert\Type(array(
             'type' => 'string',
             'message' => 'Votre pseudo doit être une chaîne de caractères.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
         $metadata->addPropertyConstraint('username', new Assert\Length(array(
             'min' => 2,
             'max' => 50,
             'minMessage' => 'Votre pseudo doit comporter 2 caractères au minimum.',
             'maxMessage' => 'Votre pseudo doit compoter 50 caractères au maximum.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
 
 
@@ -239,18 +239,18 @@ class User implements AdvancedUserInterface, \Serializable {
         //Email
         $metadata->addPropertyConstraint('email', new Assert\NotBlank(array(
             'message' => 'Votre adresse email ne peut être vide.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
         $metadata->addPropertyConstraint('email', new Assert\Email(array(
             'message' => 'Votre adresse email doit avoir un format valable.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
         $metadata->addPropertyConstraint('email', new Assert\Length(array(
             'min' => 2,
             'max' => 100,
             'minMessage' => 'Votre adresse email doit comporter 2 caractères au minimum.',
             'maxMessage' => 'Votre adresse email doit compoter 100 caractères au maximum.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'basicData')
         )));
 
 
@@ -258,19 +258,19 @@ class User implements AdvancedUserInterface, \Serializable {
         //Password
         $metadata->addPropertyConstraint('password', new Assert\NotBlank(array(
             'message' => 'Votre mot de passe doit être renseigné.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'userDelete')
         )));
         $metadata->addPropertyConstraint('password', new Assert\Type(array(
             'type' => 'string',
             'message' => 'Votre mot de passe doit être une chaîne de caractères.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'userDelete')
         )));
         $metadata->addPropertyConstraint('password', new Assert\Length(array(
             'min' => 8,
             'max' => 120,
             'minMessage' => 'Votre mot de passe doit comporter 8 caractères au minimum.',
             'maxMessage' => 'Votre mot de passe doit compoter 120 caractères au maximum.',
-            'groups' => array('registration')
+            'groups' => array('registration', 'userDelete')
         )));
 
 

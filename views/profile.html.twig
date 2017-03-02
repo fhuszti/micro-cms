@@ -22,13 +22,19 @@
             </div>
         {% endfor %}
 
+        {{ form_errors(basicUserDataForm.username) }}
+        {{ form_errors(basicUserDataForm.email) }}
+
+        {{ form_errors(userPasswordForm.oldPassword) }}
+        {{ form_errors(userPasswordForm.newPassword.first) }}
+        {{ form_errors(userPasswordForm.newPassword.second) }}
+
+        {{ form_errors(userDeleteForm.password) }}
+
         <div class="well">
             {{ form_start(basicUserDataForm, { 'attr': {'class': 'form-horizontal'} }) }}
                 <fieldset>
                     <legend>Informations</legend>
-
-                    {{ form_errors(basicUserDataForm.username) }}
-                    {{ form_errors(basicUserDataForm.email) }}
 
                     <div class="form-group">
                         {{ form_label(basicUserDataForm.username, null, { 'label_attr':  {
@@ -61,10 +67,6 @@
             {{ form_start(userPasswordForm, { 'attr': {'class': 'form-horizontal'} }) }}
                 <fieldset>
                     <legend>Sécurité</legend>
-
-                    {{ form_errors(userPasswordForm.oldPassword) }}
-                    {{ form_errors(userPasswordForm.newPassword.first) }}
-                    {{ form_errors(userPasswordForm.newPassword.second) }}
 
                     <div class="form-group">
                         {{ form_label(userPasswordForm.oldPassword, null, { 'label_attr':  {
@@ -107,8 +109,6 @@
             {{ form_start(userDeleteForm, { 'attr': {'class': 'form-horizontal'} }) }}
                 <fieldset>
                     <legend>Suppression du compte</legend>
-
-                    {{ form_errors(userDeleteForm.password) }}
 
                     <div class="form-group">
                         {{ form_label(userDeleteForm.password, null, { 'label_attr':  {

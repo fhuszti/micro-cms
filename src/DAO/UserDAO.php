@@ -25,9 +25,17 @@ class UserDAO extends DAO implements UserProviderInterface {
             throw new \Exception("Aucun utilisateur ne correspond à l'ID : " . $id);
     }
 
-    public function findByUsername($username) {
-        $sql = "SELECT * FROM t_users WHERE usr_name = ?";
-        $row = $this->getDb()->fetchAssoc($sql, array($username));
+    //return whether the given username is unique
+    //can be given an ID to except it during the search (needed on email modifications)
+    public function findByUsername($username, $id = null) {
+        if (is_null($id)) {
+            $sql = "SELECT * FROM t_users WHERE usr_name = ?";
+            $row = $this->getDb()->fetchAssoc($sql, array($username));
+        }
+        else {
+            $sql = "SELECT * FROM t_users WHERE usr_name = ? AND usr_id != ?";
+            $row = $this->getDb()->fetchAssoc($sql, array($username, $id));
+        }
 
         if ($row)
             return true;
@@ -35,9 +43,17 @@ class UserDAO extends DAO implements UserProviderInterface {
             return false;
     }
 
-    public function findByEmail($email) {
-        $sql = "SELECT * FROM t_users WHERE usr_email = ?";
-        $row = $this->getDb()->fetchAssoc($sql, array($email));
+    //return whether the given email adress is unique
+    //can be given an ID to except it during the search (needed on username modifications)
+    public function findByEmail($email, $id = null) {
+        if (is_null($id)) {
+            $sql = "SELECT * FROM t_users WHERE usr_email = ?";
+            $row = $this->getDb()->fetchAssoc($sql, array($email));
+        }
+        else {
+            $sql = "SELECT * FROM t_users WHERE usr_email = ? AND usr_id != ?";
+            $row = $this->getDb()->fetchAssoc($sql, array($email, $id));
+        }
 
         if ($row)
             return true;

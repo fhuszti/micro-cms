@@ -35,12 +35,11 @@ class UserType extends AbstractType
         ));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
-{
-    $resolver->setDefaults(array(
-        'validation_groups' => array('registration'),
-    ));
-}
+    public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setDefaults(array(
+            'validation_groups' => array('registration')
+        ));
+    }
 
     public function getName(){
         return 'user';
