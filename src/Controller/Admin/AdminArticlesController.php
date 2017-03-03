@@ -25,6 +25,7 @@ class AdminArticlesController {
 
         return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Créer un article',
+            'request' => $request,
             'articleForm' => $articleForm->createView()
         ));
     }
@@ -49,6 +50,7 @@ class AdminArticlesController {
 
         return $app['twig']->render('article_form.html.twig', array(
             'title' => 'Modifier l\'article',
+            'request' => $request,
             'articleForm' => $articleForm->createView()
         ));
     }
