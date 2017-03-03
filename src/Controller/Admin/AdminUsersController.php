@@ -41,18 +41,28 @@ class AdminUsersController {
 
         $userForm->handleRequest($request);
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            // generate a random salt value
-            $salt = substr(md5(time()), 0, 23);
-            $user->setSalt($salt);
+            if (!$app['dao.user']->findByUsername($user->getUsername(), $user->getId())) {
+                if (!$app['dao.user']->findByEmail($user->getEmail(), $user->getId())) {
+                    // generate a random salt value
+                    $salt = substr(md5(time()), 0, 23);
+                    $user->setSalt($salt);
 
-            //encode the plain password
-            $this->encodePassword($user, $app);
+                    //encode the plain password
+                    $this->encodePassword($user, $app);
 
-            // initialize a ban status for the user
-            $user->setIsActive(true);
+                    // initialize a ban status for the user
+                    $user->setIsActive(true);
 
-            $app['dao.user']->save($user);
-            $app['session']->getFlashBag()->add('success', 'Le membre a été créé avec succès.');
+                    $app['dao.user']->save($user);
+                    $app['session']->getFlashBag()->add('success', 'Le membre a été créé avec succès.');
+                }
+                else {
+                    $app['session']->getFlashBag()->add('error', 'Cette adresse email est déjà utilisée.');
+                }
+            }
+            else {
+                $app['session']->getFlashBag()->add('error', 'Ce pseudo est déjà utilisé.');
+            }
         }
 
         return $app['twig']->render('user_form.html.twig', array(
@@ -95,9 +105,19 @@ class AdminUsersController {
      * @param Application $app Silex application
      */
     public function banUserAction($id, Application $app) {
-        // ban the user
-        $app['dao.user']->ban($id);
-        $app['session']->getFlashBag()->add('success', 'Le membre a été banni avec succès.');
+        $user = $app['dao.user']->find($id);
+
+        $errors = $app['validator']->validate($user);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $app['session']->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
+        else {
+            // ban the user
+            $app['dao.user']->ban($id);
+            $app['session']->getFlashBag()->add('success', 'Le membre a été banni avec succès.');
+        }
 
         // Redirect to admin home page
         return $app->redirect($app['url_generator']->generate('admin'));
@@ -110,9 +130,19 @@ class AdminUsersController {
      * @param Application $app Silex application
      */
     public function unbanUserAction($id, Application $app) {
-        // Unban the user
-        $app['dao.user']->unban($id);
-        $app['session']->getFlashBag()->add('success', 'Le membre a été réinstitué avec succès.');
+        $user = $app['dao.user']->find($id);
+
+        $errors = $app['validator']->validate($user);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $app['session']->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
+        else {
+            // Unban the user
+            $app['dao.user']->unban($id);
+            $app['session']->getFlashBag()->add('success', 'Le membre a été réinstitué avec succès.');
+        }
 
         // Redirect to admin home page
         return $app->redirect($app['url_generator']->generate('admin'));
@@ -125,9 +155,19 @@ class AdminUsersController {
      * @param Application $app Silex application
      */
     public function deleteUserAction($id, Application $app) {
-        // Delete the user
-        $app['dao.user']->delete($id);
-        $app['session']->getFlashBag()->add('success', 'Le membre a été supprimé avec succès.');
+        $user = $app['dao.user']->find($id);
+
+        $errors = $app['validator']->validate($user);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $app['session']->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
+        else {
+            // Delete the user
+            $app['dao.user']->delete($id);
+            $app['session']->getFlashBag()->add('success', 'Le membre a été supprimé avec succès.');
+        }
 
         // Redirect to admin home page
         return $app->redirect($app['url_generator']->generate('admin'));

@@ -13,10 +13,20 @@
             {{ flashMessage }}
         </div>
     {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
 
-    {% if form_errors(userForm.password.first) %}
-        {{ form_errors(userForm.password.first) }}
-    {% endif %}
+    {{ form_errors(userForm.username) }}
+
+    {{ form_errors(userForm.email) }}
+
+    {{ form_errors(userForm.password.first) }}
+    {{ form_errors(userForm.password.second) }}
+
+    {{ form_errors(userForm.role) }}
 
     <div class="well">
         {{ form_start(userForm, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -25,7 +35,6 @@
                     'class': 'col-sm-5 control-label'
                 }}) }}
                 <div class="col-sm-4">
-                    {{ form_errors(userForm.username) }}
                     {{ form_widget(userForm.username, { 'attr':  {
                         'class': 'form-control'
                     }}) }}
@@ -36,7 +45,6 @@
                     'class': 'col-sm-5 control-label'
                 }}) }}
                 <div class="col-sm-4">
-                    {{ form_errors(userForm.email) }}
                     {{ form_widget(userForm.email, { 'attr':  {
                         'class': 'form-control'
                     }}) }}
@@ -67,7 +75,6 @@
                     'class': 'col-sm-5 control-label'
                 }}) }}
                 <div class="col-sm-2">
-                    {{ form_errors(userForm.role) }}
                     {{ form_widget(userForm.role, { 'attr':  {
                         'class': 'form-control'
                     }}) }}

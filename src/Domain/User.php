@@ -306,7 +306,7 @@ class User implements AdvancedUserInterface, \Serializable {
 
 
         //Is active ?
-        $metadata->addPropertyConstraint('is_active', new Assert\NotBlank(array(
+        $metadata->addPropertyConstraint('is_active', new Assert\NotNull(array(
             'message' => 'Le statut de ban de l\'utilisateur doit être renseigné.'
         )));
         $metadata->addPropertyConstraint('is_active', new Assert\Type(array(
