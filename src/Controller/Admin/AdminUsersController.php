@@ -5,6 +5,8 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use MicroCMS\Domain\User;
 use MicroCMS\Form\Type\UserType;
+use MicroCMS\Form\Type\UserEditBasicType;
+use MicroCMS\Form\Type\UserEditPasswordType;
 
 class AdminUsersController {
     /**
@@ -81,20 +83,45 @@ class AdminUsersController {
     public function editUserAction($id, Request $request, Application $app) {
         $user = $app['dao.user']->find($id);
 
-        $userForm = $app['form.factory']->create(UserType::class, $user);
+        $basicUserDataForm = $app['form.factory']->create(UserEditBasicType::class, $user);
+        $userPasswordForm = $app['form.factory']->create(UserEditPasswordType::class, $user);
 
-        $userForm->handleRequest($request);
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
-            //encode the plain password
-            $this->encodePassword($user, $app);
+        if ($request->isMethod('POST')) {
+            //Managing the basic user data form submission
+            $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
+            if ($request->request->has($basicUserDataForm->getName())) {
+                if ($basicUserDataForm->isValid()) {
+                    if (!$app['dao.user']->findByUsername($user->getUsername(), $user->getId())) {
+                        if (!$app['dao.user']->findByEmail($user->getEmail(), $user->getId())) {
+                            $app['dao.user']->save($user);
+                            $app['session']->getFlashBag()->add('success', 'Les informations du membre ont été mises à jour avec succès.');
+                        }
+                        else {
+                            $app['session']->getFlashBag()->add('error', 'Cette adresse email est déjà utilisée.');
+                        }
+                    }
+                    else {
+                        $app['session']->getFlashBag()->add('error', 'Ce pseudo est déjà utilisé.');
+                    }
+                }
+            }
 
-            $app['dao.user']->save($user);
-            $app['session']->getFlashBag()->add('success', 'Le membre a été modifié avec succès.');
+            //Managing the user password form submission
+            $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
+            if ($request->request->has($userPasswordForm->getName())) {
+                if ($userPasswordForm->isValid()) {
+                    $this->encodePassword($user, $app);
+
+                    $app['dao.user']->save($user);
+                    $app['session']->getFlashBag()->add('success', 'Le mot de passe du membre a été mis à jour avec succès.');
+                }
+            }
         }
 
-        return $app['twig']->render('user_form.html.twig', array(
+        return $app['twig']->render('user_edit_form.html.twig', array(
             'title' => 'Modifier le membre',
-            'userForm' => $userForm->createView()
+            'basicUserDataForm' => $basicUserDataForm->createView(),
+            'userPasswordForm' => $userPasswordForm->createView()
         ));
     }
 
