@@ -170,6 +170,14 @@ class Comment {
         $metadata->addPropertyConstraint('content', new Assert\NotBlank(array(
             'message' => 'Votre message ne peut être vide.'
         )));
+        $metadata->addPropertyConstraint('content', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Le contenu de l\'article doit être une chaîne de caractères.'
+        )));
+        $metadata->addPropertyConstraint('content', new Assert\Length(array(
+            'min' => 2,
+            'minMessage' => 'Le contenu de l\'article doit comporter 2 caractères au minimum.'
+        )));
 
 
 
