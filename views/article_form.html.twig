@@ -13,6 +13,14 @@
             {{ flashMessage }}
         </div>
     {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {{ form_errors(articleForm.title) }}
+    {{ form_errors(articleForm.content) }}
 
     <div class="well">
         {{ form_start(articleForm, { 'attr': {'class': 'form-horizontal'} }) }}
@@ -24,7 +32,6 @@
                     })
                 }}
                 <div class="col-sm-6">
-                    {{ form_errors(articleForm.title) }}
                     {{ form_widget(articleForm.title, {
                             'attr': {
                                 'class': 'form-control'
@@ -41,7 +48,6 @@
                     })
                 }}
                 <div class="col-sm-6">
-                    {{ form_errors(articleForm.content) }}
                     {{ form_widget(articleForm.content, {
                             'attr':  {
                                 'class': 'form-control',

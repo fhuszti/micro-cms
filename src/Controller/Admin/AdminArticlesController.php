@@ -60,9 +60,19 @@ class AdminArticlesController {
      * @param Application $app Silex application
      */
     public function deleteArticleAction($id, Application $app) {
-        // Delete the article
-        $app['dao.article']->delete($id);
-        $app['session']->getFlashBag()->add('success', 'L\'article a été supprimé avec succès.');
+        $article = $app['dao.article']->find($id);
+
+        $errors = $app['validator']->validate($article);
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $app['session']->getFlashBag()->add('error', $error->getMessage());
+            }
+        }
+        else {
+            // Delete the article
+            $app['dao.article']->delete($id);
+            $app['session']->getFlashBag()->add('success', 'L\'article a été supprimé avec succès.');
+        }
 
         // Redirect to admin home page
         return $app->redirect($app['url_generator']->generate('admin'));

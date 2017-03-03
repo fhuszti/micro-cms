@@ -1,6 +1,9 @@
 <?php
 namespace MicroCMS\Domain;
 
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+
 class Article {
     /**
      * Article id.
@@ -119,8 +122,9 @@ class Article {
         $metadata->addPropertyConstraint('content', new Assert\NotBlank(array(
             'message' => 'Le contenu de l\'article ne peut être vide.'
         )));
-        $metadata->addPropertyConstraint('content', new Assert\Email(array(
-            'message' => 'Le contenu de l\'article doit avoir un format valable.'
+        $metadata->addPropertyConstraint('content', new Assert\Type(array(
+            'type' => 'string',
+            'message' => 'Le contenu de l\'article doit être une chaîne de caractères.'
         )));
         $metadata->addPropertyConstraint('content', new Assert\Length(array(
             'min' => 2,
