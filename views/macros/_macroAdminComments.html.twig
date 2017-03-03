@@ -1,12 +1,13 @@
-{% macro admin_comments_tab(comments) %}
+{% macro admin_comments_tab(comments, flagCounts) %}
     {% if comments %}
         <div class="table-responsive">
-            <table class="table table-hover table-condensed">
+            <table class="table table-hover table-condensed table-comments">
                 <thead>
                     <tr>
                         <th>Article</th>
                         <th>Auteur</th>
                         <th>Contenu</th>
+                        <th>Signalements</th>
                         <th></th>  <!-- Actions column -->
                     </tr>
                 </thead>
@@ -20,8 +21,11 @@
                         <td>
                             {{ comment.author.username }}
                         </td>
-                        <td>
+                        <td class="table-comment-content">
                             {{ comment.content | truncate(60) }}
+                        </td>
+                        <td>
+                            {{ comment.numberFlags }}
                         </td>
                         <td>
                             <a href="{{ path('admin_comment_edit', { 'id': comment.id }) }}" class="btn btn-info btn-xs" title="Modifier">

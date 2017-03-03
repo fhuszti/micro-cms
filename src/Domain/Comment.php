@@ -69,6 +69,13 @@ class Comment {
      */
     private $is_deleted;
 
+    /**
+     * Number of times the comment has been flagged
+     *
+     * @var integer
+     */
+    private $number_flags;
+
 
 
 
@@ -150,6 +157,15 @@ class Comment {
 
     public function setIsDeleted($is_deleted) {
         $this->is_deleted = $is_deleted;
+        return $this;
+    }
+
+    public function getNumberFlags() {
+        return $this->number_flags;
+    }
+
+    public function setNumberFlags($number_flags) {
+        $this->number_flags = $number_flags;
         return $this;
     }
 

@@ -51,6 +51,27 @@ class FlagDAO extends DAO {
     }
 
     /**
+     * Returns the number of flags for the given comment
+     *
+     * @param integer $id The comment id
+     *
+     * @return int The number of flags for the comment.
+     */
+    public function countByComments() {
+        $sql = "SELECT * FROM t_flags ORDER BY flag_com_id";
+        $result = $this->getDb()->fetchAll($sql);
+
+        //Convert query results to an array of Domain objects
+        $flags = array();
+        foreach ($result as $row) {
+            $commentId = $row['flag_com_id'];
+            $flags[$commentId] = array_key_exists($commentId, $flags) ? $flags[$commentId] + 1 : 1;
+        }
+
+        return $flags;
+    }
+
+    /**
      * Returns a list of all flags, sorted by date (most recent first).
      *
      * @return array A list of all flags.
@@ -60,7 +81,7 @@ class FlagDAO extends DAO {
         $result = $this->getDb()->fetchAll($sql);
 
         //Convert query results to an array of Domain objects
-        $comments = array();
+        $flags = array();
         foreach ($result as $row) {
             $flagId = $row['flag_id'];
             $flags[$flagId] = $this->buildDomainObject($row);

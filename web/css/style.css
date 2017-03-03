@@ -70,6 +70,12 @@ a:hover, a:focus, a:active {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+.table-comments, .table-comments th {
+	text-align: center;
+}
+.table-comment-content {
+    text-align: left;
+}
 
 #errorPanel {
     padding-top: 30px;
