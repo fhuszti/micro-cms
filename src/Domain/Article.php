@@ -137,12 +137,5 @@ class Article {
         $metadata->addPropertyConstraint('date', new Assert\Date(array(
             'message' => 'La date de création de l\'article doit être un objet de type Date, ou une string valide au format YYYY-MM-DD.'
         )));
-
-
-
-        //Last modif
-        $metadata->addPropertyConstraint('last_modif', new Assert\Date(array(
-            'message' => 'La date de dernière modification de l\'article doit être un objet de type Date, ou une string valide au format YYYY-MM-DD.'
-        )));
     }
 }

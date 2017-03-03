@@ -18,7 +18,7 @@
                                 </a>
                             </td>
                             <td>
-                                {{ article.content | truncate(60) }}
+                                {{ article.content | striptags | truncate(60) | raw }}
                             </td>
                             <td>
                                 <a href="{{ path('admin_article_edit', { 'id': article.id }) }}" class="btn btn-info btn-xs" title="Modifier">

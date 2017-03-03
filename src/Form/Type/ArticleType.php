@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class ArticleType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder->add('title', TextType::class);
-        $builder->add('content', TextareaType::class);
+        $builder->add('content', TextareaType::class, array('required' => false));
     }
 
     public function getName() {

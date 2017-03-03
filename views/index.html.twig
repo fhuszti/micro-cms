@@ -87,7 +87,7 @@
                                 <span>Dernière modification le <time datetime="{{ article.lastModif }}">{{ article.lastModif|date("d/m/Y") }}</time></span>
                             {% endif %}
 
-                            <p>{{ article.content | truncate(150, true) }}</p>
+                            <p>{{ article.content | striptags | truncate(150, true) | raw }}</p>
                         </figcaption>
                     </figure>
                 </li>
