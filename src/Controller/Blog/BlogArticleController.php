@@ -111,6 +111,7 @@ class BlogArticleController {
 
                         //we update the forms list
                         $forms = $this->generateForms($id, $comment, $app);
+                        $mainForm = $app['form.factory']->create(CommentType::class, $comment);
                     }
                     else
                         $app['session']->getFlashBag()->add('error', 'Votre commentaire n\'est pas valable.');
