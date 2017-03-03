@@ -23,7 +23,7 @@
 
         <!-- Comment content -->
         <div class="row" id="commentContent-{{ parent.id }}">
-            <p>{{ parent.content }}</p>
+            <p>{{ parent.content | nl2br }}</p>
         </div>
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
