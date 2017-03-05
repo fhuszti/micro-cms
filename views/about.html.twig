@@ -1,6 +1,10 @@
 {% extends "layout.html.twig" %}
 {% set aboutMenu = true %}
 
+{% block cssSup %}
+    <link rel="stylesheet" href="{{ request.getBaseURL() }}/../vendor/components/font-awesome/css/font-awesome.min.css">
+{% endblock %}
+
 {% block title %}
     &Agrave; propos
 {% endblock %}
@@ -11,7 +15,7 @@
         <hr />
 
         <section>
-            <div class="panel panel-default justified-content">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><em>Billet simple pour l&rsquo;Alaska</em></h3>
                 </div>
@@ -23,7 +27,7 @@
         </section>
 
         <section>
-            <div class="panel panel-default justified-content">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Jean Forteroche</h3>
                 </div>
@@ -32,6 +36,42 @@
                     <img src="{{ asset('/images/jean-forteroche.jpg') }}" alt="Jean Forteroche" class="pull-right" />
                     Nunc sed mi in nisl ultrices lobortis. Aliquam placerat pharetra ultricies. Proin malesuada erat et ligula dignissim lacinia. Fusce accumsan leo nec lectus molestie, a maximus leo dignissim. Praesent sagittis vehicula sapien, vitae consectetur ante vulputate nec. Fusce in dignissim magna, ac porta orci. Aliquam eleifend massa a leo consectetur, at eleifend urna consequat. Morbi nunc lectus, venenatis quis massa at, sollicitudin facilisis nisi. Phasellus urna ex, viverra nec venenatis a, eleifend eget odio. Vestibulum mollis sem sed dolor porttitor, et faucibus nunc dapibus. Suspendisse vitae sapien cursus, euismod quam vel, pretium eros. Maecenas finibus neque a finibus venenatis. Nullam sollicitudin, turpis vel feugiat imperdiet, ligula urna imperdiet tortor, ac ornare justo purus in sem. Pellentesque vel convallis lectus, at vulputate nisl. Morbi tincidunt non nibh vel varius. Nulla nisi nulla, finibus ac augue vitae, bibendum porttitor mi.
                 </p>
+            </div>
+        </section>
+
+        <section class="well row" id="contactSection">
+            <h3>
+                Contact
+                <hr />
+            </h3>
+
+            <div class="col-sm-6">
+                <address>
+                    Mon-Agence-de-star<br />
+                    15 rue du Paradis<br />
+                    75000 Paris<br />
+                    France<br />
+                </address>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-xs-12">
+                        agent@email.com<br />
+                        +33 1 02 03 04 05
+                        <hr />
+                    </div>
+                    <div class="col-xs-12">
+                        <a href="https://www.facebook.com" title="Facebook">
+                            <i class="fa fa-facebook-square fa-3x" id="facebookLogo"></i>
+                        </a>
+                        <a href="https://www.twitter.com" title="Twitter">
+                            <i class="fa fa-google-plus-square fa-3x" id="googlePlusLogo"></i>
+                        </a>
+                        <a href="https://plus.google.com/" title="Google Plus">
+                            <i class="fa fa-twitter-square fa-3x" id="twitterLogo"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
     </div>

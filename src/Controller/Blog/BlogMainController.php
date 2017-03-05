@@ -31,10 +31,13 @@ class BlogMainController {
     /**
      * About page controller.
      *
+     * @param Request $request Incoming request
      * @param Application $app Silex application
      */
-    public function aboutAction(Application $app) {
-        return $app['twig']->render('about.html.twig');
+    public function aboutAction(Request $request, Application $app) {
+        return $app['twig']->render('about.html.twig', array(
+            'request' => $request
+        ));
     }
 
     /**
