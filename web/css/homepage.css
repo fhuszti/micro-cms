@@ -1,3 +1,12 @@
+#wrapper {
+    padding-left: 0;
+    padding-right: 0;
+}
+#last-chapters {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .jumbotron {
     background-image: url("../images/snow-background.jpg");
     border: 1px solid #CEDADE;
