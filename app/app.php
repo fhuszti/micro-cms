@@ -95,18 +95,6 @@ $app['dao.flag'] = function($app) {
 
 
 
-// Translations
-$app['translator.domains'] = array(
-    'validators' => array(
-        'fr' => array(
-            "Bad credentials." => "Pseudo/adresse mail ou mot de passe incorrect(s)."
-        )
-    )
-);
-
-
-
-
 // Register error handler
 /*$app->error(function (\Exception $e, Request $request, $code) use ($app) {
     switch ($code) {
