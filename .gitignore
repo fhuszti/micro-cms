@@ -3,3 +3,4 @@ vendor/
 var/logs/
 app/config/
 web/.htaccess
+web/images/
