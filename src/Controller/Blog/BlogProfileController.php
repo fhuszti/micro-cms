@@ -155,49 +155,57 @@ class BlogProfileController {
         $changePasswordModel = new ChangePassword();
 
         $user = $app['dao.user']->find($id);
-        // Allow to display all messages by user, sorted by article
-        $comments = $app['dao.comment']->findAllByUser($id);
-        $articles = array();
-        if(!empty($comments))
-            $articles = $this->fetchArticles($comments, $app);
+
+        $token = $app['security.token_storage']->getToken();
+
+        if (is_object($token->getUser()) && $token->getUser()->getId() == $id) {
+            // Allow to display all messages by user, sorted by article
+            $comments = $app['dao.comment']->findAllByUser($id);
+            $articles = array();
+            if(!empty($comments))
+                $articles = $this->fetchArticles($comments, $app);
 
 
-        // Managing all necessary forms
-        $basicUserDataForm = $app['form.factory']->createNamed('basicData', BasicUserDataType::class, $user);
-        $userPasswordForm = $app['form.factory']->createNamed('userPassword', UserPasswordType::class, $changePasswordModel);
-        $userDeleteForm = $app['form.factory']->createNamed('userDelete', UserDeleteType::class, $user);
+            // Managing all necessary forms
+            $basicUserDataForm = $app['form.factory']->createNamed('basicData', BasicUserDataType::class, $user);
+            $userPasswordForm = $app['form.factory']->createNamed('userPassword', UserPasswordType::class, $changePasswordModel);
+            $userDeleteForm = $app['form.factory']->createNamed('userDelete', UserDeleteType::class, $user);
 
-        if ($request->isMethod('POST')) {
-            //Managing the basic user data form submission
-            $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
-            if ($request->request->has($basicUserDataForm->getName())) {
-                if ($basicUserDataForm->isValid())
-                    $this->basicDataFormSubmission($user, $app);
+            if ($request->isMethod('POST')) {
+                //Managing the basic user data form submission
+                $basicUserDataForm->submit($request->request->get($basicUserDataForm->getName()), false);
+                if ($request->request->has($basicUserDataForm->getName())) {
+                    if ($basicUserDataForm->isValid())
+                        $this->basicDataFormSubmission($user, $app);
+                }
+
+                //Managing the user password form submission
+                $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
+                if ($request->request->has($userPasswordForm->getName())) {
+                    if ($userPasswordForm->isValid())
+                        $this->userPasswordFormSubmission($changePasswordModel, $user, $app);
+                }
+
+                //Managing the delete user form submission
+                $userPwd = $user->getPassword();
+                $userDeleteForm->submit($request->request->get($userDeleteForm->getName()), false);
+                if ($request->request->has($userDeleteForm->getName())) {
+                    if ($userDeleteForm->isValid())
+                        return $this->userDeleteFormSubmission($userPwd, $user, $app);
+                }
             }
 
-            //Managing the user password form submission
-            $userPasswordForm->submit($request->request->get($userPasswordForm->getName()), false);
-            if ($request->request->has($userPasswordForm->getName())) {
-                if ($userPasswordForm->isValid())
-                    $this->userPasswordFormSubmission($changePasswordModel, $user, $app);
-            }
-
-            //Managing the delete user form submission
-            $userPwd = $user->getPassword();
-            $userDeleteForm->submit($request->request->get($userDeleteForm->getName()), false);
-            if ($request->request->has($userDeleteForm->getName())) {
-                if ($userDeleteForm->isValid())
-                    return $this->userDeleteFormSubmission($userPwd, $user, $app);
-            }
+            return $app['twig']->render('profile.html.twig', array(
+                'title' => 'Profil',
+                'basicUserDataForm' => $basicUserDataForm->createView(),
+                'userPasswordForm' => $userPasswordForm->createView(),
+                'userDeleteForm' => $userDeleteForm->createView(),
+                'articles' => $articles,
+                'comments' => $comments
+            ));
         }
-
-        return $app['twig']->render('profile.html.twig', array(
-            'title' => 'Profil',
-            'basicUserDataForm' => $basicUserDataForm->createView(),
-            'userPasswordForm' => $userPasswordForm->createView(),
-            'userDeleteForm' => $userDeleteForm->createView(),
-            'articles' => $articles,
-            'comments' => $comments
-        ));
+        else {
+            return $app->redirect($app['url_generator']->generate('home'));
+        }
     }
 }
